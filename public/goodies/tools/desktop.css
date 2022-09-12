@@ -1,0 +1,395 @@
+.showWindows { display: none !important; }
+.showMac { display: none !important; }
+.showLinux { display: none !important; }
+.showSpa { display: none !important; }
+
+body {
+    user-select: none;
+    overflow: hidden;
+}
+
+.shortcut {
+    position: absolute;
+    max-width: 8em;
+    text-align: center;
+    z-index: 2;
+    border-radius: .25em;
+    background: none;
+}
+
+.shortcut:hover {
+    background: linear-gradient(to right, grey 50%, rgba(255, 255, 255, 0) 0%),
+    linear-gradient(grey 50%, rgba(255, 255, 255, 0) 0%),
+    linear-gradient(to right, grey 50%, rgba(255, 255, 255, 0) 0%),
+    linear-gradient(grey 50%, rgba(255, 255, 255, 0) 0%);
+    background-position: top, right, bottom, left;
+    background-repeat: repeat-x, repeat-y;
+    background-size: 8px 1px, 1px 8px;
+}
+
+.shortcut img {
+    display: block;
+    width: 3em;
+    margin-left: calc(50% - 1.6em);
+    margin-bottom:.5em;
+    padding: 0.15em;
+}
+
+.shortcut span {
+    display: inline-block;
+    color: black;
+    background-color: rgba(255,255,255,.15);
+    padding: 0.15em 0.25em;
+    border-radius: .25em;
+    margin: .25em;
+}
+
+input, button, select {
+    border: none;
+}
+
+input:not([type=color]),
+input[type=number],
+input[type=password],
+input[type=text] {
+    padding:.15em;
+}
+
+input:not([type=color]),
+button:not(.systemButton),
+input[type=submit],
+input[type=button]:not(.systemButton) {
+    border: none;
+    padding:.5em;
+}
+
+.dialog label img {
+    width: 2.5em;
+}
+
+.dialog label input[type=checkbox]:checked ~ i,
+.dialog label input[type=radio]:checked ~ img {
+    background-color: rgba(88,150,255,1);
+}
+
+.dialog label input[type=checkbox]:not(:checked) ~ i,
+.dialog label input[type=radio]:not(:checked) ~ img {
+    background-color: rgba(255,255,255,0.1);
+}
+
+.setDialogDefaultProgram {
+    width: 2em;
+    right: 1em;
+    padding-top: .5em;
+}
+
+.chooseBox {
+    padding: 0.5em;
+    border: thin grey solid;
+}
+
+.chooseBoxTitle {
+    font-size: .8em;
+    padding: .25em 1em .25em .5em;
+    display: inline-block;
+    width: min-content;
+    border-top-left-radius: .3em;
+    border-top-right-radius: .3em;
+}
+
+.dialog .chooseBox {
+    margin-bottom: 1em;
+    max-height: 24em;
+    overflow-y:  auto;
+}
+
+#autoDialogText {
+    max-height: 24em;
+    overflow-y: auto;
+}
+
+.dialog code {
+    display: block;
+    border-radius: 3px;
+    padding: 0.5em;
+    margin: 1em 0;
+    border: thin grey solid;
+    background-color: rgba(255,255,255,0.1);
+}
+
+.dialog .chooseBox label img,
+.dialog .chooseBox i {
+    padding: .25em;
+    margin: .25em;
+}
+
+.dialog .chooseBox input[type=time] {
+    /* width: 2.75em; */
+    color: white;
+    height: 2.75em;
+    padding-left: 1em;
+    margin: .25em;
+    background-color: rgba(255,255,255,0.1);
+    font-family: inherit;
+}
+
+.dialog .chooseBox input[type="time"]::-webkit-calendar-picker-indicator {
+    /* background: none; */ /* disable clock icon in chrome but space is reserved.. */
+    /* display: none; */    /* ..and this also disables nice time chooser */
+}
+
+#savedFilesDialog .chooseBox {
+    max-height: 350px;
+    overflow-y: auto;
+}
+
+.editTaskbarIcon-clock-hide {
+    position: relative;
+    top: -1.5em;
+    left: 1.5em;
+}
+
+.keyboardKey {
+    border-radius: 1em;
+    min-width: 1.2em;
+    height: 1.2em;
+    overflow: hidden;
+    vertical-align: middle;
+    box-sizing: border-box;
+    margin-right: .25em;
+    padding: 0.05em 0.35em 0.15em 0.35em;
+    display: inline-block;
+}
+
+input[type="color"] {
+	-webkit-appearance: none;
+	border: solid rgb(125,125,125) thin;
+	width: 1.75em;
+	height: 1.75em;
+}
+input[type="color"]::-webkit-color-swatch-wrapper {
+	padding: 0;
+}
+
+input[type="color"]::-webkit-color-swatch {
+	border: none;
+}
+
+header.windowmenu {
+    /* padding-left: 0.25em; */
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+header.windowmenu .programButtons {
+    font-family: inherit;
+    background-color: none;
+    border-right: solid thin grey;
+    border-left: solid thin white;
+    height: 100%;
+    padding: 0 1em;
+    margin: 0;
+}
+
+header.windowmenu .programButtons:hover {
+    background-color: rgba(255,255,255,.5);
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    font-size: 2em;
+    z-index: 99999;
+    color: white;
+}
+
+.overlay div {
+    text-align: right;
+    position: absolute;
+    top: 10%;
+    right:10%;
+}
+
+.overlay button {
+    margin-top: 1em;
+    font-size: .75em;
+}
+
+.overlay button i {
+    font-size: 1.25em;
+    margin: 0 .25em 0 .25em ;
+}
+
+.fancy {
+    background: rgba(131,58,180,1);
+    background: linear-gradient(345deg, rgba(131,58,180,1) 0%, rgba(253,29,29,1) 50%, rgba(252,176,69,1) 100%);
+}
+
+
+/* ACTION MENU */
+#actionMenu:not(.hide) {
+    display: flex !important;
+    justify-content: center;
+    z-index: 111;
+}
+
+.actionMenu {
+    font-family: Roboto, Arial, Helvetica, sans-serif;
+    top: 3em;
+    color: white;
+    position: fixed;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+#actionMenu,
+#actionMenu.op25 {
+    transition: opacity 250ms;
+}
+
+.actionMenu:hover {
+}
+
+.actionMenuTitle {
+    border-top-left-radius: .3em;
+    border-top-right-radius: .3em;
+}
+
+.actionMenu .chooseBox {
+    border-top-left-radius: 0;
+    margin-bottom: 1em;
+    padding: .25em .5em;
+}
+
+.actionMenu .columns {
+    display: flex;
+    flex-direction: column;
+    flex-basis: 100%;
+    flex: 1;
+    width: 180px;
+}
+
+.actionMenu ul,
+.actionMenu h3,
+.actionMenu h4,
+.actionMenu h5 {
+    /* float: left; */
+    /* margin: .5em .5em 0 .5em; */
+}
+
+.actionMenu ul {
+    /* margin-bottom: 1em; */
+}
+
+.actionMenu .chooseBox li {
+    padding: .25em;
+}
+
+.chooseBox li {
+    padding: .5em;
+    width: 300px;
+}
+
+.chooseBox li {
+    width: initial;
+}
+
+.chooseBox li:not(:last-of-type),
+.actionMenu li:not(:last-of-type) {
+    border-bottom: solid grey thin;
+}
+
+.chooseBox li:hover,
+.actionMenu li:hover {
+    background-color: rgba(255,255,255,0.2);
+}
+
+.dialog {
+    font-family: Roboto, Arial, Helvetica, sans-serif;
+}
+
+.dialog input[type=text],
+.dialog textarea {
+    padding: .75em .5em;
+    margin: .5em 0;
+}
+
+.autoNote {
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index: 99999;
+    color: white;
+    min-width: 8em;
+    max-width: 20em;
+    margin-top: 1.5em;
+}
+
+.autoNote div {
+    padding: 1em;
+    margin: 1em;
+}
+
+.autoNote div h3 i {
+    margin-right: .25em;
+}
+
+.autoNote div h3 {
+   padding-bottom: .5em;
+}
+
+#savedFilesDialog .chooseBox li:hover i {
+    opacity: 1;
+}
+
+#savedFilesDialog .chooseBox li i {
+    opacity: 0;
+}
+
+#savedFilesDialog .chooseBox li div {
+    padding: 1em .5em 0 0;
+}
+
+.fileUploadButton {
+    overflow: hidden;
+    position: relative;
+}
+
+.fileUploadButton i {
+    transform: scale(1.5) translateY(.125em);
+    position: relative;
+    z-index: 0;
+}
+
+.fileUploadButton input {
+    opacity: 0;
+    margin: 0;
+    padding: 0;
+    font-size: 2em;
+    position: absolute;
+    top: 0;
+    left: 0;
+    cursor: pointer;
+    z-index: 1;
+}
+
+.actionMenu h1,
+.actionMenu h3,
+.actionMenu h4 {
+    opacity: 0.75;
+}
+
+.actionMenu li i {
+    vertical-align: middle;
+}
+
+.minimizeWindow { animation: minimizeWindow .15s ease-in 1 forwards; }
+
+@keyframes minimizeWindow {
+    0%   { margin-top: 0; transform: scale(1); }
+    100% { margin-top: 100%; transform: scaleX(.8); }
+}

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>NAME GENERATOR</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- style and script resources -->
+    <link rel="stylesheet" type="text/css" href="../tools/fonts.css" media="all">
+    <link rel="stylesheet" href="../tools/general.css" media="all">
+    <link rel="stylesheet" href="../tools/desktop.css" media="all">
+    <link rel="stylesheet" href="stylesheet.css" media="all">
+    <script src="../tools/general.js"></script>
+    <script src="javascript.js" onload="getNames();" defer></script>
+
+  </head>
+  <body>
+    <div class="container padding2 centerText maxWidth">
+      <input type="number" id="count" value="20"> <button onclick="getNames();"> get new data</button>
+      <div id="names" class="container padding2 alignLeft"></div>
+      <div id="namesShort" class="container padding2 alignLeft"></div>
+      <div id="emails" class="container padding2 alignLeft"></div>
+      <div id="projectNames" class="container padding2 alignLeft"></div>
+      <div id="techwords" class="container padding2 alignLeft"></div>
+    </div>
+  </body>
+  </html>

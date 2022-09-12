@@ -1,0 +1,6 @@
+body {
+    background-color: darkgrey;
+    color:white;
+    user-select: auto;
+    overflow: auto;
+}
