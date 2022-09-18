@@ -219,7 +219,7 @@ const store = new Vuex.Store({
         markedForDeletion: {
           status: false,
         }
-      }).then(function(docRef) {
+      }).then(function() {
         store.dispatch('addContribution', 4);
         // fb["db"].collection("users").doc(state.userProfile.uid).update({'contribution': state.userProfile.contribution+3})
         // store.dispatch('updateField', {'collection':'users', 'document':state.userProfile.uid, 'field':'contribution', 'data':state.userProfile.contribution+3})
