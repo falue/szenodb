@@ -1,24 +1,37 @@
-# szenodb
+# szeno&middot;DB
 
-## Project setup
+### Setup, dev & build
 ```
-npm install
-```
-
-### Compiles and hot-reloads for development
-```
-npm run serve
+npm install      # Project setup
+npm run serve    # Compiles & hot-reloads for development
+npm run build    # Compiles & minifies for production
 ```
 
-### Compiles and minifies for production
-```
-npm run build
-```
+# What
 
-### Lints and fixes files
-```
-npm run lint
-```
+This is a tool for the lovely people who work in the art department of switzerland.
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+szeno&middot;DB is a searchable collection of links of connections, materials, services and problem solvers.
+
+It is geographically targeted to switzerland, as it is not intended to hold tens of thousands of entries or users, nor does it have smart ways to distinguish local and global content. So for now, its only practical for swiss based artisans.
+
+
+### Auth keys
+For obvious reasons, auth keys are removed from this repo by `.gitignore`.
+
+The file that holds the keys is `src/auth.js` and contains the following:
+
+```
+const authKeys = {
+    'deepl': {
+        auth_key: '...'
+    },
+    'fb' : {
+        apiKey: '...',
+        messagingSenderId: '...',
+        appId: '...',
+        measurementId: '...'
+    }
+}
+export { authKeys }
+```
