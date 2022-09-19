@@ -35,7 +35,7 @@
           :user="user"
           @delete="deleteResource($event)"
           @edit="post = $event.newData, oldData=$event.oldData, saveEditedResource()"
-          @new="post = $event, createResource()"
+          @new="getEmittedNewPost($event)"
           @cancel="cancelEditResource()"
         ></EditResource>
       </div>
@@ -141,7 +141,7 @@
         <v-container v-if="resources.length" class="pa-0 pt-4 ma-0 fill-width" style="max-width:initial">
           <!-- TABLE HEADER -->
           <div class="primary--text italics my-2 grey darken-4" :class="$vuetify.breakpoint.mdAndUp ? 'px-4' : 'px-2'">
-              <div style="vertical-align: top; width:20%; display:inline-block;">Title</div>
+              <div style="vertical-align: top; width:20%; display:inline-block;">Firm</div>
               <div v-if="isSmallWithOpenDrawer" :style="$vuetify.breakpoint.mdAndUp ? 'width:60%' : 'width:80%'" class="pl-2" style="display:inline-block">
                   Resources
               </div>
@@ -412,6 +412,22 @@ import EditResource from '@/components/EditResource'
         this.dataMode = 'view'
       },
 
+      async getEmittedNewPost(data) {
+        this.post = data;
+        let openNewOneAfterwards = false;
+        if (data.newAndNext) {
+          delete data.newAndNext;
+          openNewOneAfterwards = true;
+        }
+        await this.createResource();
+
+        if(openNewOneAfterwards) {
+          this.dataMode = 'new';
+          this.drawerOpen = true
+        }
+      },
+
+
       createResource() {
         this.$store.dispatch('addResource', {"collection": "resources", "post": this.post}).then(() => {
           console.log("Success!")
@@ -423,7 +439,7 @@ import EditResource from '@/components/EditResource'
           this.$toasted.global.error({msg:error.message});
         });
         this.drawerOpen = false;
-      },  
+      },
 
       createNewFromSearch() {
         this.post.title=this.filter; 

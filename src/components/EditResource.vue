@@ -3,7 +3,7 @@
   <form @submit.prevent="dataMode === 'new' ? $emit('new', data) : $emit('edit', {'newData': data, 'oldData': oldData});">
     <!-- Use v-model="..." @change="..." instead of v-model: massive typing speed improvements -->
     <v-text-field style="width:40%; display:inline-block" class="mr-2" type="text" v-model="data.title" :rules="requiered">
-      <template v-slot:label>Business or main resource<span v-if="data.title.length == 0" class="red--text">*</span></template>
+      <template v-slot:label>Firm/resource<span v-if="data.title.length == 0" class="red--text">*</span></template>
     </v-text-field>
     <v-text-field label="Contact person" style="width:55%; display:inline-block" type="text" v-model="data.name"></v-text-field>
     <v-textarea auto-grow rows="3" hint="Resources or services of this business. Will auto translate to EN, DE and FR." type="text" :rules="requiered" v-model="data.resources">
@@ -69,23 +69,37 @@
 
       <v-spacer></v-spacer>
 
-      <span :title="data.title === '' || data.resources === '' ? 'Please enter at least business name & resources' : ''">
-        <v-btn color="primary" type="submit" class="mr-2 mb-2" :disabled="data.title === '' || data.resources === ''">
-            Save
-        </v-btn>
-      </span>
-      </v-card-actions>
+      <v-tooltip :disabled="$vuetify.breakpoint.smAndDown" top>
+        <template v-slot:activator="{ on, attrs }">
+          <div v-bind="attrs" v-on="on">
+            <v-btn
+              @mouseenter="checkShiftKey($event)"
+              @mousemove="checkShiftKey($event)"
+              @mouseleave="shiftKeyPressed = false"
+              @mouseout="shiftKeyPressed = false"
+              :color="shiftKeyPressed ? 'green' : 'primary'"
+              @click="if(shiftKeyPressed) data.newAndNext = true"
+              type="submit" class="mr-2 mb-2"
+              :disabled="data.title === '' || data.resources === ''"
+            >
+              {{shiftKeyPressed ? 'Save & next' : 'Save'}}
+            </v-btn>
+          </div>
+        </template>
+        <span>{{data.title === '' || data.resources === '' ? 'Please enter at least Firm & some resources' : 'Shift & Click to save open new'}}</span>
+      </v-tooltip>
+    </v-card-actions>
 
-      <v-card-actions v-else class="py-2 fixed bottom grey darken-4 fill-width left">
-        <v-btn @click="$emit('cancel')">Cancel</v-btn>
-        <v-spacer></v-spacer>
-        <v-btn v-if="user.role === 'admin'" icon class="red mx-2" :small="$vuetify.breakpoint.mdAndUp" @click="$emit('delete', data); $emit('cancel')">
-          <v-icon :small="$vuetify.breakpoint.mdAndUp">mdi-delete</v-icon>
-        </v-btn>
-        <v-spacer></v-spacer>
-        <v-btn type="submit" color="primary" class="mr-0" :disabled="data.title === ''">Save Edit</v-btn>
-      </v-card-actions>
-    </form>
+    <v-card-actions v-else class="py-2 fixed bottom grey darken-4 fill-width left">
+      <v-btn @click="$emit('cancel')">Cancel</v-btn>
+      <v-spacer></v-spacer>
+      <v-btn v-if="user.role === 'admin'" icon class="red mx-2" :small="$vuetify.breakpoint.mdAndUp" @click="$emit('delete', data); $emit('cancel')">
+        <v-icon :small="$vuetify.breakpoint.mdAndUp">mdi-delete</v-icon>
+      </v-btn>
+      <v-spacer></v-spacer>
+      <v-btn type="submit" color="primary" class="mr-0" :disabled="data.title === ''">Save Edit</v-btn>
+    </v-card-actions>
+  </form>
 </template>
 
 <script>
@@ -101,6 +115,8 @@ import CsvImport from '@/components/CsvImport'
       return {
         requiered: [value => !!value || 'Required.'],
         oldData: {},
+        newAndNext: false,
+        shiftKeyPressed: false,
       }
     },
     created() {
@@ -109,6 +125,10 @@ import CsvImport from '@/components/CsvImport'
     },
     
     methods: {
+      checkShiftKey(event) {
+        this.shiftKeyPressed = event.shiftKey;
+      },
+      
       /* IMAGES */
       saveNewImage(img) {
         this.data.imgs.unshift(img);
