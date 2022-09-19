@@ -123,7 +123,7 @@ const store = new Vuex.Store({
     sendEmailVerification() {
       console.log("Send email verification email...")
       let actionCodeSettings = {
-        url: 'https://szenodb.telefabi.ch/?success=emailVerified',
+        url: 'https://szenodb.telefabi.ch/#/resources?success=emailVerified',
         /* iOS: {
           bundleId: 'com.myurl.ios'
         },
