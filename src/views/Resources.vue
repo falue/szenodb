@@ -322,7 +322,8 @@ import EditResource from '@/components/EditResource'
           'translations': {
             'DE': ['',''],
             'EN-GB': ['',''],
-            'FR': ['','']
+            'FR': ['',''],
+            'IT': ['','']
           },
           'address': '',
           'info': '',

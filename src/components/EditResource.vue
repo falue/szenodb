@@ -6,10 +6,10 @@
       <template v-slot:label>Firm/resource<span v-if="data.title.length == 0" class="red--text">*</span></template>
     </v-text-field>
     <v-text-field label="Contact person" style="width:55%; display:inline-block" type="text" v-model="data.name"></v-text-field>
-    <v-textarea auto-grow rows="3" hint="Resources or services of this business. Will auto translate to EN, DE and FR." type="text" :rules="requiered" v-model="data.resources">
+    <v-textarea auto-grow rows="3" hint="Resources or services of this business. Will auto translate to EN/DE/FR/IT." type="text" :rules="requiered" v-model="data.resources">
       <template v-slot:label>Resources<span v-if="data.resources.length == 0" class="red--text">*</span></template>
     </v-textarea>
-    <v-textarea auto-grow rows="3" label="Opinions" hint="Delivery speed, what to look out for, etc. Will auto translate to EN, DE and FR." type="text" v-model="data.info"></v-textarea>
+    <v-textarea auto-grow rows="3" label="Opinions" hint="Delivery speed, what to look out for, etc. Will auto translate to EN/DE/FR/IT." type="text" v-model="data.info"></v-textarea>
     <v-text-field label="Address" hint="Can be typed address, google share link or general region." type="text" v-model="data.address"></v-text-field>
     <v-text-field label="Telephone" style="width:40%; display:inline-block" class="mr-2" type="text" v-model="data.tel"></v-text-field>
     <v-text-field label="Email" style="width:55%; display:inline-block" type="text" v-model="data.email"></v-text-field>

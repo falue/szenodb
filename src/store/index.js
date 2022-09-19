@@ -224,6 +224,7 @@ const store = new Vuex.Store({
         'DE': [],
         'EN-GB': [],
         'FR': [],
+        'IT': [],
       }
       await fb["db"].collection(collection).add({
         createdOn: creationDate,
@@ -265,6 +266,8 @@ const store = new Vuex.Store({
         data.content.translations["EN-GB"][1],
         data.content.translations["FR"][0],
         data.content.translations["FR"][1],
+        data.content.translations["IT"][0],
+        data.content.translations["IT"][1],
       ]
       fields = fields.join('').replace(/[^0-9a-zA-Z]/g, '').toLowerCase();
       // write fields to document.content.searchfield
@@ -354,9 +357,9 @@ const store = new Vuex.Store({
     
     // eslint-disable-next-line no-unused-vars
     async translateResource({ state }, {document, data}) {
-      let targetLangs = ['DE', 'FR', 'EN-GB'];
+      let targetLangs = ['DE', 'FR', 'EN-GB', 'IT'];
       let translations = {
-        'DE': [], 'FR': [], 'EN-GB': []
+        'DE': [], 'FR': [], 'EN-GB': [], 'IT': []
       };
 
       let originalLang = 'DE';
