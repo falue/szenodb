@@ -205,11 +205,11 @@
                 <v-icon :small="$vuetify.breakpoint.mdAndUp">mdi-pencil</v-icon>
               </v-btn>
 
-              <v-btn v-if="user.role === 'admin'" icon title="Delete" class="red ml-1" :small="$vuetify.breakpoint.mdAndUp" @click.stop="deletePost(resource)">
+              <v-btn v-if="user.role === 'admin'" icon title="Delete for good" class="red ml-1" :small="$vuetify.breakpoint.mdAndUp" @click.stop="deletePost(resource)">
                 <v-icon :small="$vuetify.breakpoint.mdAndUp">mdi-delete</v-icon>
               </v-btn>
 
-              <v-btn v-else icon title="Mark for deletion" class="red ml-1" :small="$vuetify.breakpoint.mdAndUp" @click.stop="markForDeletion(resource)">
+              <v-btn v-else-if="user.emailVerified" icon title="Mark for deletion" class="red ml-1" :small="$vuetify.breakpoint.mdAndUp" @click.stop="markForDeletion(resource)">
                 <v-icon :small="$vuetify.breakpoint.mdAndUp">mdi-delete</v-icon>
               </v-btn>
             </div>
@@ -228,7 +228,7 @@
               </v-btn>
           </span>
         </p>
-        <div class="grey--text my-12" v-if="listWasShortened">
+        <div class="grey--text my-12" v-if="listWasShortened && resources.length > 100">
           This list has been shortened to increase performance.
           <v-btn small @click="resetSearch(6666)">Show all entries</v-btn>
         </div>
