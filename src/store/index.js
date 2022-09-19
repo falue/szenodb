@@ -102,7 +102,7 @@ const store = new Vuex.Store({
           await dispatch('fetchUserProfile', credentials)
           
           // Send verification email
-          store.sendEmailVerification();
+          store.dispatch('sendEmailVerification');
 
           // change route to dashboard
           if (router.currentRoute.path === '/signup') {
