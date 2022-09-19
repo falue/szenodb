@@ -93,6 +93,16 @@
           <span>An assortment of things</span>
         </v-tooltip>
 
+        <v-tooltip bottom v-if="user.role === 'admin'" :disabled="$vuetify.breakpoint.smAndDown">
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn :icon="$vuetify.breakpoint.xs" dense small circle to="/admin" class="mx-1 primary--text" v-bind="attrs" v-on="on">
+              <v-icon v-if="$vuetify.breakpoint.smAndDown" color="primary">mdi-wrench</v-icon>
+              <span v-else>Admin</span>
+            </v-btn>
+          </template>
+          <span>Manage users & backups</span>
+        </v-tooltip>
+
         <v-tooltip bottom :disabled="$vuetify.breakpoint.smAndDown">
           <template v-slot:activator="{ on, attrs }">
             <v-btn small :icon="$vuetify.breakpoint.mdAndUp" :circle="$vuetify.breakpoint.mdAndUp" to="/profile" class="mx-1 grey darken-3" v-bind="attrs" v-on="on">

@@ -5,6 +5,7 @@ import { auth } from '../firebase'
 
 // Views
 import Home from '../views/Home.vue'
+import Admin from '../views/Admin.vue'
 import Goodies from '../views/Goodies.vue'
 import Resources from '../views/Resources.vue'
 import Profile from '../views/Profile.vue'
@@ -24,6 +25,14 @@ const routes = [
     path: '/profile',
     name: 'Profile',
     component: Profile,
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/admin',
+    name: 'Admin',
+    component: Admin,
     meta: {
       requiresAuth: true
     }
