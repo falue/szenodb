@@ -88,14 +88,15 @@
         <div class="italics grey--text">
           Disclaimer: As this is very prototype-y, beware that sometimes it takes a while to load, may not work at all, or may change drastically in the future.
         </div>
+
+        <hr class="mb-3 mt-16" style="border:none; border-top: solid 1px rgba(255,255,255,.25);">
         
-        <v-card-title class="justify-center pt-16">Whodunit?</v-card-title>
+        <v-card-title class="justify-center">Whodunit?</v-card-title>
 
         <v-list three-line class="pa-0" color="transparent">
           <v-list-item class="pa-0">
             <v-list-item-avatar color="grey darken-3" size="125">
             <v-img
-              class="elevation-6"
               alt=""
               :src="require('@/assets/portrait.jpg')"
             ></v-img>
@@ -111,11 +112,11 @@
               </v-list-item-subtitle>
               <v-card-text class="ma-0 pa-0">
                 <p>
-                  Thank you <a href="https://www.isabellesimmen.com/" class="no-underline" target="_blank">Isabelle Simmen</a> for bullet proofing & szeno chat for inspiration.
+                  Thank you <a href="https://www.isabellesimmen.com/" class="no-underline" target="_blank">Isabelle Simmen</a> for bullet proofing & szeno chat for the community.
                   <br>
-                  Get in contact if you have questions, or want to improve this:
+                  Get in contact if you have questions or want to improve this:
                   <br v-if="$vuetify.breakpoint.smAndDown">
-                  <a href="tel:0787424834" v-if="$vuetify.breakpoint.smAndDown" title="call" class="no-underline" :class="{'bigMobileButton mr-2' : $vuetify.breakpoint.smAndDown}">
+                  <a href="tel:0787424834" title="call" class="no-underline" :class="{'bigMobileButton mr-2' : $vuetify.breakpoint.smAndDown}">
                     <v-icon class="pr-2" color="primary">mdi-phone</v-icon>
                   </a>
                   <a href="mailto:info@fluescher.ch" title="write email" class="no-underline" :class="{'bigMobileButton mr-2' : $vuetify.breakpoint.smAndDown}">
