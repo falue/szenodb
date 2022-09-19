@@ -90,7 +90,8 @@
         {{ $helpers.timeRelativeToNow(data.createdOn.toDate()) }},
         {{ $helpers.fbTimeToString(data.createdOn, "DD.MM.YY - HH:mm") }}
         <div v-if="data.editedOn && JSON.stringify(data.createdOn) != JSON.stringify(data.editedOn)">
-          Edited
+          Edited by <span :title="'Editor ID: '+data.userIdEdited">{{data.userNameEdited}}</span><!-- 
+         --><Copy v-if="user.role === 'admin'" :data="data.userIdEdited" dataName="Editor ID"></Copy>,
           {{ $helpers.timeRelativeToNow(data.editedOn.toDate()) }},
           {{ $helpers.fbTimeToString(data.editedOn, "DD.MM.YY - HH:mm") }}
         </div>

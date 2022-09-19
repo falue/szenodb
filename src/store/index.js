@@ -294,8 +294,8 @@ const store = new Vuex.Store({
       await fb["db"].collection(collection).doc(document).update({
         editedOn: new Date(),
         content: post,
-        userId: fb.auth.currentUser.uid,
-        userName: state.userProfile.name,
+        userIdEdited: fb.auth.currentUser.uid,
+        userNameEdited: state.userProfile.name,
       }).then(async function() {
         store.dispatch('addContribution', 2);
         // if post.resources or post.info was changed:
