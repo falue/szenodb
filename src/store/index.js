@@ -332,7 +332,14 @@ const store = new Vuex.Store({
       })
       .catch(error => {
         console.error(error);
-        return false;
+        // Do not break further script if error was
+        //   429: too many requests (too fast) or
+        //   456: quota exceeded (more than 500K chars/month in free API mode)
+        // See https://www.deepl.com/docs-api/api-access/error-handling/
+        return [
+          {'text': '', 'detected_source_language': 'EN'},
+          {'text': '', 'detected_source_language': 'EN'},
+        ];
       });
     },
     
