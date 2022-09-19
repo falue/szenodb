@@ -138,6 +138,18 @@
 
         <!-- LIST RESOURCES -->
         <v-container v-if="resources.length" class="pa-0 pt-4 ma-0 fill-width" style="max-width:initial">
+          <!-- TABLE HEADER -->
+          <div class="primary--text italics my-2 grey darken-4" :class="$vuetify.breakpoint.mdAndUp ? 'px-4' : 'px-2'">
+              <div style="vertical-align: top; width:20%; display:inline-block;">Title</div>
+              <div v-if="isSmallWithOpenDrawer" :style="$vuetify.breakpoint.mdAndUp ? 'width:60%' : 'width:80%'" class="pl-2" style="display:inline-block">
+                  Resources
+              </div>
+              <div v-if="$vuetify.breakpoint.mdAndUp" :style="isSmallWithOpenDrawer ? '' : 'width:80%'" style="width:20%; text-align:right; display:inline-block">
+                  Actions
+              </div>
+          </div>
+
+          <!-- LIST RESOURCES -->
           <div
             v-for="(resource, i) in resources"
             class="my-2"
@@ -148,7 +160,7 @@
               ? 'pink darken-4'
                 : user.role != 'admin' && resource.markedForDeletion.status
                 ? 'hideDeleted'
-                  : i % 2 == 0 
+                  : i % 2 == 1 
                   ? 'grey darken-4'
                     : '', $vuetify.breakpoint.mdAndUp
                     ? 'px-4'
