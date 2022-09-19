@@ -278,14 +278,15 @@ const store = new Vuex.Store({
         snapshot.forEach(doc => {
           let resource = doc.data()
           resource.id = doc.id
+          let positionOf = resource.content.searchfield?.indexOf(payload);
           if(!payload) {
             // if no search, display results
             dataArray.push(resource)
-          } else if(payload && resource.content.searchfield.indexOf(payload) === 0)  {
+          } else if(payload && positionOf === 0)  {
             // find exact matches in the title. searchfield has the title first, so position is 0 if title is exact.
             resource.primaryResult=true;
             primaryDataArray.push(resource)
-          } else if(payload && resource.content.searchfield.indexOf(payload) !== -1)  {
+          } else if(payload && positionOf !== -1)  {
             // find matches anywhere
             dataArray.push(resource)
           }
