@@ -49,8 +49,8 @@
       <!-- PUBLIC NAV -->
       <v-tooltip bottom :disabled="$vuetify.breakpoint.smAndDown">
         <template v-slot:activator="{ on, attrs }">
-          <v-btn dense small to="/about" class="mx-1 primary--text" v-bind="attrs" v-on="on">
-            <v-icon v-if="$vuetify.breakpoint.smAndDown" color="primary">mdi-information</v-icon>
+          <v-btn :icon="$vuetify.breakpoint.xs" dense small to="/about" class="mx-1 primary--text" v-bind="attrs" v-on="on">
+            <v-icon v-if="$vuetify.breakpoint.smAndDown" color="primary">mdi-information-outline</v-icon>
             <span v-else>What's this?</span>
           </v-btn>
         </template>
@@ -64,8 +64,9 @@
 
       <v-tooltip bottom v-if="!auth" :disabled="$vuetify.breakpoint.smAndDown">
         <template v-slot:activator="{ on, attrs }">
-          <v-btn dense small to="/login" class="mx-1 primary--text" v-bind="attrs" v-on="on">
-            login
+          <v-btn :icon="$vuetify.breakpoint.xs" dense small to="/login" class="mx-1 primary--text" v-bind="attrs" v-on="on">
+            <v-icon v-if="$vuetify.breakpoint.smAndDown" color="primary">mdi-login-variant</v-icon>
+            <span v-else>login</span>
           </v-btn>
         </template>
         <span>Login to see the goodies</span>
@@ -75,7 +76,7 @@
       <div v-if="auth">
         <v-tooltip bottom :disabled="$vuetify.breakpoint.smAndDown">
           <template v-slot:activator="{ on, attrs }">
-            <v-btn dense small circle to="/resources" class="mx-1 primary--text" v-bind="attrs" v-on="on">
+            <v-btn :icon="$vuetify.breakpoint.xs" dense small circle to="/resources" class="mx-1 primary--text" v-bind="attrs" v-on="on">
               <v-icon v-if="$vuetify.breakpoint.smAndDown" color="primary">mdi-format-list-text</v-icon>
               <span v-else>Resources</span>
             </v-btn>
@@ -85,7 +86,7 @@
 
         <v-tooltip bottom :disabled="$vuetify.breakpoint.smAndDown">
           <template v-slot:activator="{ on, attrs }">
-            <v-btn dense small circle to="/goodies" class="mx-1 primary--text" v-bind="attrs" v-on="on">
+            <v-btn :icon="$vuetify.breakpoint.xs" dense small circle to="/goodies" class="mx-1 primary--text" v-bind="attrs" v-on="on">
               <v-icon v-if="$vuetify.breakpoint.smAndDown" color="primary">mdi-cupcake</v-icon>
               <span v-else>Goodies</span>
             </v-btn>
@@ -105,7 +106,7 @@
 
         <v-tooltip bottom :disabled="$vuetify.breakpoint.smAndDown">
           <template v-slot:activator="{ on, attrs }">
-            <v-btn small :icon="$vuetify.breakpoint.mdAndUp" :circle="$vuetify.breakpoint.mdAndUp" to="/profile" class="mx-1 grey darken-3" v-bind="attrs" v-on="on">
+            <v-btn icon small :circle="$vuetify.breakpoint.mdAndUp" to="/profile" class="mx-1 grey darken-3" v-bind="attrs" v-on="on">
               <v-icon color="primary">mdi-account-cowboy-hat</v-icon>
             </v-btn>
           </template>
@@ -114,7 +115,7 @@
 
         <v-tooltip bottom :disabled="$vuetify.breakpoint.smAndDown">
           <template v-slot:activator="{ on, attrs }">
-            <v-btn small :icon="$vuetify.breakpoint.mdAndUp" :circle="$vuetify.breakpoint.mdAndUp" @click="logout()" class="mx-1 grey darken-3" v-bind="attrs" v-on="on">
+            <v-btn icon small :circle="$vuetify.breakpoint.mdAndUp" @click="logout()" class="mx-1 grey darken-3" v-bind="attrs" v-on="on">
               <v-icon :small="$vuetify.breakpoint.mdAndUp" color="primary">mdi-logout-variant</v-icon>
             </v-btn>
           </template>

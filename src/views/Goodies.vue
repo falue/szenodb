@@ -244,7 +244,7 @@
            // 'web':[`./goodies/terminal/index.html`,
            'web':[],
            'color':`indigo`,
-           'dialog': {'title': ``, 'icon':'information', 'text': `On the top right there is a menu button hidden. Click it for settings or adjustments.`}
+           'dialog': {'title': ``, 'icon':'information-outline', 'text': `On the top right there is a menu button hidden. Click it for settings or adjustments.`}
           },
 
           {'title':`telefabi.ch bash console`,
@@ -252,7 +252,7 @@
            // 'web':[`./goodies/bash/index.html`,
            'web':[],
            'color':`warning`,
-           'dialog': {'title': ``, 'icon':'information', 'text': `On the top right there is a menu button hidden. Click it for settings or adjustments.`}
+           'dialog': {'title': ``, 'icon':'information-outline', 'text': `On the top right there is a menu button hidden. Click it for settings or adjustments.`}
           },
 
           {'title':`telefabi.ch Eddy-G`,
@@ -273,7 +273,7 @@
            'desc':`Fullscreen video player with perfect looping, chapters, play pause, delays, etc. Available offline aswell.`,
            'web':[`./goodies/video/index.html`, './downloads/video.zip'],
            'color':`deep-purple accent-4`,
-           'dialog': {'title': ``, 'icon':'information', 'text': `On the top right there is a menu button hidden. Click it for settings or adjustments.`}
+           'dialog': {'title': ``, 'icon':'information-outline', 'text': `On the top right there is a menu button hidden. Click it for settings or adjustments.`}
           },
 
           {'title':`threejs.org 3d viewer`,
@@ -287,7 +287,7 @@
            'desc':`Green/Blue screens with adjustable sizes & markers. Fullscreen colorplate with markers (or without). Available offline aswell.`,
            'web':[`./goodies/colorMarker/index.html`, './downloads/colorMarker.zip'],
            'color':`pink darken-2`,
-           'dialog': {'title': ``, 'icon':'information', 'text': `On the top right there is a menu button hidden. Click it for settings or adjustments.`}
+           'dialog': {'title': ``, 'icon':'information-outline', 'text': `On the top right there is a menu button hidden. Click it for settings or adjustments.`}
           },
 
           {'title':`Greenscreen images`,
