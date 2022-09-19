@@ -207,7 +207,10 @@
                 <v-icon :small="$vuetify.breakpoint.mdAndUp">mdi-pencil</v-icon>
               </v-btn>
 
-              <v-btn v-if="user.role === 'admin'" icon title="Delete for good" class="red ml-1" :small="$vuetify.breakpoint.mdAndUp" @click.stop="deleteResource(resource)">
+              <v-btn v-if="user.role === 'admin'" icon title="Delete for good" class="red ml-1" :small="$vuetify.breakpoint.mdAndUp"
+                @click.stop="!singleClickWarningIssued ? (singleClickWarningIssued = true, $toasted.global.info({msg:'Use double click for confirmation of IMMEDIATE deletion.'})) : null"
+                @dblclick.stop="deleteResource(resource)"
+              >
                 <v-icon :small="$vuetify.breakpoint.mdAndUp">mdi-delete</v-icon>
               </v-btn>
 
@@ -268,6 +271,7 @@ import EditResource from '@/components/EditResource'
         loading: false,
         showFavs: false,
         showOwnResources: false,
+        singleClickWarningIssued: false,
         maxSearchResults: 100,
         listWasShortened: false,
         dataMode: 'new',
