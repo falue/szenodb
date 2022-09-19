@@ -34,8 +34,8 @@
         </p>
 
         <!-- MENU -->
-        <div style="line-height:1em" class="fill-width pt-12 grey--text overline pb-2">
-          Chapters:
+        <div style="line-height:1em" class="fill-width pt-12 grey--text text-h6 pb-2">
+          Chapters
         </div>
         <template v-for="(card, n) in cards">
           <!-- <div :key="n" v-if="card.chapter" class="pointer mb-2" @click="goto(`chapter-${n}`)">{{card.chapter}}</div> -->
@@ -45,7 +45,7 @@
         <v-row>
           <template v-for="(card, n) in cards" >
             <!-- CHAPTER TITLE -->
-            <div :id="`chapter-${n}`" :key="n" v-if="card.chapter" style="line-height:1em" class="fill-width pa-4 pt-12 grey--text overline pb-2">
+            <div :id="`chapter-${n}`" :key="n" v-if="card.chapter" style="line-height:1em" class="fill-width pa-4 pt-12 grey--text text-h4 pb-2">
               <hr class="my-6" style="border:none; border-top: solid 1px rgba(255,255,255,.25);">
               {{card.chapter}}
             </div>
