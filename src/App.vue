@@ -44,6 +44,7 @@ export default {
         'loggedIn': 'You have successfully been logged in.',
         'loggedOut': 'You have been logged out.',
         'kicked': 'You have been banned from this system.',
+        'missingUserFile': `Oh no, your user file is missing! Get in contact with the &nbsp;<a href="mailto:info@fluescher.ch?subject=szenodb.telefabi.ch%3A%20Missing%20User%20File&body=Hi%2C%0Athere%20seems%20to%20be%20my%20user%20file%20missing.%0A%0AUser%20ID%3A%20${this.$route.query.id}%0A%0AThanks%21">admin here</a>!`,
         'emailVerified': 'Thank you for verifying your email.',
         'authRequiered': 'This page needs authentication.',
         'noExistence': 'This page does not yet exist.',  // currently not used

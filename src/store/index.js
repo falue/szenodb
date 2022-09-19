@@ -58,6 +58,15 @@ const store = new Vuex.Store({
     async fetchUserProfile({ commit }, user) {
       // fetch user profile
       return fb.usersCollection.doc(user.uid).get().then(function(userProfile) {
+        /* DELETED USER FILE */
+        if(!userProfile.data()) {
+          console.log(userProfile.data());
+          fb.auth.signOut();
+          commit('setUserProfile', {});
+          router.push(`/login?error=missingUserFile&id=${user.uid}`);
+          return;
+        }
+        
         /* KICKED! */
         if(userProfile.data().kicked) {
           console.log("KICKED USER");
