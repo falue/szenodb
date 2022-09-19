@@ -128,7 +128,7 @@
               v-bind="attrs" v-on="on"
               class="mx-2"
               :small="$vuetify.breakpoint.mdAndUp"
-              @click="resetSearch(maxSearchResults)">
+              @click="resetSearch(maxSearchResults), filter = ''">
               <v-icon :small="$vuetify.breakpoint.mdAndUp">mdi-close</v-icon>
               <!-- :color="user.favorites.includes(view.id) ? 'red' : ''" -->
             </v-btn>
