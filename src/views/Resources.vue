@@ -155,6 +155,7 @@
             v-for="(resource, i) in resources"
             class="my-2"
             style="height:56px; overflow: hidden;"
+            :style="resource.markedForDeletion.unreliable ? 'text-decoration: line-through !important' : ''"
             :key="i"
             :class="[
               user.role === 'admin' && resource.markedForDeletion.status 
@@ -170,9 +171,9 @@
             ]"
             @click="viewResource(resource)"
           >
-            <div class="pt-1" style="vertical-align: top; width:20%; display:inline-block;">
+            <div class="pt-1" style="text-decoration: inherit; vertical-align: top; width:20%; display:inline-block;">
               <!-- min-width:150px;  -->
-              <div style="overflow: hidden; text-overflow:ellipsis; white-space: nowrap; text-transform: capitalize;">{{resource.content.title}}
+              <div style="text-decoration: inherit; overflow: hidden; text-overflow:ellipsis; white-space: nowrap; text-transform: capitalize;">{{resource.content.title}}
                 <v-icon small color="yellow" title="Exact match" v-if="resource.primaryResult">mdi-star</v-icon>
               </div>
               <div style="overflow: hidden; text-overflow:ellipsis; white-space: nowrap" v-if="resource.content.address">
@@ -181,7 +182,7 @@
                 </a>
               </div>
             </div>
-            <div v-if="isSmallWithOpenDrawer" :style="$vuetify.breakpoint.mdAndUp ? 'width:60%' : 'width:80%'" class="grey--text pl-2 pt-1" style="display:inline-block">
+            <div v-if="isSmallWithOpenDrawer" :style="$vuetify.breakpoint.mdAndUp ? 'width:60%' : 'width:80%'" class="grey--text pl-2 pt-1" style="text-decoration: inherit; display:inline-block">
               <div v-if="user.role === 'admin' && resource.markedForDeletion.status">
                 Marked for deletion by
                 {{resource.markedForDeletion.userName}},
@@ -189,7 +190,7 @@
                 {{resource.markedForDeletion.userId}}
                 <v-btn text small dense onclick="event.stopPropagation();" @click="unmarkForDeletion(resource);">Unmark</v-btn>
               </div>
-              <div v-else style="overflow:hidden; display: -webkit-box; -webkit-box-orient: vertical; box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; ">
+              <div v-else style="text-decoration: inherit; overflow:hidden; display: -webkit-box; -webkit-box-orient: vertical; box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; ">
                   {{resource.content.resources}}
               </div>
             </div>
@@ -214,7 +215,7 @@
                 <v-icon :small="$vuetify.breakpoint.mdAndUp">mdi-delete</v-icon>
               </v-btn>
 
-              <v-btn v-else-if="user.emailVerified" icon title="Mark for deletion" class="red ml-1" :small="$vuetify.breakpoint.mdAndUp" @click.stop="markForDeletion(resource)">
+              <v-btn v-else-if="user.emailVerified" icon title="Mark for deletion" class="red ml-1" :small="$vuetify.breakpoint.mdAndUp" @click.stop="reasonOfDelete = {display: true, id: resource.id, title: resource.content.title, reason: ''}">
                 <v-icon :small="$vuetify.breakpoint.mdAndUp">mdi-delete</v-icon>
               </v-btn>
             </div>
@@ -246,6 +247,57 @@
         <!-- SPACER RIGHT -->
       </v-card>
     </v-card>
+
+    <!-- DELETE CONFIRMATION -->
+    <v-dialog
+      v-model="reasonOfDelete.display"
+      :width="$vuetify.breakpoint.smAndDown ? '80%' : '45%'"
+      :fullscreen="$vuetify.breakpoint.xs"
+    >
+      <v-card>
+        <v-card-title class="text-h5 error">
+          Are you sure to delete "{{reasonOfDelete.title}}"?
+        </v-card-title>
+        <v-card-text class="my-4 white--text">
+          Please specify your reasoning (eg, closed down, completely wrong, owned by murderers, etc).
+          Consider editing the resource aswell!
+          <v-text-field
+            filled
+            class="mt-4 input"
+            label="Reason"
+            type="text"
+            placeholder="Reason"
+            v-model="reasonOfDelete.reason"
+            required
+          ></v-text-field>
+          <!-- reasonOfDelete: <pre>{{reasonOfDelete}}</pre> -->
+        </v-card-text>
+
+        <v-card-actions>
+          <v-btn color="black" @click="reasonOfDelete.display = false, reasonOfDelete = {reason:''}">
+            <span>Cancel</span>
+          </v-btn>
+          <v-spacer></v-spacer>
+          <v-tooltip top max-width="300">
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn v-bind="attrs" v-on="on" color="white" class="black--text" :disabled="reasonOfDelete.reason.length === 0"
+              @click="reasonOfDelete.display = false, markForDeletion(reasonOfDelete, true), reasonOfDelete = {reason:''}">
+                Mark as unreliable
+              </v-btn>
+            </template>
+            <div>
+              All users will still be able to see this resource, in conjunction with your reasoning.
+              <br>
+              Others do not have to find out why this is unreliable or unusable!
+            </div>
+          </v-tooltip>
+          <v-spacer></v-spacer>
+          <v-btn color="red" :disabled="reasonOfDelete.reason.length === 0" @click="reasonOfDelete.display = false, markForDeletion(reasonOfDelete, false), reasonOfDelete = {reason:''}">
+            <span>Trust me, I know what I'm doing</span>
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -274,6 +326,7 @@ import EditResource from '@/components/EditResource'
         singleClickWarningIssued: false,
         maxSearchResults: 100,
         listWasShortened: false,
+        reasonOfDelete: {reason:''},
         dataMode: 'new',
         filter: '',
         searchTimeout: 0,
@@ -528,14 +581,16 @@ import EditResource from '@/components/EditResource'
         });
       },
 
-      async markForDeletion(data) {
+      async markForDeletion(data, unreliable) {
         await db.collection("resources").doc(data.id).set({
           'markedForDeletion': {
             'date':new Date(),
-            'status':true,
+            'status':!unreliable,
             'userId': this.user.uid,
             'userName': this.user.name,
-            'userEmail': this.user.email
+            'userEmail': this.user.email,
+            'reason': data.reason,
+            ...(unreliable && {unreliable: true})
           }
         }, { merge: true }).then(() => {
           this.$toasted.global.success({msg:'This post has been marked for deletion'});
