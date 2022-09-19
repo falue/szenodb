@@ -11,7 +11,7 @@
     >
       <v-card-title class="justify-center">This is for the art departments needs</v-card-title>
 
-      <v-card-text class="grey--text italics text-center">
+      <v-card-text class="white--text italics text-center">
         Don't know where to get hayballs, a spider web spray, an astronaut suit?
         <br>
         In need of someone who makes authentic medieval axes for a living?
@@ -42,7 +42,7 @@
         <p>This is a tool for the lovely people who work in the art department of switzerland.</p>
         <p><span class="overline pink--text" style="line-height:1em">szeno&middot;DB</span> is a searchable collection of links of connections, materials, services and problem solvers; done by you for us all.</p>
         <p>
-          Filmmaking is fast and needs answers equally fast.
+          Filmmaking and theater work is fast and needs answers equally fast.
           There is no point in holding back with your own curated list of interesting places with interesting stuff to get.
           We're in this together, and its scientifically proven to be more fun if we work together<sup class="grey--text">[citation needed]</sup>.
         </p>
@@ -88,35 +88,98 @@
         <div class="italics grey--text">
           Disclaimer: As this is very prototype-y, beware that sometimes it takes a while to load, may not work at all, or may change drastically in the future.
         </div>
-          <br>
-          Get in contact if you have questions, or want to improve this:
-          <br v-if="$vuetify.breakpoint.smAndDown">
-          <a href="tel:0787424834" v-if="$vuetify.breakpoint.smAndDown" title="call" class="no-underline" :class="{'bigMobileButton mr-2' : $vuetify.breakpoint.smAndDown}">
-            <v-icon :small="$vuetify.breakpoint.mdAndUp" class="pa-1" color="grey">mdi-phone</v-icon>
-          </a>
-          <a href="mailto:info@fluescher.ch" title="write email" class="no-underline" :class="{'bigMobileButton mr-2' : $vuetify.breakpoint.smAndDown}">
-            <v-icon :small="$vuetify.breakpoint.mdAndUp" class="pa-1" color="grey">mdi-email</v-icon>
-          </a>
-          <a href="https://github.com/falue/szenodb" title="github repo" target="_blank" class="no-underline" :class="{'bigMobileButton mr-2' : $vuetify.breakpoint.smAndDown}">
-            <v-icon :small="$vuetify.breakpoint.mdAndUp" class="pa-1" color="grey">mdi-github</v-icon>
-          </a>
-      </v-card-text>
+        
+        <v-card-title class="justify-center pt-16">Whodunit?</v-card-title>
 
+        <v-list three-line class="pa-0" color="transparent">
+          <v-list-item class="pa-0">
+            <v-list-item-avatar color="grey darken-3" size="125">
+            <v-img
+              class="elevation-6"
+              alt=""
+              :src="require('@/assets/portrait.jpg')"
+            ></v-img>
+          </v-list-item-avatar>
+
+            <v-list-item-content>
+              <v-list-item-title>Fabian Lüscher</v-list-item-title>
+              <v-list-item-subtitle class="grey--text">Prop maker & professional nerd</v-list-item-subtitle>
+              <v-list-item-subtitle class="grey--text mb-4">
+                <a href="https://fluescher.ch" class="no-underline" target="_blank">fluescher.ch</a> /
+                <a href="https://www.ssfv.ch/de/crew/crew-suche/fabian-luescher-1770" class="no-underline" target="_blank">ssfv.ch</a> /
+                <a href="https://www.imdb.com/name/nm5535144" class="no-underline" target="_blank">imdb.com</a>
+              </v-list-item-subtitle>
+              <v-card-text class="ma-0 pa-0">
+                <p>
+                  Thank you <a href="https://www.isabellesimmen.com/" class="no-underline" target="_blank">Isabelle Simmen</a> for bullet proofing & szeno chat for inspiration.
+                  <br>
+                  Get in contact if you have questions, or want to improve this:
+                  <br v-if="$vuetify.breakpoint.smAndDown">
+                  <a href="tel:0787424834" v-if="$vuetify.breakpoint.smAndDown" title="call" class="no-underline" :class="{'bigMobileButton mr-2' : $vuetify.breakpoint.smAndDown}">
+                    <v-icon class="pr-2" color="primary">mdi-phone</v-icon>
+                  </a>
+                  <a href="mailto:info@fluescher.ch" title="write email" class="no-underline" :class="{'bigMobileButton mr-2' : $vuetify.breakpoint.smAndDown}">
+                    <v-icon class="pr-2" color="primary">mdi-email</v-icon>
+                  </a>
+                  <a href="https://github.com/falue/szenodb" title="github repo" target="_blank" class="no-underline" :class="{'bigMobileButton mr-2' : $vuetify.breakpoint.smAndDown}">
+                    <v-icon class="pr-2" color="primary">mdi-github</v-icon>
+                  </a>
+                </p>
+                <p>
+                  If you thinks it's valuable what I do here, buy me a coffee:
+                </p>
+                <v-btn @click="popUpTwint = !popUpTwint" large color="black" class="mr-2">
+                  <img style="height:2em" :src="require('@/assets/twintLogo.svg')">
+                </v-btn>
+                <a href="https://www.buymeacoffee.com/falue" target="_blank">
+                  <v-btn large color="black" class="pa-0">
+                    <img style="height:44px" src="https://cdn.buymeacoffee.com/buttons/v2/default-blue.png" title="Buy Me A Coffee">
+                  </v-btn>
+                </a>
+                <br>
+              </v-card-text>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list>
+      </v-card-text>
     </v-card>
+
+    <!-- TWINT QR CODE -->
+    <v-dialog
+      v-model="popUpTwint"
+      width="300"
+      light
+    >
+    <v-card class="white">
+      <img v-if="$vuetify.breakpoint.smAndUp" style="width:100%" :src="require('@/assets/twint.svg')">
+      <v-card-text class="ma-0 pa-0 pl-6" v-if="$vuetify.breakpoint.smAndDown">
+        Fabian Lüscher /
+        078 742 48 34
+        <Copy data="0787424834" dataName="TWINT number"></Copy>
+      </v-card-text>
+    </v-card>
+    </v-dialog>
+
+
   </div>
 </template>
 
 <script>
+import Copy from '@/components/Copy'
   export default {
     name: 'About',
     props: {
       auth: Boolean,
       user: Object,
     },
+    components: {
+      Copy
+    },
     
     data () {
       return {
         showQuotes: false,
+        popUpTwint: false,
         classes: [
           'indigo--text italics',
           'warning--text',
