@@ -112,7 +112,9 @@
               </v-list-item-subtitle>
               <v-card-text class="ma-0 pa-0">
                 <p>
-                  Thank you <a href="https://www.isabellesimmen.com/" class="no-underline" target="_blank">Isabelle Simmen</a> for bullet proofing & szeno chat for the community.
+                  Thank you <a href="https://www.isabellesimmen.com/" class="no-underline" target="_blank">Isabelle Simmen</a>
+                  for testing, feedback and enthusiasm;
+                  and szeno chat for the community.
                   <br>
                   Get in contact if you have questions or want to improve this:
                   <br v-if="$vuetify.breakpoint.smAndDown">
@@ -127,7 +129,7 @@
                   </a>
                 </p>
                 <p>
-                  If you thinks it's valuable what I do here, buy me a coffee:
+                  If you think it's valuable what I do here, buy me a coffee:
                 </p>
                 <v-btn @click="popUpTwint = !popUpTwint" large color="black" class="mr-2">
                   <img style="height:2em" :src="require('@/assets/twintLogo.svg')">
