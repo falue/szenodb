@@ -265,7 +265,6 @@
           newResource.imgs = [];
           newResource.rating = 0;
           newResource.hiddenNote = "CSV import";
-          newResource.searchfield = `${newResource.title}${newResource.name}${newResource.resources}${newResource.info}${newResource.address}${newResource.tel}${newResource.email}${newResource.web}`.replace(/[^0-9a-zA-Z]/g, '').toLowerCase();
 
           await this.$store.dispatch('addResource', {"collection": "resources", "post": newResource})
           counter++;

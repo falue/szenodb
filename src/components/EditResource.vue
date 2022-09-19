@@ -1,11 +1,15 @@
 <template>
 <!--  -->
-  <form @submit.prevent="dataMode === 'new' ? $emit('new', data) : $emit('edit', data);">
+  <form @submit.prevent="dataMode === 'new' ? $emit('new', data) : $emit('edit', {'newData': data, 'oldData': oldData});">
     <!-- Use v-model="..." @change="..." instead of v-model: massive typing speed improvements -->
-    <v-text-field  label="Business or main resource*" style="width:40%; display:inline-block" class="mr-2" type="text" v-model="data.title" :rules="requiered"></v-text-field>
+    <v-text-field style="width:40%; display:inline-block" class="mr-2" type="text" v-model="data.title" :rules="requiered">
+      <template v-slot:label>Business or main resource<span v-if="data.title.length == 0" class="red--text">*</span></template>
+    </v-text-field>
     <v-text-field label="Contact person" style="width:55%; display:inline-block" type="text" v-model="data.name"></v-text-field>
-    <v-textarea auto-grow rows="3" label="Resources*" hint="List what kind of resources and services this business delivers" type="text" :rules="requiered" v-model="data.resources"></v-textarea>
-    <v-textarea auto-grow rows="3" label="Opinions" hint="Delivery speed, communication skills, what to look out for, etc" type="text" v-model="data.info"></v-textarea>
+    <v-textarea auto-grow rows="3" hint="Resources or services of this business. Will auto translate to EN, DE and FR." type="text" :rules="requiered" v-model="data.resources">
+      <template v-slot:label>Resources<span v-if="data.resources.length == 0" class="red--text">*</span></template>
+    </v-textarea>
+    <v-textarea auto-grow rows="3" label="Opinions" hint="Delivery speed, what to look out for, etc. Will auto translate to EN, DE and FR." type="text" v-model="data.info"></v-textarea>
     <v-text-field label="Address" hint="Can be typed address, google share link or general region." type="text" v-model="data.address"></v-text-field>
     <v-text-field label="Telephone" style="width:40%; display:inline-block" class="mr-2" type="text" v-model="data.tel"></v-text-field>
     <v-text-field label="Email" style="width:55%; display:inline-block" type="text" v-model="data.email"></v-text-field>
@@ -96,7 +100,12 @@ import CsvImport from '@/components/CsvImport'
     data() {
       return {
         requiered: [value => !!value || 'Required.'],
+        oldData: {},
       }
+    },
+    created() {
+      // Save data for detecting changes for translation
+      this.oldData = JSON.parse(JSON.stringify(this.data));
     },
     
     methods: {

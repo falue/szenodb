@@ -13,13 +13,28 @@
     </v-card-text>
 
       <v-card-text class="pb-0">
-      <div style="line-height:1em" class="grey--text overline">Resources</div>
-      <span v-html="data.content.resources"></span>
+        <div style="line-height:1em" class="grey--text overline">Resources</div>
+        <v-btn
+          small
+          class="right top ma-7 fixed"
+          :title="`${{'DE':'Autotranslate to German','FR':'Autotranslate to French','EN-GB':'Autotranslate to English','original':'See original'}[languages[languageIndex+1 > languages.length-1 ? 0 : languageIndex+1]]}`"
+          @click="switchLanguage()"
+        >
+          <v-icon small color="primary" class="mr-1">mdi-translate</v-icon> {{$vuetify.breakpoint.smAndUp ? currentLanguage : ''}}
+        </v-btn>
+
+        <span class="lang lang-original" v-html="data.content.resources"></span>
+        <span class="lang hide lang-DE" v-html="data.content.translations['DE'][0]"></span>
+        <span class="lang hide lang-EN-GB" v-html="data.content.translations['EN-GB'][0]"></span>
+        <span class="lang hide lang-FR" v-html="data.content.translations['FR'][0]"></span>
       </v-card-text>
 
       <v-card-text v-if="data.content.info" class="pb-0">
-      <div style="line-height:1em" class="grey--text overline">Opionions</div>
-      <span v-html="data.content.info"></span>
+        <div style="line-height:1em" class="grey--text overline">Opinions</div>
+        <span class="lang lang-original" v-html="data.content.info"></span>
+        <span class="lang hide lang-DE" v-html="data.content.translations['DE'][1]"></span>
+        <span class="lang hide lang-EN-GB" v-html="data.content.translations['EN-GB'][1]"></span>
+        <span class="lang hide lang-FR" v-html="data.content.translations['FR'][1]"></span>
       </v-card-text>
 
       <v-card-text v-if="data.content.address" class="pb-0">
@@ -55,10 +70,10 @@
         </v-img>
       </v-card-text>
 
-      <v-card-text class="pb-0">
+      <v-card-text class="pb-0 grey--text">
       <div style="line-height:1em" class="grey--text overline">rating</div>
       <v-icon v-for="x in data.content.rating" :key="x" small class="orange--text">mdi-star</v-icon>
-      <v-icon v-for="n in 5-data.content.rating" :title="data.content.rating+n" :key="'A'+ n" small class="grey--text">mdi-star-outline</v-icon>
+      <v-icon v-for="n in 5-data.content.rating" :title="data.content.rating+n" :key="'A'+ n" small class="white--text">mdi-star-outline</v-icon>
       {{data.content.rating ? data.content.rating+'/5' : '(unrated)'}}
       </v-card-text>
 
@@ -108,6 +123,16 @@ import VCardExport from '@/components/VCardExport'
     },
     data() {
       return {
+        currentLanguage: this.data.content.originalLang,
+        languageIndex: 0,
+        languages: ['original', 'DE', 'EN-GB', 'FR']
+      }
+    },
+    created() {
+      // Remove original language from list
+      const index = this.languages.indexOf(this.data.content.originalLang);
+      if (index > -1) {
+        this.languages.splice(index, 1);
       }
     },
     methods: {
@@ -120,6 +145,14 @@ import VCardExport from '@/components/VCardExport'
         }
         this.$store.dispatch('updateField', {'collection':'users', 'document':this.user.uid,'field':'favorites', 'data': this.user.favorites})
       },
+
+      switchLanguage() {
+        this.languageIndex++;
+        if(this.languageIndex >= this.languages.length) this.languageIndex = 0;
+        this.$helpers.hideClass('lang');
+        this.$helpers.showClass('lang-'+this.languages[this.languageIndex]);
+        this.currentLanguage = this.languages[this.languageIndex];
+      }
     }
   }
 </script>

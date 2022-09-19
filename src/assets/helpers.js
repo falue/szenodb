@@ -2,6 +2,62 @@ import Vue from 'vue';
 /* import md5 from 'md5'; */
 
 export default {
+  gebi: function(id) {
+    return document.getElementById(id);
+  },
+
+  hide: function(id) {
+    if(!Array.isArray(id)) {
+      this.gebi(id).classList.add('hide');
+      return
+    }
+    for(let i=0; i< id.length; i++) { 
+      this.gebi(id[i]).classList.add('hide');
+    }
+  },
+
+  show: function(id) {
+    if(!Array.isArray(id)) {
+      this.gebi(id).classList.remove('hide');
+      return
+    }
+    for(let i=0; i< arguments.length; i++) { 
+      this.gebi(arguments[i]).classList.remove('hide');
+    }
+  },
+
+  toggle: function(id) {
+    // TODO: IGNORES CLASS HIDE
+    let element = this.gebi(id);
+    let display = window.getComputedStyle(element, null).display;
+    if(display == "" || display == "none") {
+      this.show(id);
+      return 1;
+    } else {
+      this.hide(id);
+      return 0;
+    }
+  },
+
+  swap: function(id1, id2) {
+    this.toggle(id1);
+    this.toggle(id2);
+  },
+
+  showClass: function(className) {
+    let elements = document.getElementsByClassName(className);
+    for(let i=0; i< elements.length; i++) {
+      elements[i].classList.remove('hide');
+    }
+  },
+
+  hideClass: function(className) {
+    let elements = document.getElementsByClassName(className);
+    for(let i=0; i< elements.length; i++) { 
+      elements[i].classList.add('hide');
+    }
+  },
+
   toUrlText: function (text) {
     return encodeURI(text);
   },

@@ -32,9 +32,10 @@
         <EditResource
           :data="post"
           :dataMode="dataMode"
-          @delete="deletePost($event)"
-          @edit="post = $event, saveEditedPost()"
-          @new="post = $event, createPost()"
+          :user="user"
+          @delete="deleteResource($event)"
+          @edit="post = $event.newData, oldData=$event.oldData, saveEditedResource()"
+          @new="post = $event, createResource()"
           @cancel="cancelEditResource()"
         ></EditResource>
       </div>
@@ -127,7 +128,7 @@
               v-bind="attrs" v-on="on"
               class="mx-2"
               :small="$vuetify.breakpoint.mdAndUp"
-              @click="resetSearch(100)">
+              @click="resetSearch(maxSearchResults)">
               <v-icon :small="$vuetify.breakpoint.mdAndUp">mdi-close</v-icon>
               <!-- :color="user.favorites.includes(view.id) ? 'red' : ''" -->
             </v-btn>
@@ -162,11 +163,12 @@
                 ? 'hideDeleted'
                   : i % 2 == 1 
                   ? 'grey darken-4'
-                    : '', $vuetify.breakpoint.mdAndUp
-                    ? 'px-4'
-                    : 'px-2'
+                    : '',
+              $vuetify.breakpoint.mdAndUp
+                ? 'px-4'
+                : 'px-2'
             ]"
-            @click="viewPost(resource)"
+            @click="viewResource(resource)"
           >
             <div class="pt-1" style="vertical-align: top; width:20%; display:inline-block;">
               <!-- min-width:150px;  -->
@@ -197,7 +199,7 @@
                   <v-icon>mdi-link-variant</v-icon>
                 </v-btn>
               </a>
-              <v-btn title="View" icon v-if="$vuetify.breakpoint.mdAndUp" class="primary ml-1" :small="$vuetify.breakpoint.mdAndUp" @click.stop="viewPost(resource)">
+              <v-btn title="View" icon v-if="$vuetify.breakpoint.mdAndUp" class="primary ml-1" :small="$vuetify.breakpoint.mdAndUp" @click.stop="viewResource(resource)">
                 <v-icon :small="$vuetify.breakpoint.mdAndUp">mdi-eye</v-icon>
               </v-btn>
 
@@ -205,7 +207,7 @@
                 <v-icon :small="$vuetify.breakpoint.mdAndUp">mdi-pencil</v-icon>
               </v-btn>
 
-              <v-btn v-if="user.role === 'admin'" icon title="Delete for good" class="red ml-1" :small="$vuetify.breakpoint.mdAndUp" @click.stop="deletePost(resource)">
+              <v-btn v-if="user.role === 'admin'" icon title="Delete for good" class="red ml-1" :small="$vuetify.breakpoint.mdAndUp" @click.stop="deleteResource(resource)">
                 <v-icon :small="$vuetify.breakpoint.mdAndUp">mdi-delete</v-icon>
               </v-btn>
 
@@ -272,18 +274,8 @@ import EditResource from '@/components/EditResource'
         filter: '',
         searchTimeout: 0,
         view: {},
-        post: {
-          title: '',
-          name: '',
-          resources: '',
-          info: '',
-          address: '',
-          tel: '',
-          email: '',
-          web: '',
-          imgs: [],
-          rating: 0,
-        }
+        oldData: {},
+        post: this.resetResource()
       }
     },
 
@@ -305,12 +297,6 @@ import EditResource from '@/components/EditResource'
           this.search(this.filter);
         }, "750");
       },
-
-      /* fileInput: function (data) {
-        if (data.length) {
-          this.parseCsvFile(data);
-        }
-      }, */
     },
 
     created() {
@@ -323,12 +309,34 @@ import EditResource from '@/components/EditResource'
       });
       if(!this.resources.length) {
         // After login, sometimes resources are loaded before the fetchUserProfile is done, or something
-        console.log("Resources were missing");
+        console.log("Resources were missing. Reload from scratch.");
         this.resetSearch(this.maxSearchResults);
       }
     },
 
     methods: {
+      resetResource() {
+        return {
+          'title': '',
+          'originalLang': '',
+          'translations': {
+            'DE': ['',''],
+            'EN-GB': ['',''],
+            'FR': ['','']
+          },
+          'address': '',
+          'info': '',
+          'searchfield': '',
+          'rating': 0,
+          'imgs': [],
+          'name': '',
+          'web': '',
+          'resources': '',
+          'tel': '',
+          'email': ''
+        }
+      },
+
       search(payload) {
         if(!payload) {
           this.resetSearch(this.maxSearchResults);
@@ -398,32 +406,16 @@ import EditResource from '@/components/EditResource'
       },
       
 
-      viewPost(things) {
+      viewResource(things) {
         this.view = things;
         this.drawerOpen = true;
         this.dataMode = 'view'
       },
 
-      createPost() {
-        this.post.searchfield = this.createSearchString(),
+      createResource() {
         this.$store.dispatch('addResource', {"collection": "resources", "post": this.post}).then(() => {
           console.log("Success!")
-          this.post = {
-            title: '',
-            name: '',
-            resources: '',
-            info: '',
-            address: '',
-            tel: '',
-            email: '',
-            web: '',
-            imgs: [],
-            rating: '',
-            /* userName: '',
-            userId: '',
-            createdOn: '',
-            editedOn: '' */
-          }
+          this.post = this.resetResource();
           this.$toasted.global.success({msg:"Saved new data to firestore database!"});
         }).catch(error => {
           console.log(error)
@@ -432,10 +424,6 @@ import EditResource from '@/components/EditResource'
         });
         this.drawerOpen = false;
       },  
-
-      createSearchString() {
-        return `${this.post.title}${this.post.name}${this.post.resources}${this.post.info}${this.post.address}${this.post.tel}${this.post.email}${this.post.web}`.replace(/[^0-9a-zA-Z]/g, '').toLowerCase()
-      },
 
       createNewFromSearch() {
         this.post.title=this.filter; 
@@ -465,15 +453,18 @@ import EditResource from '@/components/EditResource'
             imgs: localData.content.imgs,
             //imgs: [],
             rating: localData.content.rating,
+            translations: localData.content.translations,
+            originalLang: localData.content.originalLang,
             // userCreated: localData.userCreated,
             // createdOn: localData.createdOn,
             // editedOn: localData.editedOn
           };
+          // TODO: this.post = localData;
         // this.$vuetify.goTo(0);
         this.drawerOpen = true;
       },
 
-      saveEditedPost() {
+      async saveEditedResource() {
         // to remove id from post
         let newData = {
             title: this.post.title,
@@ -486,22 +477,13 @@ import EditResource from '@/components/EditResource'
             web: this.post.web,
             imgs: this.post.imgs,
             rating: this.post.rating,
-            searchfield: this.createSearchString()
+            translations: this.post.translations,
+            originalLang: this.post.originalLang
         }
-        this.$store.dispatch('editResource', {'collection': 'resources', 'document': this.post.id, 'post': newData}).then(() => {
+        // TODO: let newData = this.post;
+        await this.$store.dispatch('editResource', {'collection': 'resources', 'document': this.post.id, 'post': newData, 'oldData': this.oldData}).then(() => {
           console.log('Success edit!')
-          this.post = {
-            title: '',
-            name: '',
-            resources: '',
-            info: '',
-            address: '',
-            tel: '',
-            email: '',
-            web: '',
-            imgs: [],
-            rating: ''
-          }
+          this.post = this.resetResource();
           this.dataMode = 'new';
           this.$toasted.global.success({msg:'Sucessfully edited post.'});
         }).catch(error => {
@@ -512,7 +494,7 @@ import EditResource from '@/components/EditResource'
         this.drawerOpen = false;
       },
 
-      deletePost(data) {
+      deleteResource(data) {
         // console.log(data.id, data)  // data.id,
         this.$store.dispatch('deleteResource', {'collection': 'resources', 'document': data.id}).then(() => {
           console.log('Sucessful removed post.')
@@ -565,21 +547,7 @@ import EditResource from '@/components/EditResource'
         this.dataMode = 'new';
         this.success = '';
         this.error = '';
-        this.post = {
-          title: '',
-          name: '',
-          resources: '',
-          info: '',
-          address: '',
-          tel: '',
-          email: '',
-          web: '',
-          imgs: [],
-          rating: ''/* ,
-          userCreated: '',
-          createdOn: '',
-          editedOn: '' */
-        }
+        this.post = this.resetResource();
         this.drawerOpen = false;
       },
 
