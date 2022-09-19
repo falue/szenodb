@@ -23,18 +23,18 @@
           <v-icon small color="primary" class="mr-1">mdi-translate</v-icon> {{$vuetify.breakpoint.smAndUp ? currentLanguage : ''}}
         </v-btn>
 
-        <span class="lang lang-original" v-html="data.content.resources"></span>
-        <span class="lang hide lang-DE" v-html="data.content.translations['DE'][0]"></span>
-        <span class="lang hide lang-EN-GB" v-html="data.content.translations['EN-GB'][0]"></span>
-        <span class="lang hide lang-FR" v-html="data.content.translations['FR'][0]"></span>
+        <span class="lang lang-original" :lang="data.content.originalLang" v-html="data.content.resources"></span>
+        <span class="lang hide lang-DE" lang="DE" v-html="data.content.translations['DE'][0]"></span>
+        <span class="lang hide lang-EN-GB" lang="en-GB" v-html="data.content.translations['EN-GB'][0]"></span>
+        <span class="lang hide lang-FR" lang="FR" v-html="data.content.translations['FR'][0]"></span>
       </v-card-text>
 
       <v-card-text v-if="data.content.info" class="pb-0">
         <div style="line-height:1em" class="grey--text overline">Opinions</div>
-        <span class="lang lang-original" v-html="data.content.info"></span>
-        <span class="lang hide lang-DE" v-html="data.content.translations['DE'][1]"></span>
-        <span class="lang hide lang-EN-GB" v-html="data.content.translations['EN-GB'][1]"></span>
-        <span class="lang hide lang-FR" v-html="data.content.translations['FR'][1]"></span>
+        <span class="lang lang-original" :lang="data.content.originalLang" v-html="data.content.info"></span>
+        <span class="lang hide lang-DE" lang="DE" v-html="data.content.translations['DE'][1]"></span>
+        <span class="lang hide lang-EN-GB" lang="en-GB" v-html="data.content.translations['EN-GB'][1]"></span>
+        <span class="lang hide lang-FR" lang="FR" v-html="data.content.translations['FR'][1]"></span>
       </v-card-text>
 
       <v-card-text v-if="data.content.address" class="pb-0">
