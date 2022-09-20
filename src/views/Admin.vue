@@ -1,93 +1,99 @@
 <template>
-  <div class="mx-auto my-4 mt-12 pa-8 pt-4">
-    <div class="pb-16 mb-16" v-if="user.role === 'admin'">
-      <!-- BACKUP -->
-      <div class="pb-4">
-      <!-- MAKE BACKUP -->
-        <div style="line-height:1em" class="mt-4 mb-2 primary--text text-h4">Backups</div>
-        <v-btn @click="triggerBackups()" :loading="backupInProgress" class="my-2">
-          <v-icon color="primary" class="mr-2">mdi-database-plus</v-icon>
-          Make backups <span v-if="$vuetify.breakpoint.mdAndUp">&nbsp;&nbsp;of users, persons & resources</span>
-        </v-btn>
-        <!-- READ BACKUPS -->
-        <ol class="px-0 py-2" v-if="backups && backups['date'] && backups['date'].length">
-          <li style="list-style:none;" v-for="(backup, x) in backups.date.slice().reverse()" :key="x">
-            <span class="grey--text">{{x+1}}.</span>
-            <!-- UNIX to date with format... -->
-            {{ $moment(backup).format("dddd, DD. MM. YYYY - HH:mm:ss") }}
-            <span class="grey--text">{{x === 0 ? `(${$helpers.timeRelativeToNow($moment(backup))})` : ''}}</span>
-            <span class="grey--text">{{x === backups['date'].length-1 && x != 0 ? '(oldest)' : ''}}</span>
-            <v-btn icon small class="ml-2" :color="reloadBackupConfirmation === backup ? 'red' : 'grey'" @click="reloadBackupConfirmation === backup ? reloadBackupConfirmation = -1 :reloadBackupConfirmation = backup">
-              <!-- <v-icon small>mdi-database-outline</v-icon> -->
-              <v-icon>mdi-database-clock</v-icon>
-            </v-btn>
-            <div class="primary--text pb-4 pl-4" v-if="reloadBackupConfirmation === backup">
-              <p class="mb-2">
-                Really sure to delete current data & reload this backup?
-              </p>
-              <v-btn color="red"  class="mr-2 mb-2" small @click="reloadBackup(backup.trim(), 'resources')">
-                <v-icon class="mr-2">mdi-hammer-wrench</v-icon> Reload resources
+  <div class="ma-0 fill-width fill-height">
+    <v-card
+      :class="$vuetify.breakpoint.smAndDown ? 'transparent fill-height ma-0 pa-4' : 'mx-auto my-4 mt-12 pa-8'"
+      :max-width="$vuetify.breakpoint.mdAndUp ? 888 : 6666"
+      max-height="80%"
+      style="overflow-y: auto;"
+    >
+      <div class="pb-16 mb-16" v-if="user.role === 'admin'">
+        <!-- BACKUP -->
+        <div class="pb-4">
+        <!-- MAKE BACKUP -->
+          <div style="line-height:1em" class="mt-4 mb-2 primary--text text-h4">Backups</div>
+          <v-btn @click="triggerBackups()" :loading="backupInProgress" class="my-2">
+            <v-icon color="primary" class="mr-2">mdi-database-plus</v-icon>
+            Make backups <span v-if="$vuetify.breakpoint.mdAndUp">&nbsp;&nbsp;of users, persons & resources</span>
+          </v-btn>
+          <!-- READ BACKUPS -->
+          <ol class="px-0 py-2" v-if="backups && backups['date'] && backups['date'].length">
+            <li style="list-style:none;" v-for="(backup, x) in backups.date.slice().reverse()" :key="x">
+              <span class="grey--text">{{x+1}}.</span>
+              <!-- UNIX to date with format... -->
+              {{ $moment(backup).format("dddd, DD. MM. YYYY - HH:mm:ss") }}
+              <span class="grey--text">{{x === 0 ? `(${$helpers.timeRelativeToNow($moment(backup))})` : ''}}</span>
+              <span class="grey--text">{{x === backups['date'].length-1 && x != 0 ? '(oldest)' : ''}}</span>
+              <v-btn icon small class="ml-2" :color="reloadBackupConfirmation === backup ? 'red' : 'grey'" @click="reloadBackupConfirmation === backup ? reloadBackupConfirmation = -1 :reloadBackupConfirmation = backup">
+                <!-- <v-icon small>mdi-database-outline</v-icon> -->
+                <v-icon>mdi-database-clock</v-icon>
               </v-btn>
-              <v-btn color="white" disabled class="mr-2 mb-2 black--text" small @click="reloadBackup(backup.trim(), 'persons')">
-                <v-icon class="mr-2">mdi-account-group</v-icon> Reload persons
-              </v-btn>
-              <v-btn color="primary"  class="mr-2 mb-2" small @click="reloadBackup(backup.trim(), 'users')">
-                <v-icon class="mr-2">mdi-account-cowboy-hat</v-icon> Reload users
-              </v-btn>
+              <div class="primary--text pb-4 pl-4" v-if="reloadBackupConfirmation === backup">
+                <p class="mb-2">
+                  Really sure to delete current data & reload this backup?
+                </p>
+                <v-btn color="red"  class="mr-2 mb-2" small @click="reloadBackup(backup.trim(), 'resources')">
+                  <v-icon class="mr-2">mdi-hammer-wrench</v-icon> Reload resources
+                </v-btn>
+                <v-btn color="white" disabled class="mr-2 mb-2 black--text" small @click="reloadBackup(backup.trim(), 'persons')">
+                  <v-icon class="mr-2">mdi-account-group</v-icon> Reload persons
+                </v-btn>
+                <v-btn color="primary"  class="mr-2 mb-2" small @click="reloadBackup(backup.trim(), 'users')">
+                  <v-icon class="mr-2">mdi-account-cowboy-hat</v-icon> Reload users
+                </v-btn>
+              </div>
+            </li>
+          </ol>
+          <div v-else class="pa-1 my-2 red">No backups yet.</div>
+        </div>
+
+        <v-divider class="mb-4"></v-divider>
+
+        <!-- USERS -->
+        <div style="line-height:1em" class="mt-6 primary--text text-h4">Users ({{users.length}})</div>
+        <div class="pa-0 py-2">
+          <div
+            v-for="(singleUser, i) in users"
+            class="my-2 py-2 px-4"
+            style="relative"
+            :key="i"
+            :class="i % 2 == 0 ? 'grey darken-4' : ''"
+          >
+            <div class="" style="overflow:hidden; vertical-align: top; width:20%; display:inline-block">
+              <span class="text-h6 primary--text">
+              {{singleUser.name}}
+              </span>
+              <br>
+              <a :href="`mailto:${singleUser.email}`">{{singleUser.email}}</a>
+                <v-icon
+                  small
+                  class="ml-2"
+                  :title="singleUser.emailVerified ? 'Email verified' : 'Email not verified'"
+                  :class="singleUser.emailVerified ? 'green--text' : 'red--text'">
+                  {{singleUser.emailVerified  ? 'mdi-check-circle' : 'mdi-close-circle'}}
+                </v-icon>
+              <br>
+              <v-btn dense small class="mt-2 mb-2 red" :disabled="singleUser.id === user.uid" v-if="singleUser.kicked" @click="updateUserField('kicked', singleUser.id, false)">unkick me</v-btn>
+              <v-btn dense small class="mt-2 mb-2" :disabled="singleUser.id === user.uid" v-else @click="updateUserField('kicked', singleUser.id, true)">kick me</v-btn>
+              <br>
             </div>
-          </li>
-        </ol>
-        <div v-else class="pa-1 my-2 red">No backups yet.</div>
-      </div>
-
-      <v-divider class="mb-4"></v-divider>
-
-      <!-- USERS -->
-      <div style="line-height:1em" class="mt-6 primary--text text-h4">Users ({{users.length}})</div>
-      <div class="pa-0 py-2">
-        <div
-          v-for="(singleUser, i) in users"
-          class="my-2 py-2 px-4"
-          style="relative"
-          :key="i"
-          :class="i % 2 == 0 ? 'grey darken-4' : ''"
-        >
-          <div class="" style="overflow:hidden; vertical-align: top; width:20%; display:inline-block">
-            <span class="text-h6 primary--text">
-            {{singleUser.name}}
-            </span>
-            <br>
-            <a :href="`mailto:${singleUser.email}`">{{singleUser.email}}</a>
-              <v-icon
-                small
-                class="ml-2"
-                :title="singleUser.emailVerified ? 'Email verified' : 'Email not verified'"
-                :class="singleUser.emailVerified ? 'green--text' : 'red--text'">
-                {{singleUser.emailVerified  ? 'mdi-check-circle' : 'mdi-close-circle'}}
-              </v-icon>
-            <br>
-            <v-btn dense small class="mt-2 mb-2 red" :disabled="singleUser.id === user.uid" v-if="singleUser.kicked" @click="updateUserField('kicked', singleUser.id, false)">unkick me</v-btn>
-            <v-btn dense small class="mt-2 mb-2" :disabled="singleUser.id === user.uid" v-else @click="updateUserField('kicked', singleUser.id, true)">kick me</v-btn>
-            <br>
-          </div>
-          <div class="grey--text" style="width:80%; display:inline-block">
-            Role: <span class="pointer" @click="setRoleForUser(singleUser.role === 'user' ? 'admin' :'user', singleUser.uid)" 
-            :title="singleUser.role === 'user' ? 'Upgrade to admin' :'Downgrade to user'" style="disaplay:inline-block">
-              {{singleUser.role}}
-              <v-icon small v-if="singleUser.role === 'user'">mdi-account-arrow-up</v-icon>
-              <v-icon small v-else>mdi-account-arrow-down</v-icon>
-            </span><br>
-            Profession: {{singleUser.title}}<br>
-            Contribution: {{singleUser.contribution}}<br>
-            ID: <pre class="grey--text" style="display:inline">{{$vuetify.breakpoint.smAndDown ? $helpers.truncate(singleUser.uid, 15) : singleUser.uid}}</pre>
-            <Copy :data="singleUser.uid" dataName="user ID"></Copy><br>
-            Created on: {{singleUser.createdOn ? $helpers.fbTimeToString(singleUser.createdOn, "DD.MM.YY - HH:mm") : '---' }},
-            last login: {{singleUser.lastLogin ? $helpers.fbTimeToString(singleUser.lastLogin, "DD.MM.YY - HH:mm") : '---' }}<br>
+            <div class="grey--text" style="width:80%; display:inline-block">
+              Role: <span class="pointer" @click="setRoleForUser(singleUser.role === 'user' ? 'admin' :'user', singleUser.uid)" 
+              :title="singleUser.role === 'user' ? 'Upgrade to admin' :'Downgrade to user'" style="disaplay:inline-block">
+                {{singleUser.role}}
+                <v-icon small v-if="singleUser.role === 'user'">mdi-account-arrow-up</v-icon>
+                <v-icon small v-else>mdi-account-arrow-down</v-icon>
+              </span><br>
+              Profession: {{singleUser.title}}<br>
+              Contribution: {{singleUser.contribution}}<br>
+              ID: <pre class="grey--text" style="display:inline">{{$vuetify.breakpoint.smAndDown ? $helpers.truncate(singleUser.uid, 15) : singleUser.uid}}</pre>
+              <Copy :data="singleUser.uid" dataName="user ID"></Copy><br>
+              Created on: {{singleUser.createdOn ? $helpers.fbTimeToString(singleUser.createdOn, "DD.MM.YY - HH:mm") : '---' }},
+              last login: {{singleUser.lastLogin ? $helpers.fbTimeToString(singleUser.lastLogin, "DD.MM.YY - HH:mm") : '---' }}<br>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-
+    </v-card>
   </div>
 </template>
 
