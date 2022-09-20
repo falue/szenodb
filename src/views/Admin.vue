@@ -11,7 +11,7 @@
         <div class="pb-4">
           <!-- MAKE BACKUP -->
           <div style="line-height:1em" class="mt-4 mb-2 grey--text text-h4">Backups</div>
-          <v-btn @click="setBackupName = true" :loading="backupInProgress" class="my-2">
+          <v-btn @click="setBackupName = !setBackupName" :loading="backupInProgress" class="my-2">
             <v-icon color="primary" class="mr-2">mdi-database-plus</v-icon>
             Make backups <span v-if="$vuetify.breakpoint.mdAndUp" class="ml-1">of users & resources</span>
           </v-btn>
