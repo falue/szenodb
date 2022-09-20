@@ -52,6 +52,8 @@ const store = new Vuex.Store({
     },
 
     async logout({ commit }) {
+      store.dispatch('unsubscribeAllBut', '');
+
       await fb.auth.signOut()
       // clear userProfile and redirect to /login
       commit('setUserProfile', {})
