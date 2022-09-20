@@ -261,7 +261,7 @@
           },
 
           {'title':`telefabi.ch html desktop`,
-           'desc':`Virtual desktop. Customizable only in offline mode.`,
+           'desc':`Virtual desktop. Make MAC look like Linux or Windows, but copyright free, and vice-versa. Lots of customization. Customizable only in offline mode.`,
            'web':[],
            'color':`green`,
            'dialog': {'title': ``, 'text': ``}
