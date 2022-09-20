@@ -6,74 +6,84 @@
       max-height="80%"
       style="overflow-y: auto;"
     >
+      <!-- BACKUP -->
       <div class="pb-16 mb-16" v-if="user.role === 'admin'">
-        <!-- BACKUP -->
         <div class="pb-4">
-        <!-- MAKE BACKUP -->
-          <div style="line-height:1em" class="mt-4 mb-2 primary--text text-h4">Backups</div>
-          <v-btn @click="triggerBackups()" :loading="backupInProgress" class="my-2">
+          <!-- MAKE BACKUP -->
+          <div style="line-height:1em" class="mt-4 mb-2 grey--text text-h4">Backups</div>
+          <v-btn @click="setBackupName = true" :loading="backupInProgress" class="my-2">
             <v-icon color="primary" class="mr-2">mdi-database-plus</v-icon>
-            Make backups <span v-if="$vuetify.breakpoint.mdAndUp">&nbsp;&nbsp;of users, persons & resources</span>
+            Make backups <span v-if="$vuetify.breakpoint.mdAndUp" class="ml-1">of users & resources</span>
           </v-btn>
+          <v-text-field dense height="1em" hide-details style="width:220px;" v-if="setBackupName" filled class="input ml-2 inline-block" placeholder="Set backup Name" type="text" v-model="backupName"></v-text-field>
+          <v-btn :disabled="!backupName.length" v-if="setBackupName" @click="triggerBackups(backupName), backupName = '', setBackupName = false" :loading="backupInProgress" class="ml-2 my-2 primary">
+            GO
+          </v-btn>
+
           <!-- READ BACKUPS -->
-          <ol class="px-0 py-2" v-if="backups && backups['date'] && backups['date'].length">
-            <li style="list-style:none;" v-for="(backup, x) in backups.date.slice().reverse()" :key="x">
-              <span class="grey--text">{{x+1}}.</span>
+          <ol class="px-0 py-2" v-if="backups && backups['backups'] && backups['backups'].length">
+            <li style="list-style:none;" v-for="(backup, x) in backups['backups'].slice().reverse()" :key="x">
+              <!-- {{backup}} -->
+              <span class="grey--text">{{x+1}}. </span>
+              <span v-html="starify(backup.name)"></span>
               <!-- UNIX to date with format... -->
-              {{ $moment(backup).format("dddd, DD. MM. YYYY - HH:mm:ss") }}
-              <span class="grey--text">{{x === 0 ? `(${$helpers.timeRelativeToNow($moment(backup))})` : ''}}</span>
-              <span class="grey--text">{{x === backups['date'].length-1 && x != 0 ? '(oldest)' : ''}}</span>
-              <v-btn icon small class="ml-2" :color="reloadBackupConfirmation === backup ? 'red' : 'grey'" @click="reloadBackupConfirmation === backup ? reloadBackupConfirmation = -1 :reloadBackupConfirmation = backup">
+              <span class="grey--text">
+                {{ $moment(backup.date).format("dddd, DD. MM. YYYY - HH:mm:ss") }}<!-- 
+                -->{{x === 0 ? `, ${$helpers.timeRelativeToNow($moment(backup.date))}, newest` : ''}}<!-- 
+                -->{{x === backups.backups.length-1 && x != 0 ? ', oldest' : ''}}
+              </span>
+
+              <v-btn icon small class="ml-2" :color="reloadBackupConfirmation === backup.date ? 'red' : 'grey'" @click="reloadBackupConfirmation === backup.date ? reloadBackupConfirmation = -1 :reloadBackupConfirmation = backup.date">
                 <!-- <v-icon small>mdi-database-outline</v-icon> -->
                 <v-icon>mdi-database-clock</v-icon>
               </v-btn>
-              <div class="primary--text pb-4 pl-4" v-if="reloadBackupConfirmation === backup">
+              <div class="primary--text pb-4 pl-4" v-if="reloadBackupConfirmation === backup.date">
                 <p class="mb-2">
                   Really sure to delete current data & reload this backup?
                 </p>
-                <v-btn color="red"  class="mr-2 mb-2" small @click="reloadBackup(backup.trim(), 'resources')">
+                <v-btn color="red" class="mr-2 mb-2" small @click="reloadBackup(backup.date.trim(), 'resources')">
                   <v-icon class="mr-2">mdi-hammer-wrench</v-icon> Reload resources
                 </v-btn>
-                <v-btn color="white" disabled class="mr-2 mb-2 black--text" small @click="reloadBackup(backup.trim(), 'persons')">
+                <v-btn color="white" disabled class="mr-2 mb-2 black--text" small @click="reloadBackup(backup.date.trim(), 'persons')">
                   <v-icon class="mr-2">mdi-account-group</v-icon> Reload persons
                 </v-btn>
-                <v-btn color="primary"  class="mr-2 mb-2" small @click="reloadBackup(backup.trim(), 'users')">
+                <v-btn color="primary"  class="mr-2 mb-2" small @click="reloadBackup(backup.date.trim(), 'users')">
                   <v-icon class="mr-2">mdi-account-cowboy-hat</v-icon> Reload users
                 </v-btn>
               </div>
             </li>
           </ol>
-          <div v-else class="pa-1 my-2 red">No backups yet.</div>
+          <div v-else class="pa-1 my-2 red">No backups yet, or page hard reloaded.</div>
         </div>
 
         <v-divider class="mb-4"></v-divider>
 
         <!-- USERS -->
-        <div style="line-height:1em" class="mt-6 primary--text text-h4">Users ({{users.length}})</div>
+        <div style="line-height:1em" class="mt-6 grey--text text-h4">Users</div>
+         {{users.length}} users in total, combined effort: {{totalContribution}} contribution points
         <div class="pa-0 py-2">
           <div
             v-for="(singleUser, i) in users"
-            class="my-2 py-2 px-4"
-            style="relative"
+            class="my-2 py-2 px-4 relative"
             :key="i"
             :class="i % 2 == 0 ? 'grey darken-4' : ''"
           >
-            <div class="" style="overflow:hidden; vertical-align: top; width:20%; display:inline-block">
+            <div class="pr-2" style="overflow:hidden; vertical-align: top; width:20%; display:inline-block;">
               <span class="text-h6 primary--text">
               {{singleUser.name}}
               </span>
               <br>
+              <v-icon
+                small
+                class="mr-1"
+                :title="singleUser.emailVerified ? 'Email verified' : 'Email not verified'"
+                :class="singleUser.emailVerified ? 'green--text' : 'red--text'">
+                {{singleUser.emailVerified  ? 'mdi-check-circle' : 'mdi-close-circle'}}
+              </v-icon>
               <a :href="`mailto:${singleUser.email}`">{{singleUser.email}}</a>
-                <v-icon
-                  small
-                  class="ml-2"
-                  :title="singleUser.emailVerified ? 'Email verified' : 'Email not verified'"
-                  :class="singleUser.emailVerified ? 'green--text' : 'red--text'">
-                  {{singleUser.emailVerified  ? 'mdi-check-circle' : 'mdi-close-circle'}}
-                </v-icon>
               <br>
-              <v-btn dense small class="mt-2 mb-2 red" :disabled="singleUser.id === user.uid" v-if="singleUser.kicked" @click="updateUserField('kicked', singleUser.id, false)">unkick me</v-btn>
-              <v-btn dense small class="mt-2 mb-2" :disabled="singleUser.id === user.uid" v-else @click="updateUserField('kicked', singleUser.id, true)">kick me</v-btn>
+              <v-btn dense small class="ma-2 red right top absolute" :disabled="singleUser.id === user.uid" v-if="singleUser.kicked" @click="updateUserField('kicked', singleUser.id, false)">unkick me</v-btn>
+              <v-btn dense small class="ma-2 right top absolute" :disabled="singleUser.id === user.uid" v-else @click="updateUserField('kicked', singleUser.id, true)">kick me</v-btn>
               <br>
             </div>
             <div class="grey--text" style="width:80%; display:inline-block">
@@ -114,8 +124,11 @@ import Copy from '@/components/Copy'
       return {
         success: false,
         somethingWrong: false,
+        setBackupName: false,
+        backupName: '',
         loading: false,
         backupInProgress: false,
+        totalContribution: 0,
         users: [],
         backups: [],
         reloadBackupConfirmation: -1,
@@ -144,6 +157,7 @@ import Copy from '@/components/Copy'
           querySnapshot.forEach(doc => {
             let f = doc.data();
             f.id = doc.id;
+            this.totalContribution += f.contribution;
             newData.push(f);
           });
           this.users = newData;
@@ -181,22 +195,26 @@ import Copy from '@/components/Copy'
         });
       },
 
-      async triggerBackups() {
-        let date = new Date();
-        let fbTimestamps = [];
-        if(this.backups && this.backups.date && this.backups.date.length) {
-          fbTimestamps = [...this.backups.date, date.toISOString()];
-        } else {
-          fbTimestamps = [date.toISOString()];
-        }
-        // FIXME: overwrites always all timestamps.. but yeah
-        await this.$store.dispatch('updateField', {'collection':'backups', 'document':'backuplist','field':'date', 'data': fbTimestamps});
+      starify(backupName) {
+        // Yes yes kindly fuck off ;)
+        return backupName.replace(/\*/g, '<i class="v-icon notranslate mdi mdi-star theme--dark orange--text" style="font-size: 1em;"></i>');
+      },
 
-        //this.makeBackup('texts', date);  // test
+      async triggerBackups(backupName) {
+        let currentDate = new Date().toISOString();
+        let allBackups = [];
+        if(this.backups.backups.length) {
+          allBackups = [...this.backups.backups, {date: currentDate, name: backupName}];
+        } else {
+          allBackups = [{date: currentDate, name: backupName}];
+        }
+        await this.$store.dispatch('updateField', {'collection':'backups', 'document':'backuplist','field':'backups', 'data': allBackups});
+       
         this.backupInProgress = true;
-        await this.makeBackup('users', date.toISOString());
-        await this.makeBackup('persons', date.toISOString());
-        await this.makeBackup('resources', date.toISOString());
+        // this.makeBackup('texts', currentDate);  // test
+        await this.makeBackup('users', currentDate);
+        await this.makeBackup('persons', currentDate);
+        await this.makeBackup('resources', currentDate);
         this.backupInProgress = false;
       },
 
@@ -217,9 +235,8 @@ import Copy from '@/components/Copy'
       async reloadBackup(filename, collection) {
         // delete current resources
         try {
-          console.log(`try to delete old collection if '${collection}'`);
+          console.log(`Try to delete old collection if '${collection}'`);
           const documents = await db.collection(collection).get();
-          /* TODO DOES NOT WAIT ON DELETION !!! */
           documents.forEach(async (doc)=> {
             await db.collection(collection).doc(doc.id).delete().then(function() {
               return true
@@ -233,9 +250,6 @@ import Copy from '@/components/Copy'
           return;
 
         } finally {
-
-          /* TODO DOES NOT WAIT ON DELETION !!! */
-          
         // copy old to new
         console.log("copy old to new"); 
         console.log(filename);
