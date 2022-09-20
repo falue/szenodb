@@ -20,7 +20,8 @@ async function setup() {
   let script = [];
   if(scriptName && scriptName != "default") {
     script = await parseFile(
-      `../../workstations/${workstation}/bash/${scriptName}.fakeBash`
+      //`../../workstations/${workstation}/bash/${scriptName}.fakeBash`
+      `${workstation}/${scriptName}.fakeBash`
     );
   } else {
     // make default bashProfile and enable freetext bashing

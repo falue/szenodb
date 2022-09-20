@@ -249,8 +249,7 @@
 
           {'title':`telefabi.ch bash console`,
            'desc':`Pre-determined animation of a console. Customizable only in offline mode.`,
-           // 'web':[`./goodies/bash/index.html`,
-           'web':[],
+           'web': [`./goodies/bash/index.html?script=1&workstation=examples&darkMode=true`, `./goodies/bash/index.html?script=2&workstation=examples&darkMode=true`],
            'color':`warning`,
            'dialog': {'title': ``, 'icon':'information-outline', 'text': `On the top right there is a menu button hidden. Click it for settings or adjustments.`}
           },
