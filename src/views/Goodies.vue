@@ -431,7 +431,7 @@ a[href$="py"]:before,
 a[href$="html"]:not[href^="http"]:before {
   content: "\F102B";  /* file code outline */
 }
-a[href$="html"][href^="./"]:before {
+a[href*=".html"][href^="./"]:before {
   content: "\F0206";  /* exit-to-app */
 }
 a[href^="http"][href$="zip"]:before {
