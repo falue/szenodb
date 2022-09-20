@@ -1,22 +1,22 @@
 <template>
   <div>
     <v-card-title class="pt-2">
-      <span v-html="data.content.title" :style="data.markedForDeletion.unreliable ? 'text-decoration: line-through': ''"></span>
+      <span v-html="data.content.title" :style="data.flags.unreliable ? 'text-decoration: line-through': ''"></span>
       <Copy :data="data.content.title" dataName="title" position="right"></Copy>
       <Copy v-if="user.role === 'admin'" :data="data.id" dataName="Document ID" position="right"></Copy>
     </v-card-title>
 
-    <v-card-text v-if="data.markedForDeletion.unreliable" class="error darken-2 pa-4 rounded relative">
+    <v-card-text v-if="data.flags.unreliable" class="error darken-2 pa-4 rounded relative">
       <div style="line-height:1em" class="white--text overline">
-        Marked as unreliable by {{data.markedForDeletion.userName}}<!-- 
-        --><Copy v-if="user.role === 'admin'" :data="data.markedForDeletion.userId" dataName="Flagger ID" position="top" opacity="1.0"></Copy>:
+        Marked as unreliable by {{data.flags.userName}}<!-- 
+        --><Copy v-if="user.role === 'admin'" :data="data.flags.userId" dataName="Flagger ID" position="top" opacity="1.0"></Copy>:
         <v-icon small color="yellow" >mdi-alert</v-icon>
       </div>
       <p>
-        {{data.markedForDeletion.reason}}
+        {{data.flags.reason}}
       </p>
-      {{ $helpers.fbTimeToString(data.markedForDeletion.date, "DD.MM.YY - HH:mm") }}
-      <v-btn small v-if="user.role === 'admin'" @click="removeUnreliableLabel(data.id)" class="right bottom absolute ma-2">Remove label</v-btn>
+      {{ $helpers.fbTimeToString(data.flags.date, "DD.MM.YY - HH:mm") }}
+      <v-btn small v-if="user.role === 'admin'" @click="removeUnreliableLabel(data.id)" class="right bottom absolute ma-2">Remove flag</v-btn>
     </v-card-text>
 
     <v-card-text v-if="data.content.name" class="pb-0">
@@ -163,7 +163,7 @@ import VCardExport from '@/components/VCardExport'
       },
 
       removeUnreliableLabel(id) {
-        this.$store.dispatch('updateField', {'collection':'resources', 'document':id,'field':'markedForDeletion', 'data': {'status': false}});
+        this.$store.dispatch('updateField', {'collection':'resources', 'document':id,'field':'flags', 'data': {'status': false}});
         this.$emit('close');
       },
 

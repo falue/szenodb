@@ -155,12 +155,12 @@
             v-for="(resource, i) in resources"
             class="my-2"
             style="height:56px; overflow: hidden;"
-            :style="resource.markedForDeletion.unreliable ? 'text-decoration: line-through !important' : ''"
+            :style="resource.flags.unreliable ? 'text-decoration: line-through !important' : ''"
             :key="i"
             :class="[
-              user.role === 'admin' && resource.markedForDeletion.status 
+              user.role === 'admin' && resource.flags.deleted
               ? 'pink darken-4'
-                : user.role != 'admin' && resource.markedForDeletion.status
+                : user.role != 'admin' && resource.flags.deleted
                 ? 'hideDeleted'
                   : i % 2 == 1 
                   ? 'grey darken-4'
@@ -183,12 +183,12 @@
               </div>
             </div>
             <div v-if="isSmallWithOpenDrawer" :style="$vuetify.breakpoint.mdAndUp ? 'width:60%' : 'width:80%'" class="grey--text pl-2 pt-1" style="text-decoration: inherit; display:inline-block">
-              <div v-if="user.role === 'admin' && resource.markedForDeletion.status">
+              <div v-if="user.role === 'admin' && resource.flags.deleted">
                 Marked for deletion by
-                {{resource.markedForDeletion.userName}},
-                {{resource.markedForDeletion.userEmail}},
-                {{resource.markedForDeletion.userId}}
-                <v-btn text small dense onclick="event.stopPropagation();" @click="unmarkForDeletion(resource);">Unmark</v-btn>
+                {{resource.flags.userName}},
+                {{resource.flags.userEmail}}
+                <br>
+                ID: <pre class="inline">{{resource.flags.userId}}</pre>
               </div>
               <div v-else style="text-decoration: inherit; overflow:hidden; display: -webkit-box; -webkit-box-orient: vertical; box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; ">
                   {{resource.content.resources}}
@@ -208,15 +208,20 @@
                 <v-icon :small="$vuetify.breakpoint.mdAndUp">mdi-pencil</v-icon>
               </v-btn>
 
-              <v-btn v-if="user.role === 'admin'" icon title="Delete for good" class="red ml-1" :small="$vuetify.breakpoint.mdAndUp"
-                @click.stop="!singleClickWarningIssued ? (singleClickWarningIssued = true, $toasted.global.info({msg:'Use double click for confirmation of IMMEDIATE deletion.'})) : null"
-                @dblclick.stop="deleteResource(resource)"
+              <v-btn
+                v-if="user.emailVerified"
+                icon
+                :title="user.role === 'admin' && resource.flags.status ? 'Edit delete/unreliable state' : user.role === 'admin' ? 'Mark for deletion - shift & click: Delete immediately' : 'Mark for deletion'"
+                class="red ml-1"
+                :small="$vuetify.breakpoint.mdAndUp"
+                @click.stop="setFlags($event, resource)"
               >
-                <v-icon :small="$vuetify.breakpoint.mdAndUp">mdi-delete</v-icon>
-              </v-btn>
-
-              <v-btn v-else-if="user.emailVerified" icon title="Mark for deletion" class="red ml-1" :small="$vuetify.breakpoint.mdAndUp" @click.stop="reasonOfDelete = {display: true, id: resource.id, title: resource.content.title, reason: ''}">
-                <v-icon :small="$vuetify.breakpoint.mdAndUp">mdi-delete</v-icon>
+                <v-icon v-if="user.role === 'admin' && resource.flags.status">
+                  mdi-pencil-circle
+                </v-icon>
+                <v-icon v-else :small="$vuetify.breakpoint.mdAndUp">
+                  mdi-delete
+                </v-icon>
               </v-btn>
             </div>
           </div>
@@ -255,18 +260,25 @@
       :fullscreen="$vuetify.breakpoint.xs"
     >
       <v-card>
-        <v-card-title class="text-h5 error">
+        <v-card-title v-if="reasonOfDelete.status" class="text-h5 error">
+          Edit "{{reasonOfDelete.title}}" flags
+        </v-card-title>
+        <v-card-title v-else class="text-h5 error">
           Are you sure to delete "{{reasonOfDelete.title}}"?
         </v-card-title>
         <v-card-text class="my-4 white--text">
           Please specify your reasoning (eg, closed down, completely wrong, owned by murderers, etc).
           Consider editing the resource aswell!
+          <p v-if="user.role === 'admin'" class="my-2">
+            <span class="primary--text">Admins can shift & click the trash can in the list to delete immedietely!</span>
+            <br>
+            ID: <pre class="inline">{{reasonOfDelete.id}}</pre>
+          </p>
           <v-text-field
             filled
             class="mt-4 input"
             label="Reason"
             type="text"
-            placeholder="Reason"
             v-model="reasonOfDelete.reason"
             required
           ></v-text-field>
@@ -274,26 +286,32 @@
         </v-card-text>
 
         <v-card-actions>
-          <v-btn color="black" @click="reasonOfDelete.display = false, reasonOfDelete = {reason:''}">
+          <v-btn color="black" @click="reasonOfDelete.display = false, reasonOfDelete = {reason:'', deleted:false, unreliable:false}">
             <span>Cancel</span>
           </v-btn>
           <v-spacer></v-spacer>
+          <v-btn v-if="reasonOfDelete.status" class="mr-2" color="primary" @click="reasonOfDelete.display = false, markForDeletion(reasonOfDelete, false, false), reasonOfDelete = {reason:'', deleted:false, unreliable:false}">
+            <span>Unmark</span>
+          </v-btn>
           <v-tooltip top max-width="300">
             <template v-slot:activator="{ on, attrs }">
               <v-btn v-bind="attrs" v-on="on" color="white" class="black--text" :disabled="reasonOfDelete.reason.length === 0"
-              @click="reasonOfDelete.display = false, markForDeletion(reasonOfDelete, true), reasonOfDelete = {reason:''}">
+              @click="reasonOfDelete.display = false, markForDeletion(reasonOfDelete, false, true), reasonOfDelete = {reason:'', deleted:false, unreliable:false}">
                 Mark as unreliable
               </v-btn>
             </template>
             <div>
               All users will still be able to see this resource, in conjunction with your reasoning.
               <br>
-              Others do not have to find out why this is unreliable or unusable!
+              Others do not have to find out on their own why this is unreliable or unusable!
             </div>
           </v-tooltip>
-          <v-spacer></v-spacer>
-          <v-btn color="red" :disabled="reasonOfDelete.reason.length === 0" @click="reasonOfDelete.display = false, markForDeletion(reasonOfDelete, false), reasonOfDelete = {reason:''}">
-            <span>Trust me, I know what I'm doing</span>
+          <v-btn color="red" :disabled="reasonOfDelete.reason.length === 0" @click="reasonOfDelete.display = false, markForDeletion(reasonOfDelete, true, false), reasonOfDelete = {reason:'', deleted:false, unreliable:false}">
+            <span v-if="user.role === 'admin'">Mark as deleted</span>
+            <span v-else>Trust me, I know what I'm doing</span>
+          </v-btn>
+          <v-btn color="orange" title="Admins can delete this now!" v-if="user.role === 'admin'" @click="reasonOfDelete.display = false, deleteResource(reasonOfDelete), reasonOfDelete = {reason:'', deleted:false, unreliable:false}">
+            <v-icon>mdi-delete-alert</v-icon>
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -460,7 +478,7 @@ import EditResource from '@/components/EditResource'
       loadDeletedResources() {
         this.showOwnResources = false;
         this.showFavs = false;
-        this.$store.dispatch('showMarkedForDeletion');
+        this.$store.dispatch('showDeletedFlags');
       },
       
 
@@ -568,12 +586,26 @@ import EditResource from '@/components/EditResource'
         this.drawerOpen = false;
       },
 
+      setFlags(event, resource) {
+        if(event.shiftKey && this.user.role === 'admin') {
+          this.deleteResource(resource);
+          return;
+        }
+        this.reasonOfDelete = {
+          display: true,
+          id: resource.id,
+          title: resource.content.title,
+          status: resource.flags.status,
+          reason: resource.flags.reason ? resource.flags.reason : ''
+        };
+      },
+
       deleteResource(data) {
         // console.log(data.id, data)  // data.id,
         this.$store.dispatch('deleteResource', {'collection': 'resources', 'document': data.id}).then(() => {
-          console.log('Sucessful removed post.')
+          console.log('Sucessful removed resource.')
           this.dataMode = 'new';
-          this.$toasted.global.success({msg:'Sucessful removed post'});
+          this.$toasted.global.success({msg:'Sucessful removed resource'});
         }).catch(error => {
           console.log(error)
           console.error(error.message);
@@ -581,16 +613,19 @@ import EditResource from '@/components/EditResource'
         });
       },
 
-      async markForDeletion(data, unreliable) {
+      async markForDeletion(data, deleted, unreliable) {
         await db.collection("resources").doc(data.id).set({
-          'markedForDeletion': {
+          'flags': {
             'date':new Date(),
-            'status':!unreliable,
+            'status': deleted || unreliable,
             'userId': this.user.uid,
             'userName': this.user.name,
             'userEmail': this.user.email,
             'reason': data.reason,
-            ...(unreliable && {unreliable: true})
+            'unreliable': unreliable,
+            'deleted': deleted,
+            //...(unreliable && {unreliable: unreliable}),
+            //...(deleted && {deleted: deleted})
           }
         }, { merge: true }).then(() => {
           this.$toasted.global.success({msg:'This post has been marked for deletion'});
@@ -603,7 +638,7 @@ import EditResource from '@/components/EditResource'
 
       async unmarkForDeletion(data) {
         await db.collection("resources").doc(data.id).set({
-          'markedForDeletion': {
+          'flags': {
             'date':new Date(),
             'status':false,
             'userId': this.user.uid,

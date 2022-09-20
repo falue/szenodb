@@ -198,8 +198,8 @@ const store = new Vuex.Store({
       })
     },
 
-    async showMarkedForDeletion() {
-      fb["db"].collection('resources').where('markedForDeletion.status', '==', true).orderBy('markedForDeletion.date', 'desc').onSnapshot(snapshot => {
+    async showDeletedFlags() {
+      fb["db"].collection('resources').where('flags.deleted', '==', true).orderBy('flags.date', 'desc').onSnapshot(snapshot => {
         let dataArray = []
         snapshot.forEach(doc => {
           let resource = doc.data()
@@ -232,8 +232,10 @@ const store = new Vuex.Store({
         content: post,
         userId: fb.auth.currentUser.uid,
         userName: state.userProfile.name,
-        markedForDeletion: {
+        flags: {
           status: false,
+          unreliable: false,
+          deleted: false,
         }
       }).then(async function(docRef) {
         store.dispatch('addContribution', 4);
