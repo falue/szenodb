@@ -365,7 +365,9 @@ import EditResource from '@/components/EditResource'
 
     computed: {
       resources () {
-        return this.$store.getters.resources
+        // triggers again after search, because array has changed!
+        // console.log("computed resources");
+        return this.$store.getters.resources;
       },
       isSmallWithOpenDrawer() {
         return !this.drawerOpen || ((this.$vuetify.breakpoint.smAndDown || this.$vuetify.breakpoint.lgAndUp) && this.drawerOpen);
@@ -394,7 +396,7 @@ import EditResource from '@/components/EditResource'
       if(!this.resources.length) {
         // After login, sometimes resources are loaded before the fetchUserProfile is done, or something
         console.log("Resources were missing. Reload from scratch.");
-        this.resetSearch(this.maxSearchResults);
+        this.$store.dispatch('getResources', this.maxSearchResults);
       }
     },
 
@@ -449,6 +451,7 @@ import EditResource from '@/components/EditResource'
       },
 
       resetSearch(limit) {
+        // console.log("Resources.vue: reset search");
         this.filterSet = '';
         // get initial array back
         if(limit == 100) {
@@ -505,7 +508,7 @@ import EditResource from '@/components/EditResource'
           delete data.newAndNext;
           openNewOneAfterwards = true;
         }
-        await this.createResource();
+        await this.addResource();
 
         if(openNewOneAfterwards) {
           this.dataMode = 'new';
@@ -513,8 +516,7 @@ import EditResource from '@/components/EditResource'
         }
       },
 
-
-      createResource() {
+      addResource() {
         this.$store.dispatch('addResource', {"collection": "resources", "post": this.post}).then(() => {
           console.log("Success!")
           this.post = this.resetResource();

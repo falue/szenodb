@@ -6,6 +6,8 @@ import { authKeys } from '../auth.js'
 
 Vue.use(Vuex)
 
+let unsubscribe = [];
+
 // STORE STUFF
 const store = new Vuex.Store({
   state: {
@@ -18,6 +20,7 @@ const store = new Vuex.Store({
       state.userProfile = val
     },
     setResource(state, val) {
+      // console.log('trigger: setResource')
       state.resources = val
     }
   },
@@ -158,14 +161,31 @@ const store = new Vuex.Store({
       store.commit('setUserProfile', {...state.userProfile, 'contribution': contribution })
     },
 
+    // eslint-disable-next-line no-unused-vars
+    unsubscribeAllBut({state}, keepAlive) {
+      // unsubscribe() to all other .onSnapshot(...):
+      const keys = Object.keys(unsubscribe);
+      // eslint-disable-next-line no-unused-vars
+      keys.forEach((key, index) => {
+        // console.log(`${index}. Key:${key}: ${unsubscribe[key]}`);
+        if(key !== keepAlive) unsubscribe[key]();
+      });
+    },
+
     /* RESOURCES */
     async getResources({state}, limit) {
+      // console.log("trigger: store.getResources");
+
+      // Stop listening to other queries, i want to be listening to this now..
+      store.dispatch('unsubscribeAllBut', 'getResources');
+
       // Do not load deleted resources for regular user
       let query = fb["db"].collection('resources').where('flags.deleted', '==', false);
       if(state.userProfile.role === 'admin') {
         query = fb["db"].collection('resources');
       }
-      query.orderBy('createdOn', 'desc').limit(limit).onSnapshot(snapshot => {
+      unsubscribe['getResources'] = query.orderBy('createdOn', 'desc').limit(limit).onSnapshot(snapshot => {
+        // console.log("READ DOC @ all resources");
         let dataArray = []
         snapshot.forEach(doc => {
           let resource = doc.data()
@@ -177,12 +197,16 @@ const store = new Vuex.Store({
     },
 
     async showFavs({state}) {
+      // Stop listening to other queries, i want to be listening to this now..
+      store.dispatch('unsubscribeAllBut', 'showFavs');
+
       // Do not load deleted resources for regular user
       let query = fb["db"].collection('resources').where('flags.deleted', '==', false);
       if(state.userProfile.role === 'admin') {
         query = fb["db"].collection('resources');
       }
-      query.orderBy('createdOn', 'desc').onSnapshot(snapshot => {
+      unsubscribe['showFavs'] = query.orderBy('createdOn', 'desc').onSnapshot(snapshot => {
+        // console.log("READ DOC @ fav resources");
         let dataArray = []
         snapshot.forEach(doc => {
           let resource = doc.data()
@@ -196,12 +220,16 @@ const store = new Vuex.Store({
     },
 
     async showOwnResources({state}) {
+      // Stop listening to other queries, i want to be listening to this now..
+      store.dispatch('unsubscribeAllBut', 'showOwnResources');
+
       // Do not load deleted resources for regular user
       let query = fb["db"].collection('resources').where('flags.deleted', '==', false);
       if(state.userProfile.role === 'admin') {
         query = fb["db"].collection('resources');
       }
-      query.where('userId', '==', state.userProfile.uid).orderBy('createdOn', 'desc').onSnapshot(snapshot => {
+      unsubscribe['showOwnResources'] = query.where('userId', '==', state.userProfile.uid).orderBy('createdOn', 'desc').onSnapshot(snapshot => {
+        // console.log("READ DOC @ your own resources");
         let dataArray = []
         snapshot.forEach(doc => {
           let resource = doc.data()
@@ -213,7 +241,11 @@ const store = new Vuex.Store({
     },
 
     async showDeletedFlags() {
-      fb["db"].collection('resources').where('flags.deleted', '==', true).orderBy('flags.date', 'desc').onSnapshot(snapshot => {
+      // Stop listening to other queries, i want to be listening to this now..
+      store.dispatch('unsubscribeAllBut', 'showDeletedFlags');
+
+      unsubscribe['showDeletedFlags'] = fb["db"].collection('resources').where('flags.deleted', '==', true).orderBy('flags.date', 'desc').onSnapshot(snapshot => {
+        // console.log("READ DOC @ deleted resources");
         let dataArray = []
         snapshot.forEach(doc => {
           let resource = doc.data()
@@ -390,6 +422,11 @@ const store = new Vuex.Store({
     },
 
     searchResources({commit, state}, payload) {
+      // console.log("trigger: store.searchResources")
+
+      // Stop listening to other queries, i want to be listening to this now..
+      store.dispatch('unsubscribeAllBut', 'searchResources');
+      
       // await new Promise(resolve => setTimeout(resolve, 3000));
       payload = payload.replace(/[^0-9a-zA-Z]/g, '').toLowerCase()
       // Firestore has not search freetext algorythm.. despite being from google.
@@ -398,7 +435,8 @@ const store = new Vuex.Store({
       if(state.userProfile.role === 'admin') {
         query = fb["db"].collection('resources');
       }
-      query.orderBy('createdOn', 'desc').onSnapshot(snapshot => {
+      unsubscribe['searchResources'] = query.orderBy('createdOn', 'desc').onSnapshot(snapshot => {
+        // console.log("READ DOC @ search resources");
         let dataArray = []
         let primaryDataArray = []
         snapshot.forEach(doc => {
@@ -453,6 +491,6 @@ const store = new Vuex.Store({
 })
 
 // Get initial resources
-store.dispatch('getResources', 100);
+// store.dispatch('getResources', 100);
 
 export default store
