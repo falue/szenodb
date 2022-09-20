@@ -80,7 +80,7 @@
                v-bind="attrs" v-on="on"
               class="grey darken-3 mx-2"
               :small="$vuetify.breakpoint.mdAndUp"
-              :color="showFavs ? 'red' : ''"
+              :color="filterSet === 'showFavs' ? 'red' : ''"
               @click="loadFavs()">
               <v-icon :small="$vuetify.breakpoint.mdAndUp">mdi-heart</v-icon>
               <!-- :color="user.favorites.includes(view.id) ? 'red' : ''" -->
@@ -96,7 +96,7 @@
                v-bind="attrs" v-on="on"
               class="grey darken-3 mx-2"
               :small="$vuetify.breakpoint.mdAndUp"
-              :color="showOwnResources ? 'primary' : ''"
+              :color="filterSet === 'showOwnResources' ? 'primary' : ''"
               @click="loadOwnResources()">
               <v-icon :small="$vuetify.breakpoint.mdAndUp">mdi-account-eye</v-icon>
               <!-- :color="user.favorites.includes(view.id) ? 'red' : ''" -->
@@ -111,6 +111,7 @@
               icon
                v-bind="attrs" v-on="on"
               class="grey darken-3 mx-2"
+              :color="filterSet === 'deleted' ? 'red' : ''"
               :small="$vuetify.breakpoint.mdAndUp"
               @click="loadDeletedResources()">
               <v-icon :small="$vuetify.breakpoint.mdAndUp">mdi-delete</v-icon>
@@ -120,13 +121,13 @@
           <span>Show marked as deleted</span>
         </v-tooltip>
 
-        <v-tooltip :disabled="$vuetify.breakpoint.smAndDown" bottom>
+        <v-tooltip v-if="filterSet.length" :disabled="$vuetify.breakpoint.smAndDown" bottom>
           <template v-slot:activator="{ on, attrs }">
             <v-btn
               text
               icon
               v-bind="attrs" v-on="on"
-              class="mx-2"
+              class="mx-2 red--text"
               :small="$vuetify.breakpoint.mdAndUp"
               @click="resetSearch(maxSearchResults), filter = ''">
               <v-icon :small="$vuetify.breakpoint.mdAndUp">mdi-close</v-icon>
@@ -339,8 +340,7 @@ import EditResource from '@/components/EditResource'
       return {
         drawerOpen: false,
         loading: false,
-        showFavs: false,
-        showOwnResources: false,
+        filterSet: '',
         singleClickWarningIssued: false,
         maxSearchResults: 100,
         listWasShortened: false,
@@ -440,8 +440,7 @@ import EditResource from '@/components/EditResource'
       },
 
       resetSearch(limit) {
-        this.showOwnResources = false;
-        this.showFavs = false;
+        this.filterSet = '';
         // get initial array back
         if(limit == 100) {
           this.listWasShortened = true;
@@ -452,36 +451,38 @@ import EditResource from '@/components/EditResource'
       },
 
       loadFavs() {
-        this.listWasShortened = false;     
-        this.showOwnResources = false;
-        if(this.showFavs) {
-          this.showFavs = false;
+        this.listWasShortened = false;    
+        if(this.filterSet === 'showFavs') {
+          this.filterSet = '';
           this.resetSearch(this.maxSearchResults);
         } else {
-          this.showFavs = true;
+          this.filterSet = 'showFavs';
           this.$store.dispatch('showFavs');
         }
       },
 
       loadOwnResources() {
         this.listWasShortened = false;
-        this.showFavs = false;
-        if(this.showOwnResources) {
-          this.showOwnResources = false;
+        if(this.filterSet === 'showOwnResources') {
+          this.filterSet = '';
           this.resetSearch(this.maxSearchResults);
         } else {
-          this.showOwnResources = true;
+          this.filterSet = 'showOwnResources';
           this.$store.dispatch('showOwnResources');
         }
       },
 
       loadDeletedResources() {
-        this.showOwnResources = false;
-        this.showFavs = false;
-        this.$store.dispatch('showDeletedFlags');
+        this.listWasShortened = false;
+        if(this.filterSet === 'deleted') {
+          this.filterSet = '';
+          this.resetSearch(this.maxSearchResults);
+        } else {
+          this.filterSet = 'deleted';
+          this.$store.dispatch('showDeletedFlags');
+        }
       },
       
-
       viewResource(things) {
         this.view = things;
         this.drawerOpen = true;
