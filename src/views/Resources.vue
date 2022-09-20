@@ -12,7 +12,7 @@
     >
       <!-- CLOSE DRAWER -->
       <div class="text-right fixed top right">
-        <v-btn icon @click="cancelEditResource()" >
+        <v-btn :disabled="loadingCsv[0] != loadingCsv[1]" icon @click="cancelEditResource()" >
           <v-icon class="red--text">mdi-close</v-icon>
         </v-btn>
       </div>

@@ -60,12 +60,13 @@
     <hr class="my-2" style="border:none; border-top: solid 1px rgba(255,255,255,.75);">
 
     <!-- SUBMIT BUTTONS -->
+    <!-- ACTIONS WHEN NEW -->
     <v-card-actions v-if="dataMode === 'new'" class="pt-2 pb-1 fixed bottom grey darken-4 fill-width left">
-      <v-btn right @click="$emit('cancel')" class="mr-2 mb-2">Close</v-btn>
+      <v-btn :disabled="disableClose" right @click="$emit('cancel')" class="mr-2 mb-2">Close</v-btn>
       <v-spacer></v-spacer>
 
       <!-- CSV IMPORT -->
-      <CsvImport @csvImporting="$emit('csvImporting', $event)"></CsvImport>
+      <CsvImport @csvImporting="$emit('csvImporting', $event), checkDisableClose($event)"></CsvImport>
 
       <v-spacer></v-spacer>
 
@@ -90,6 +91,7 @@
       </v-tooltip>
     </v-card-actions>
 
+    <!-- ACTIONS WHEN EDITING -->
     <v-card-actions v-else class="py-2 fixed bottom grey darken-4 fill-width left">
       <v-btn @click="$emit('cancel')">Cancel</v-btn>
       <v-spacer></v-spacer>
@@ -117,6 +119,7 @@ import CsvImport from '@/components/CsvImport'
         oldData: {},
         newAndNext: false,
         shiftKeyPressed: false,
+        disableClose: false,
       }
     },
     created() {
@@ -125,6 +128,10 @@ import CsvImport from '@/components/CsvImport'
     },
     
     methods: {
+      checkDisableClose(data){
+        this.disableClose = true;
+        if(data[1] === 0) this.disableClose = false;
+      },
       checkShiftKey(event) {
         this.shiftKeyPressed = event.shiftKey;
       },
