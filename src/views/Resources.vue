@@ -73,7 +73,7 @@
 
         <!-- DISPLAY IMPORT CSV STATUS -->
         <div class="my-4" v-if="loadingCsv[0] != loadingCsv[1]">
-          Loading your CSV Data.. 
+          Loading & auto-translate your CSV Data.. 
           <v-progress-linear style="height:.6em; display:inline-block; width:200px" :value="loadingCsv[0]*100/loadingCsv[1]"></v-progress-linear>
           {{loadingCsv[0]}}/{{loadingCsv[1]}}
         </div>
