@@ -216,7 +216,7 @@
                 :small="$vuetify.breakpoint.mdAndUp"
                 @click.stop="setFlags($event, resource)"
               >
-                <v-icon v-if="user.role === 'admin' && resource.flags.status">
+                <v-icon v-if="resource.flags.deleted || resource.flags.unreliable">
                   mdi-pencil-circle
                 </v-icon>
                 <v-icon v-else :small="$vuetify.breakpoint.mdAndUp">
