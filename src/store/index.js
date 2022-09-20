@@ -309,14 +309,14 @@ const store = new Vuex.Store({
         data.tel,
         data.email,
         data.web,
-        data.translations["DE"][0],
-        data.translations["DE"][1],
-        data.translations["EN-GB"][0],
-        data.translations["EN-GB"][1],
-        data.translations["FR"][0],
-        data.translations["FR"][1],
-        data.translations["IT"][0],
-        data.translations["IT"][1],
+        data.translations["DE"].info,
+        data.translations["DE"].resources,
+        data.translations["EN-GB"].info,
+        data.translations["EN-GB"].resources,
+        data.translations["FR"].info,
+        data.translations["FR"].resources,
+        data.translations["IT"].info,
+        data.translations["IT"].resources,
       ]
       return fields.join('').replace(/[^0-9a-zA-Z]/g, '').toLowerCase();
     },
@@ -404,19 +404,22 @@ const store = new Vuex.Store({
     async translateResource({ state }, data) {
       let targetLangs = ['DE', 'FR', 'EN-GB', 'IT'];
       let translations = {
-        'DE': [], 'FR': [], 'EN-GB': [], 'IT': []
+        'DE': {}, 'FR': {}, 'EN-GB': {}, 'IT': {}
       };
 
       let originalLang = 'DE';
+
+      let fieldsToTranslate = [data.resources, data.info];
+      let objectKeys = ['resources', 'info'];
       
       for (let i = 0; i < targetLangs.length; i++) {
-        await store.dispatch('translate', {'text': [data.resources, data.info], 'lang': targetLangs[i]}).then(function(text) {
+        await store.dispatch('translate', {'text': fieldsToTranslate, 'lang': targetLangs[i]}).then(function(text) {
           for (let x = 0; x < text.length; x++) {
             // Takes only the language from the last field => .info
             if(text[x].text.length && (text[x].detected_source_language === 'EN' || targetLangs.includes(text[x].detected_source_language))) {
               originalLang = text[x].detected_source_language === 'EN' ? 'EN-GB' : text[x].detected_source_language;
             }
-            translations[targetLangs[i]].push(text[x].text);
+            translations[targetLangs[i]][objectKeys[x]] = text[x].text;
           }
         });
       }

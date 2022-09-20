@@ -37,19 +37,19 @@
         </v-btn>
 
         <span class="lang lang-original" :lang="data.content.originalLang">{{data.content.resources}}</span>
-        <span class="lang hide lang-DE" lang="DE">{{data.content.translations['DE'][0]}}</span>
-        <span class="lang hide lang-EN-GB" lang="en-GB">{{data.content.translations['EN-GB'][0]}}</span>
-        <span class="lang hide lang-FR" lang="FR">{{data.content.translations['FR'][0]}}</span>
-        <span class="lang hide lang-IT" lang="IT">{{data.content.translations['IT'][0]}}</span>
+        <span class="lang hide lang-DE" lang="DE">{{data.content.translations['DE'].resources}}</span>
+        <span class="lang hide lang-EN-GB" lang="en-GB">{{data.content.translations['EN-GB'].resources}}</span>
+        <span class="lang hide lang-FR" lang="FR">{{data.content.translations['FR'].resources}}</span>
+        <span class="lang hide lang-IT" lang="IT">{{data.content.translations['IT'].resources}}</span>
       </v-card-text>
 
       <v-card-text v-if="data.content.info" class="pb-0">
         <div style="line-height:1em" class="grey--text overline">Opinions</div>
         <span class="lang lang-original" :lang="data.content.originalLang">{{data.content.info}}</span>
-        <span class="lang hide lang-DE" lang="DE">{{data.content.translations['DE'][1]}}</span>
-        <span class="lang hide lang-EN-GB" lang="en-GB">{{data.content.translations['EN-GB'][1]}}</span>
-        <span class="lang hide lang-FR" lang="FR">{{data.content.translations['FR'][1]}}</span>
-        <span class="lang hide lang-IT" lang="IT">{{data.content.translations['IT'][1]}}</span>
+        <span class="lang hide lang-DE" lang="DE">{{data.content.translations['DE'].info}}</span>
+        <span class="lang hide lang-EN-GB" lang="en-GB">{{data.content.translations['EN-GB'].info}}</span>
+        <span class="lang hide lang-FR" lang="FR">{{data.content.translations['FR'].info}}</span>
+        <span class="lang hide lang-IT" lang="IT">{{data.content.translations['IT'].info}}</span>
       </v-card-text>
 
       <v-card-text v-if="data.content.address" class="pb-0">
