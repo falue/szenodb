@@ -136,7 +136,7 @@
                 </v-btn>
                 <a href="https://www.buymeacoffee.com/falue" target="_blank">
                   <v-btn large color="black" class="pa-0">
-                    <img style="height:44px" src="https://cdn.buymeacoffee.com/buttons/v2/default-blue.png" title="Buy Me A Coffee">
+                    <img style="height:44px" src="https://cdn.buymeacoffee.com/buttons/v2/default-blue.png" title="Buy Me A Coffee (Credit card)">
                   </v-btn>
                 </a>
                 <br>
@@ -153,7 +153,7 @@
       width="300"
       light
     >
-    <v-card class="white">
+    <v-card class="white" @click="popUpTwint = false">
       <img v-if="$vuetify.breakpoint.smAndUp" style="width:100%" :src="require('@/assets/twint.svg')">
       <v-card-text class="ma-0 pa-0 pl-6" v-if="$vuetify.breakpoint.smAndDown">
         Fabian Lüscher /
