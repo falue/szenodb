@@ -65,7 +65,7 @@
         <v-icon slot="append" :class="filter.length ? 'hover-red' : ''" @click="filter = '';">{{filter.length ? 'mdi-close' : 'mdi-magnify'}}</v-icon>
         <template v-slot:append-outer>
           <div class="primary ma-0 addNewResource">
-            <v-icon color="white" @click="dataMode = 'new'; drawerOpen = true">mdi-plus</v-icon> 
+            <v-icon color="white" @click="resetSearch(maxSearchResults), dataMode = 'new'; drawerOpen = true">mdi-plus</v-icon> 
           </div>
         </template>
         </v-text-field>
