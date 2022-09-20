@@ -8,7 +8,7 @@
 
     <v-card-text v-if="data.flags.deleted || data.flags.unreliable" :class="data.flags.deleted ? 'pink darken-2' : 'error darken-2'" class="pa-4 rounded relative">
       <div style="line-height:1em" class="white--text overline">
-        Marked as {{data.flags.deleted ? 'deleted' : 'unreliable'}} by {{data.flags.userName}}<!-- 
+        Flagged as {{data.flags.deleted ? 'deleted' : 'unreliable'}} by {{data.flags.userName}}<!-- 
         --><Copy v-if="user.role === 'admin'" :data="data.flags.userId" dataName="Flagger ID" position="top" opacity="1.0"></Copy>:
         <v-icon small color="yellow" >mdi-alert</v-icon>
       </div>

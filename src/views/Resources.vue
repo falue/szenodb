@@ -126,7 +126,7 @@
                 <!-- :color="user.favorites.includes(view.id) ? 'red' : ''" -->
               </v-btn>
             </template>
-            <span>Show marked as deleted</span>
+            <span>Show flagged as deleted</span>
           </v-tooltip>
 
           <v-tooltip v-if="filterSet.length" :disabled="$vuetify.breakpoint.smAndDown" bottom>
@@ -193,7 +193,7 @@
             </div>
             <div v-if="isSmallWithOpenDrawer" :style="$vuetify.breakpoint.mdAndUp ? 'width:60%' : 'width:80%'" class="grey--text pl-2 pt-1" style="text-decoration: inherit; display:inline-block">
               <div v-if="user.role === 'admin' && resource.flags.deleted">
-                Marked by
+                Flagged by
                 {{resource.flags.userName}},
                 {{resource.flags.userEmail}} (ID: <pre class="inline">{{resource.flags.userId}}</pre>)
                 <br>
@@ -220,7 +220,7 @@
               <v-btn
                 v-if="user.emailVerified"
                 icon
-                :title="user.role === 'admin' && resource.flags.status ? 'Edit delete/unreliable state' : user.role === 'admin' ? 'Mark for deletion - shift & click: Delete immediately' : 'Mark for deletion'"
+                :title="user.role === 'admin' && resource.flags.status ? 'Edit delete/unreliable state' : user.role === 'admin' ? 'Flag for deletion - shift & click: Delete immediately' : 'Flag for deletion'"
                 class="red ml-1"
                 :small="$vuetify.breakpoint.mdAndUp"
                 @click.stop="setFlags($event, resource)"
@@ -238,7 +238,7 @@
 
         <p v-else class="py-4">
           <span v-if="!filter">
-          {{filterSet === 'showFavs' ? 'You have no favorites saved.' : filterSet === 'deleted' ? 'There are currently no resources marked by users for deletion.' : 'There are currently no resources.'}}
+          {{filterSet === 'showFavs' ? 'You have no favorites saved.' : filterSet === 'deleted' ? 'There are currently no resources flagged for deletion.' : 'There are currently no resources.'}}
           </span>
           <span v-else>
             Your search for "{{filter}}" did not return any results.
@@ -299,14 +299,14 @@
             <span>Cancel</span>
           </v-btn>
           <v-spacer></v-spacer>
-          <v-btn v-if="reasonOfDelete.status" class="mr-2" color="primary" @click="reasonOfDelete.display = false, markForDeletion(reasonOfDelete, false, false), reasonOfDelete = {reason:'', deleted:false, unreliable:false}">
-            <span>Unmark</span>
+          <v-btn v-if="reasonOfDelete.status" class="mr-2" color="primary" @click="reasonOfDelete.display = false, flagForDeletion(reasonOfDelete, false, false), reasonOfDelete = {reason:'', deleted:false, unreliable:false}">
+            <span>Unflag</span>
           </v-btn>
           <v-tooltip top max-width="300">
             <template v-slot:activator="{ on, attrs }">
               <v-btn v-bind="attrs" v-on="on" color="white" class="black--text" :disabled="reasonOfDelete.reason.length === 0"
-              @click="reasonOfDelete.display = false, markForDeletion(reasonOfDelete, false, true), reasonOfDelete = {reason:'', deleted:false, unreliable:false}">
-                Mark as unreliable
+              @click="reasonOfDelete.display = false, flagForDeletion(reasonOfDelete, false, true), reasonOfDelete = {reason:'', deleted:false, unreliable:false}">
+                Flag as unreliable
               </v-btn>
             </template>
             <div>
@@ -315,8 +315,8 @@
               Others do not have to find out on their own why this is unreliable or unusable!
             </div>
           </v-tooltip>
-          <v-btn color="red" :disabled="reasonOfDelete.reason.length === 0" @click="reasonOfDelete.display = false, markForDeletion(reasonOfDelete, true, false), reasonOfDelete = {reason:'', deleted:false, unreliable:false}">
-            <span v-if="user.role === 'admin'">Mark as deleted</span>
+          <v-btn color="red" :disabled="reasonOfDelete.reason.length === 0" @click="reasonOfDelete.display = false, flagForDeletion(reasonOfDelete, true, false), reasonOfDelete = {reason:'', deleted:false, unreliable:false}">
+            <span v-if="user.role === 'admin'">Flag as deleted</span>
             <span v-else>Trust me, I know what I'm doing</span>
           </v-btn>
           <v-btn color="orange" title="Admins can delete this now!" v-if="user.role === 'admin'" @click="reasonOfDelete.display = false, deleteResource(reasonOfDelete), reasonOfDelete = {reason:'', deleted:false, unreliable:false}">
@@ -625,7 +625,7 @@ import EditResource from '@/components/EditResource'
         });
       },
 
-      async markForDeletion(data, deleted, unreliable) {
+      async flagForDeletion(data, deleted, unreliable) {
         await db.collection("resources").doc(data.id).set({
           'flags': {
             'date':new Date(),
@@ -638,7 +638,7 @@ import EditResource from '@/components/EditResource'
             'deleted': deleted,
           }
         }, { merge: true }).then(() => {
-          this.$toasted.global.success({msg:'This post has been marked for deletion'});
+          this.$toasted.global.success({msg:'This post has been flagged for deletion'});
         }).catch(error => {
           console.log(error)
           console.error(error.message);
@@ -646,7 +646,7 @@ import EditResource from '@/components/EditResource'
         });
       },
 
-      async unmarkForDeletion(data) {
+      async unflagForDeletion(data) {
         await db.collection("resources").doc(data.id).set({
           'flags': {
             'date':new Date(),
@@ -656,7 +656,7 @@ import EditResource from '@/components/EditResource'
             'userEmail': this.user.email
           }
         }, { merge: true }).then(() => {
-          this.$toasted.global.success({msg:'This post has been unmarked for deletion'});
+          this.$toasted.global.success({msg:'This post has been unflagged for deletion'});
         }).catch(error => {
           console.log(error)
           console.error(error.message);
