@@ -12,7 +12,7 @@
     <v-card-title :style="$route.name === 'Resources' ? 'background-color:#121212;' : ''" style="z-index: 1;" class="text-shadow--black caption pink--text justify-center pa-0 ma-0">
       <span class="overline" style="line-height:1em">szeno&middot;DB <span style="text-transform:lowercase;">v</span>{{appVersion}}</span>
       <span class="px-1">made with <v-icon small color="rgba(255,0,255,.5)">mdi-heart</v-icon> by</span>
-      <a href="https://www.fluescher.ch" target="_blank" class="no-underline"><span class=" pink--text ">telefabi.ch</span></a>
+      <a href="https://www.telefabi.ch" target="_blank" class="no-underline"><span class=" pink--text ">telefabi.ch</span></a>
     </v-card-title>
     <v-card-title :style="$route.name === 'Resources' ? 'background-color:#121212;' : ''" class="text-shadow--black caption pink--text justify-center pa-0 pb-2 ma-0" style="z-index: 1;">
       <a href="https://github.com/falue/szenodb" title="github repo" target="_blank" class="no-underline" :class="{'bigMobileButton mr-2' : $vuetify.breakpoint.smAndDown}">
