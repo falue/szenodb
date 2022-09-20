@@ -234,12 +234,16 @@ const store = new Vuex.Store({
         throw {'message': "Error writing document: Not allowed"};
       }
       let creationDate = new Date();
-      post.translations = {
-        'DE': [],
-        'EN-GB': [],
-        'FR': [],
-        'IT': [],
-      }
+
+      // TRANSLATE TEXT FIRST TO ARRAY
+      let translations = await store.dispatch('translateResource', post);
+      post.originalLang = translations.originalLang;
+      post.translations = translations.translations;
+
+      // BUILD SEARCHFIELD
+      post.searchfield = await store.dispatch('buildSearchfield', post);
+
+      // WRITE TO DB
       await fb["db"].collection(collection).add({
         createdOn: creationDate,
         editedOn: creationDate,
@@ -251,12 +255,8 @@ const store = new Vuex.Store({
           unreliable: false,
           deleted: false,
         }
-      }).then(async function(docRef) {
+      }).then(function() {
         store.dispatch('addContribution', 4);
-        await store.dispatch('translateResource', {'document': docRef.id, 'data': post});
-        await store.dispatch('buildSearchfield', {'id': docRef.id });
-        // fb["db"].collection("users").doc(state.userProfile.uid).update({'contribution': state.userProfile.contribution+3})
-        // store.dispatch('updateField', {'collection':'users', 'document':state.userProfile.uid, 'field':'contribution', 'data':state.userProfile.contribution+3})
         return true
       }).catch(function(error) {
         throw error;
@@ -264,38 +264,27 @@ const store = new Vuex.Store({
     },
 
     // eslint-disable-next-line no-unused-vars
-    async buildSearchfield({state}, document) {
-      // get document into data...
-      let data = (await fb["db"].collection('resources').doc(document.id).get()).data();
+    buildSearchfield({state}, data) {
+      // Get document into data...
       let fields = [
-        data.content.title,
-        data.content.name,
-        data.content.resources,
-        data.content.info,
-        data.content.address,
-        data.content.tel,
-        data.content.email,
-        data.content.web,
-        data.content.translations["DE"][0],
-        data.content.translations["DE"][1],
-        data.content.translations["EN-GB"][0],
-        data.content.translations["EN-GB"][1],
-        data.content.translations["FR"][0],
-        data.content.translations["FR"][1],
-        data.content.translations["IT"][0],
-        data.content.translations["IT"][1],
+        data.title,
+        data.name,
+        data.resources,
+        data.info,
+        data.address,
+        data.tel,
+        data.email,
+        data.web,
+        data.translations["DE"][0],
+        data.translations["DE"][1],
+        data.translations["EN-GB"][0],
+        data.translations["EN-GB"][1],
+        data.translations["FR"][0],
+        data.translations["FR"][1],
+        data.translations["IT"][0],
+        data.translations["IT"][1],
       ]
-      fields = fields.join('').replace(/[^0-9a-zA-Z]/g, '').toLowerCase();
-      // write fields to document.content.searchfield
-      await fb["db"].collection('resources').doc(document.id).set({
-        content: {
-          searchfield: fields
-        }
-      }, { merge: true }).then(function() {
-        return true
-      }).catch(function(error) {
-        throw error;
-      });
+      return fields.join('').replace(/[^0-9a-zA-Z]/g, '').toLowerCase();
     },
 
     async editResource({ state }, {collection, document, post, oldData}) {
@@ -307,6 +296,18 @@ const store = new Vuex.Store({
         // makes the dispatch command in component go "catch" as error
         throw {'message': "Error writing document: Not allowed"};
       }
+
+      // TRANSLATE TEXT FIRST TO ARRAY
+      // if post.resources or post.info was changed, update translation:
+      if(oldData.resources != post.resources || oldData.info != post.info) {
+        let translations = await store.dispatch('translateResource', post);
+        post.originalLang = translations.originalLang;
+        post.translations = translations.translations;
+      }
+
+      // BUILD SEARCHFIELD
+      post.searchfield = await store.dispatch('buildSearchfield', post);
+
       await fb["db"].collection(collection).doc(document).update({
         editedOn: new Date(),
         content: post,
@@ -314,12 +315,6 @@ const store = new Vuex.Store({
         userNameEdited: state.userProfile.name,
       }).then(async function() {
         store.dispatch('addContribution', 2);
-        // if post.resources or post.info was changed:
-        if(oldData.resources != post.resources || oldData.info != post.info) {
-          await store.dispatch('translateResource', {'document': document, 'data': post});
-        }
-        await store.dispatch('buildSearchfield', {'id': document });
-        // store.dispatch('updateField', {'collection':'users', 'document':state.userProfile.uid, 'field':'contribution', 'data':state.userProfile.contribution+2})
         return true
       }).catch(function(error) {
         throw error;
@@ -372,7 +367,7 @@ const store = new Vuex.Store({
     },
     
     // eslint-disable-next-line no-unused-vars
-    async translateResource({ state }, {document, data}) {
+    async translateResource({ state }, data) {
       let targetLangs = ['DE', 'FR', 'EN-GB', 'IT'];
       let translations = {
         'DE': [], 'FR': [], 'EN-GB': [], 'IT': []
@@ -381,28 +376,17 @@ const store = new Vuex.Store({
       let originalLang = 'DE';
       
       for (let i = 0; i < targetLangs.length; i++) {
-        let text = await store.dispatch('translate', {'text': [data.resources, data.info], 'lang': targetLangs[i]});
-        for (let x = 0; x < text.length; x++) {
-          // Takes only the language from the last field => .info
-          if(text[x].text.length && (text[x].detected_source_language === 'EN' || targetLangs.includes(text[x].detected_source_language))) {
-            originalLang = text[x].detected_source_language === 'EN' ? 'EN-GB' : text[x].detected_source_language;
+        await store.dispatch('translate', {'text': [data.resources, data.info], 'lang': targetLangs[i]}).then(function(text) {
+          for (let x = 0; x < text.length; x++) {
+            // Takes only the language from the last field => .info
+            if(text[x].text.length && (text[x].detected_source_language === 'EN' || targetLangs.includes(text[x].detected_source_language))) {
+              originalLang = text[x].detected_source_language === 'EN' ? 'EN-GB' : text[x].detected_source_language;
+            }
+            translations[targetLangs[i]].push(text[x].text);
           }
-          translations[targetLangs[i]].push(text[x].text);
-        }
+        });
       }
-
-      let update = {
-        content: {
-          originalLang: originalLang,
-          translations: translations,
-        },
-      };
-
-      await fb["db"].collection('resources').doc(document).set(update, { merge: true }).then(function() {
-        return true
-      }).catch(function(error) {
-        throw error;
-      });
+      return {originalLang, translations}
     },
 
     searchResources({commit, state}, payload) {
