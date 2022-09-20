@@ -230,7 +230,7 @@
 
         <p v-else class="py-4">
           <span v-if="!filter">
-          {{showFavs ? 'You have no favorites saved.' : 'There are currently no resources.'}}
+          {{filterSet === 'showFavs' ? 'You have no favorites saved.' : 'There are currently no resources.'}}
           </span>
           <span v-else>
             Your search for "{{filter}}" did not return any results.
