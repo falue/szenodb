@@ -113,13 +113,15 @@ import Copy from '@/components/Copy'
         users: [],
         backups: [],
         reloadBackupConfirmation: -1,
+        unsubscribeBackups: null,
+        unsubscribeUsers: null
       }
     },
 
     created() {
       if(this.user.role === 'admin') {
         // Get dates of backups
-        db.collection("backups")
+        this.unsubscribeBackups = db.collection("backups")
         .doc("backuplist")
         .onSnapshot(doc => {
             //var source = doc.metadata.hasPendingWrites ? "Local" : "Server";
@@ -128,7 +130,7 @@ import Copy from '@/components/Copy'
             // this.about = {"me": data.me, "email": data.email};
             this.backups = data
         });
-        db.collection('users')
+        this.unsubscribeUsers = db.collection('users')
         .orderBy('createdOn', 'desc')
         //.where('user_id', '==', firebaseUser.uid)
         .onSnapshot(querySnapshot => {
@@ -141,6 +143,11 @@ import Copy from '@/components/Copy'
           this.users = newData;
         });
       }
+    },
+
+    beforeDestroy() {
+      this.unsubscribeBackups();
+      this.unsubscribeUsers();
     },
 
     methods: {
