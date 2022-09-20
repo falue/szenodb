@@ -248,7 +248,7 @@
               </v-btn>
           </span>
         </p>
-        <div class="grey--text my-12" v-if="listWasShortened && resources.length > 100">
+        <div class="grey--text my-12" v-if="listWasShortened && resources.length === 100">
           This list has been shortened to increase performance.
           <v-btn small @click="resetSearch(6666)">Show all entries</v-btn>
         </div>
