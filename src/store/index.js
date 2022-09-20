@@ -159,9 +159,13 @@ const store = new Vuex.Store({
     },
 
     /* RESOURCES */
-    // eslint-disable-next-line no-unused-vars
-    async getResources({commit}, limit) {
-      fb["db"].collection('resources').orderBy('createdOn', 'desc').limit(limit).onSnapshot(snapshot => {
+    async getResources({state}, limit) {
+      // Do not load deleted resources for regular user
+      let query = fb["db"].collection('resources').where('flags.deleted', '==', false);
+      if(state.userProfile.role === 'admin') {
+        query = fb["db"].collection('resources');
+      }
+      query.orderBy('createdOn', 'desc').limit(limit).onSnapshot(snapshot => {
         let dataArray = []
         snapshot.forEach(doc => {
           let resource = doc.data()
@@ -173,7 +177,12 @@ const store = new Vuex.Store({
     },
 
     async showFavs({state}) {
-      fb["db"].collection('resources').orderBy('createdOn', 'desc').onSnapshot(snapshot => {
+      // Do not load deleted resources for regular user
+      let query = fb["db"].collection('resources').where('flags.deleted', '==', false);
+      if(state.userProfile.role === 'admin') {
+        query = fb["db"].collection('resources');
+      }
+      query.orderBy('createdOn', 'desc').onSnapshot(snapshot => {
         let dataArray = []
         snapshot.forEach(doc => {
           let resource = doc.data()
@@ -187,7 +196,12 @@ const store = new Vuex.Store({
     },
 
     async showOwnResources({state}) {
-      fb["db"].collection('resources').where('userId', '==', state.userProfile.uid).orderBy('createdOn', 'desc').onSnapshot(snapshot => {
+      // Do not load deleted resources for regular user
+      let query = fb["db"].collection('resources').where('flags.deleted', '==', false);
+      if(state.userProfile.role === 'admin') {
+        query = fb["db"].collection('resources');
+      }
+      query.where('userId', '==', state.userProfile.uid).orderBy('createdOn', 'desc').onSnapshot(snapshot => {
         let dataArray = []
         snapshot.forEach(doc => {
           let resource = doc.data()
@@ -391,11 +405,16 @@ const store = new Vuex.Store({
       });
     },
 
-    searchResources({commit}, payload) {
+    searchResources({commit, state}, payload) {
       // await new Promise(resolve => setTimeout(resolve, 3000));
       payload = payload.replace(/[^0-9a-zA-Z]/g, '').toLowerCase()
       // Firestore has not search freetext algorythm.. despite being from google.
-      fb["db"].collection('resources').orderBy('createdOn', 'desc').onSnapshot(snapshot => {
+      // Do not load deleted resources for regular user
+      let query = fb["db"].collection('resources').where('flags.deleted', '==', false);
+      if(state.userProfile.role === 'admin') {
+        query = fb["db"].collection('resources');
+      }
+      query.orderBy('createdOn', 'desc').onSnapshot(snapshot => {
         let dataArray = []
         let primaryDataArray = []
         snapshot.forEach(doc => {

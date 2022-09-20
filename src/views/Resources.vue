@@ -624,8 +624,6 @@ import EditResource from '@/components/EditResource'
             'reason': data.reason,
             'unreliable': unreliable,
             'deleted': deleted,
-            //...(unreliable && {unreliable: unreliable}),
-            //...(deleted && {deleted: deleted})
           }
         }, { merge: true }).then(() => {
           this.$toasted.global.success({msg:'This post has been marked for deletion'});
