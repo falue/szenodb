@@ -213,7 +213,7 @@ import Copy from '@/components/Copy'
         this.backupInProgress = true;
         // this.makeBackup('texts', currentDate);  // test
         await this.makeBackup('users', currentDate);
-        await this.makeBackup('persons', currentDate);
+        // await this.makeBackup('persons', currentDate);
         await this.makeBackup('resources', currentDate);
         this.backupInProgress = false;
       },
