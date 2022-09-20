@@ -185,11 +185,11 @@
             </div>
             <div v-if="isSmallWithOpenDrawer" :style="$vuetify.breakpoint.mdAndUp ? 'width:60%' : 'width:80%'" class="grey--text pl-2 pt-1" style="text-decoration: inherit; display:inline-block">
               <div v-if="user.role === 'admin' && resource.flags.deleted">
-                Marked for deletion by
+                Marked by
                 {{resource.flags.userName}},
-                {{resource.flags.userEmail}}
+                {{resource.flags.userEmail}} (ID: <pre class="inline">{{resource.flags.userId}}</pre>)
                 <br>
-                ID: <pre class="inline">{{resource.flags.userId}}</pre>
+                "{{resource.flags.reason}}"
               </div>
               <div v-else style="text-decoration: inherit; overflow:hidden; display: -webkit-box; -webkit-box-orient: vertical; box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; ">
                   {{resource.content.resources}}
@@ -261,7 +261,7 @@
       :fullscreen="$vuetify.breakpoint.xs"
     >
       <v-card>
-        <v-card-title v-if="reasonOfDelete.status" class="text-h5 error">
+        <v-card-title v-if="reasonOfDelete.status" class="text-h5 grey darken-3">
           Edit "{{reasonOfDelete.title}}" flags
         </v-card-title>
         <v-card-title v-else class="text-h5 error">
@@ -271,7 +271,7 @@
           Please specify your reasoning (eg, closed down, completely wrong, owned by murderers, etc).
           Consider editing the resource aswell!
           <p v-if="user.role === 'admin'" class="my-2">
-            <span class="primary--text">Admins can shift & click the trash can in the list to delete immedietely!</span>
+            <span class="primary--text">Admins like you can shift & click the trash can in the list to delete immedietely!</span>
             <br>
             ID: <pre class="inline">{{reasonOfDelete.id}}</pre>
           </p>
@@ -595,8 +595,8 @@ import EditResource from '@/components/EditResource'
         this.reasonOfDelete = {
           display: true,
           id: resource.id,
-          title: resource.content.title,
-          status: resource.flags.status,
+          title: resource.content.title,  
+          status: resource.flags.deleted || resource.flags.unreliable,
           reason: resource.flags.reason ? resource.flags.reason : ''
         };
       },

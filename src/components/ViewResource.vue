@@ -6,9 +6,9 @@
       <Copy v-if="user.role === 'admin'" :data="data.id" dataName="Document ID" position="right"></Copy>
     </v-card-title>
 
-    <v-card-text v-if="data.flags.unreliable" class="error darken-2 pa-4 rounded relative">
+    <v-card-text v-if="data.flags.deleted || data.flags.unreliable" :class="data.flags.deleted ? 'pink darken-2' : 'error darken-2'" class="pa-4 rounded relative">
       <div style="line-height:1em" class="white--text overline">
-        Marked as unreliable by {{data.flags.userName}}<!-- 
+        Marked as {{data.flags.deleted ? 'deleted' : 'unreliable'}} by {{data.flags.userName}}<!-- 
         --><Copy v-if="user.role === 'admin'" :data="data.flags.userId" dataName="Flagger ID" position="top" opacity="1.0"></Copy>:
         <v-icon small color="yellow" >mdi-alert</v-icon>
       </div>
