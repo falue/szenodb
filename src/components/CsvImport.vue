@@ -247,6 +247,7 @@
       },
 
       async csvToList(data) {
+        this.$emit('csvImporting', [0,data.length]);
         let counter = 0;
         // data.reverse();
         // let doublechecked = false;
@@ -268,9 +269,11 @@
 
           await this.$store.dispatch('addResource', {"collection": "resources", "post": newResource})
           counter++;
+          this.$emit('csvImporting', [counter,data.length]);
         }
         if (counter > 0) {
           this.$toasted.global.success({msg:`Successfully added ${counter} entries.`});
+          this.$emit('csvImporting', [0,0]);
           //this.resetSearch();  // reload the list...?
         } else {
           this.$toasted.global.info({msg:"No users were added."});

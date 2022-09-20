@@ -37,6 +37,7 @@
           @edit="post = $event.newData, oldData=$event.oldData, saveEditedResource()"
           @new="getEmittedNewPost($event)"
           @cancel="cancelEditResource()"
+          @csvImporting="loadingCsv = $event"
         ></EditResource>
       </div>
     </v-navigation-drawer>
@@ -61,8 +62,6 @@
           :error="!!filter.length && resources.length == 0"
           v-on:keyup.enter="!!filter.length && resources.length == 0 ? createNewFromSearch() : search(filter)"
         >
-        <!-- :value="filter"
-          @change="v => filter = v" -->
         <v-icon slot="append" :class="filter.length ? 'hover-red' : ''" @click="filter = '';">{{filter.length ? 'mdi-close' : 'mdi-magnify'}}</v-icon>
         <template v-slot:append-outer>
           <div class="primary ma-0 addNewResource">
@@ -71,72 +70,81 @@
         </template>
         </v-text-field>
 
+
+        <!-- DISPLAY IMPORT CSV STATUS -->
+        <div class="my-4" v-if="loadingCsv[0] != loadingCsv[1]">
+          Loading your CSV Data.. 
+          <v-progress-linear style="height:.6em; display:inline-block; width:200px" :value="loadingCsv[1]/100*loadingCsv[0]"></v-progress-linear>
+          {{loadingCsv[0]}}/{{loadingCsv[1]}}
+        </div>
+
         <!-- FILTERS -->
-        Filter resources: 
-        <v-tooltip :disabled="$vuetify.breakpoint.smAndDown" bottom>
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn
-              icon
-               v-bind="attrs" v-on="on"
-              class="grey darken-3 mx-2"
-              :small="$vuetify.breakpoint.mdAndUp"
-              :color="filterSet === 'showFavs' ? 'red' : ''"
-              @click="loadFavs()">
-              <v-icon :small="$vuetify.breakpoint.mdAndUp">mdi-heart</v-icon>
-              <!-- :color="user.favorites.includes(view.id) ? 'red' : ''" -->
-            </v-btn>
-          </template>
-          <span>Show your favorit resources</span>
-        </v-tooltip>
+        <div v-else>
+          Filter resources: 
+          <v-tooltip :disabled="$vuetify.breakpoint.smAndDown" bottom>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                icon
+                v-bind="attrs" v-on="on"
+                class="grey darken-3 mx-2"
+                :small="$vuetify.breakpoint.mdAndUp"
+                :color="filterSet === 'showFavs' ? 'red' : ''"
+                @click="loadFavs()">
+                <v-icon :small="$vuetify.breakpoint.mdAndUp">mdi-heart</v-icon>
+                <!-- :color="user.favorites.includes(view.id) ? 'red' : ''" -->
+              </v-btn>
+            </template>
+            <span>Show your favorit resources</span>
+          </v-tooltip>
 
-        <v-tooltip :disabled="$vuetify.breakpoint.smAndDown" bottom>
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn
-              icon
-               v-bind="attrs" v-on="on"
-              class="grey darken-3 mx-2"
-              :small="$vuetify.breakpoint.mdAndUp"
-              :color="filterSet === 'showOwnResources' ? 'primary' : ''"
-              @click="loadOwnResources()">
-              <v-icon :small="$vuetify.breakpoint.mdAndUp">mdi-account-eye</v-icon>
-              <!-- :color="user.favorites.includes(view.id) ? 'red' : ''" -->
-            </v-btn>
-          </template>
-          <span>Show your own resources</span>
-        </v-tooltip>
+          <v-tooltip :disabled="$vuetify.breakpoint.smAndDown" bottom>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                icon
+                v-bind="attrs" v-on="on"
+                class="grey darken-3 mx-2"
+                :small="$vuetify.breakpoint.mdAndUp"
+                :color="filterSet === 'showOwnResources' ? 'primary' : ''"
+                @click="loadOwnResources()">
+                <v-icon :small="$vuetify.breakpoint.mdAndUp">mdi-account-eye</v-icon>
+                <!-- :color="user.favorites.includes(view.id) ? 'red' : ''" -->
+              </v-btn>
+            </template>
+            <span>Show your own resources</span>
+          </v-tooltip>
 
-        <v-tooltip v-if="user.role === 'admin'" :disabled="$vuetify.breakpoint.smAndDown" bottom>
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn
-              icon
-               v-bind="attrs" v-on="on"
-              class="grey darken-3 mx-2"
-              :color="filterSet === 'deleted' ? 'red' : ''"
-              :small="$vuetify.breakpoint.mdAndUp"
-              @click="loadDeletedResources()">
-              <v-icon :small="$vuetify.breakpoint.mdAndUp">mdi-delete</v-icon>
-              <!-- :color="user.favorites.includes(view.id) ? 'red' : ''" -->
-            </v-btn>
-          </template>
-          <span>Show marked as deleted</span>
-        </v-tooltip>
+          <v-tooltip v-if="user.role === 'admin'" :disabled="$vuetify.breakpoint.smAndDown" bottom>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                icon
+                v-bind="attrs" v-on="on"
+                class="grey darken-3 mx-2"
+                :color="filterSet === 'deleted' ? 'red' : ''"
+                :small="$vuetify.breakpoint.mdAndUp"
+                @click="loadDeletedResources()">
+                <v-icon :small="$vuetify.breakpoint.mdAndUp">mdi-delete</v-icon>
+                <!-- :color="user.favorites.includes(view.id) ? 'red' : ''" -->
+              </v-btn>
+            </template>
+            <span>Show marked as deleted</span>
+          </v-tooltip>
 
-        <v-tooltip v-if="filterSet.length" :disabled="$vuetify.breakpoint.smAndDown" bottom>
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn
-              text
-              icon
-              v-bind="attrs" v-on="on"
-              class="mx-2 red--text"
-              :small="$vuetify.breakpoint.mdAndUp"
-              @click="resetSearch(maxSearchResults), filter = ''">
-              <v-icon :small="$vuetify.breakpoint.mdAndUp">mdi-close</v-icon>
-              <!-- :color="user.favorites.includes(view.id) ? 'red' : ''" -->
-            </v-btn>
-          </template>
-          <span>Reset filter</span>
-        </v-tooltip>
-
+          <v-tooltip v-if="filterSet.length" :disabled="$vuetify.breakpoint.smAndDown" bottom>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                text
+                icon
+                v-bind="attrs" v-on="on"
+                class="mx-2 red--text"
+                :small="$vuetify.breakpoint.mdAndUp"
+                @click="resetSearch(maxSearchResults), filter = ''">
+                <v-icon :small="$vuetify.breakpoint.mdAndUp">mdi-close</v-icon>
+                <!-- :color="user.favorites.includes(view.id) ? 'red' : ''" -->
+              </v-btn>
+            </template>
+            <span>Reset filter</span>
+          </v-tooltip>
+        </div>
 
         <!-- LIST RESOURCES -->
         <v-container v-if="resources.length" class="pa-0 pt-4 ma-0 fill-width" style="max-width:initial">
@@ -341,6 +349,7 @@ import EditResource from '@/components/EditResource'
         drawerOpen: false,
         loading: false,
         filterSet: '',
+        loadingCsv: [0,0],
         singleClickWarningIssued: false,
         maxSearchResults: 100,
         listWasShortened: false,

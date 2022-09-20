@@ -65,7 +65,7 @@
       <v-spacer></v-spacer>
 
       <!-- CSV IMPORT -->
-      <CsvImport></CsvImport>
+      <CsvImport @csvImporting="$emit('csvImporting', $event)"></CsvImport>
 
       <v-spacer></v-spacer>
 
