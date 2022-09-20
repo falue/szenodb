@@ -241,8 +241,7 @@
 
           {'title':`telefabi.ch terminal`,
            'desc':`Look like you can code. Available offline aswell.`,
-           // 'web':[`./goodies/terminal/index.html`,
-           'web':[],
+           'web': [`./goodies/terminal/index.html`],
            'color':`indigo`,
            'dialog': {'title': ``, 'icon':'information-outline', 'text': `On the top right there is a menu button hidden. Click it for settings or adjustments.`}
           },
