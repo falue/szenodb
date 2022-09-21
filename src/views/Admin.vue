@@ -4,6 +4,7 @@
       :class="$vuetify.breakpoint.smAndDown ? 'transparent fill-height ma-0 pa-4' : 'mx-auto my-4 mt-12 pa-8'"
       :max-width="$vuetify.breakpoint.mdAndUp ? 888 : 6666"
       max-height="80%"
+      :flat="$vuetify.breakpoint.smAndDown"
       style="overflow-y: auto;"
     >
       <!-- BACKUP -->
@@ -68,7 +69,7 @@
             :key="i"
             :class="i % 2 == 0 ? 'grey darken-4' : ''"
           >
-            <div class="pr-2" style="overflow:hidden; vertical-align: top; width:20%; display:inline-block;">
+            <div class="pr-2" :style="$vuetify.breakpoint.mdAndUp ? 'width:25%;' : 'width:100%;'" style="overflow:hidden; vertical-align: top; display:inline-block;">
               <span class="text-h6 primary--text">
               {{singleUser.name}}
               </span>
@@ -86,16 +87,16 @@
               <v-btn dense small class="ma-2 right top absolute" :disabled="singleUser.id === user.uid" v-else @click="updateUserField('kicked', singleUser.id, true)">kick me</v-btn>
               <br>
             </div>
-            <div class="grey--text" style="width:80%; display:inline-block">
-              Role: <span class="pointer" @click="setRoleForUser(singleUser.role === 'user' ? 'admin' :'user', singleUser.uid)" 
+            <div class="grey--text" :style="$vuetify.breakpoint.mdAndUp ? 'width:75%;' : 'width:100%;'" style="display:inline-block">
+              Role: <b class="pointer" @click="setRoleForUser(singleUser.role === 'user' ? 'admin' :'user', singleUser.uid)" 
               :title="singleUser.role === 'user' ? 'Upgrade to admin' :'Downgrade to user'" style="disaplay:inline-block">
                 {{singleUser.role}}
                 <v-icon small v-if="singleUser.role === 'user'">mdi-account-arrow-up</v-icon>
                 <v-icon small v-else>mdi-account-arrow-down</v-icon>
-              </span><br>
+              </b>,
+              contribution: {{singleUser.contribution}}<br>
               Profession: {{singleUser.title}}<br>
-              Contribution: {{singleUser.contribution}}<br>
-              ID: <pre class="grey--text" style="display:inline">{{$vuetify.breakpoint.smAndDown ? $helpers.truncate(singleUser.uid, 15) : singleUser.uid}}</pre>
+              ID: <pre class="grey--text" style="display:inline">{{$vuetify.breakpoint.xs ? $helpers.truncate(singleUser.uid, 22, '…') : singleUser.uid}}</pre>
               <Copy :data="singleUser.uid" dataName="user ID"></Copy><br>
               Created on: {{singleUser.createdOn ? $helpers.fbTimeToString(singleUser.createdOn, "DD.MM.YY - HH:mm") : '---' }},
               last login: {{singleUser.lastLogin ? $helpers.fbTimeToString(singleUser.lastLogin, "DD.MM.YY - HH:mm") : '---' }}<br>
