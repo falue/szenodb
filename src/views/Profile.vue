@@ -4,6 +4,7 @@
       :class="$vuetify.breakpoint.smAndDown ? 'transparent fill-height ma-0 pa-4' : 'mx-auto my-4 mt-12 pa-8'"
       :max-width="$vuetify.breakpoint.mdAndUp ? 666 : 6666"
       max-height="80%"
+      :flat="$vuetify.breakpoint.smAndDown"
       style="overflow-y: auto;"
     >
       <!-- <h2>{{$vuetify.breakpoint.xs ? 'xs' : ''}}

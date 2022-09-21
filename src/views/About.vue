@@ -7,6 +7,7 @@
       :class="$vuetify.breakpoint.smAndDown ? 'transparent fill-height ma-0 pa-0' : 'mx-auto my-4 mt-12 pa-8 pt-4'"
       :max-width="$vuetify.breakpoint.mdAndUp ? 555 : 6666"
       max-height="80%"
+      :flat="$vuetify.breakpoint.smAndDown"
       style="overflow-y: auto;"
     >
       <v-card-title class="justify-center">This is for the art departments needs</v-card-title>
@@ -93,9 +94,18 @@
         
         <v-card-title class="justify-center">Whodunit?</v-card-title>
 
+        <v-card-title v-if="$vuetify.breakpoint.smAndDown" two-line class="justify-center">
+          <v-list-item-avatar color="grey darken-3" size="250">
+            <v-img
+              alt=""
+              :src="require('@/assets/portrait.jpg')"
+            ></v-img>
+          </v-list-item-avatar>
+        </v-card-title>
+
         <v-list three-line class="pa-0" color="transparent">
           <v-list-item class="pa-0">
-            <v-list-item-avatar color="grey darken-3" size="125">
+            <v-list-item-avatar v-if="$vuetify.breakpoint.mdAndUp" style="display: block" color="grey darken-3" size="125">
             <v-img
               alt=""
               :src="require('@/assets/portrait.jpg')"
@@ -115,35 +125,38 @@
                   Thank you <a href="https://www.isabellesimmen.com/" class="no-underline" target="_blank">Isabelle Simmen</a>
                   for testing, feedback and enthusiasm;
                   and szeno chat for the community.
-                  <br>
-                  Get in contact if you have questions or want to improve this:
-                  <br v-if="$vuetify.breakpoint.smAndDown">
-                  <a href="tel:0787424834" title="call" class="no-underline" :class="{'bigMobileButton mr-2' : $vuetify.breakpoint.smAndDown}">
-                    <v-icon class="pr-2" color="primary">mdi-phone</v-icon>
-                  </a>
-                  <a href="mailto:info@fluescher.ch" title="write email" class="no-underline" :class="{'bigMobileButton mr-2' : $vuetify.breakpoint.smAndDown}">
-                    <v-icon class="pr-2" color="primary">mdi-email</v-icon>
-                  </a>
-                  <a href="https://github.com/falue/szenodb" title="github repo" target="_blank" class="no-underline" :class="{'bigMobileButton mr-2' : $vuetify.breakpoint.smAndDown}">
-                    <v-icon class="pr-2" color="primary">mdi-github</v-icon>
-                  </a>
                 </p>
-                <p>
-                  If you think it's valuable what I do here, buy me a coffee:
-                </p>
-                <v-btn @click="popUpTwint = !popUpTwint" large color="black" class="mr-2">
-                  <img style="height:2em" :src="require('@/assets/twintLogo.svg')">
-                </v-btn>
-                <a href="https://www.buymeacoffee.com/falue" target="_blank">
-                  <v-btn large color="black" class="pa-0">
-                    <img style="height:44px" src="https://cdn.buymeacoffee.com/buttons/v2/default-blue.png" title="Buy Me A Coffee (Credit card)">
-                  </v-btn>
-                </a>
-                <br>
               </v-card-text>
             </v-list-item-content>
           </v-list-item>
         </v-list>
+        <v-card-text class="pa-0 mb-16">
+          <p>
+            Get in contact if you have questions or want to improve this:
+            <br>
+            <a href="tel:0787424834" title="call" class="no-underline" :class="{'bigMobileButton mr-2' : $vuetify.breakpoint.smAndDown}">
+              <v-icon class="mr-2" color="primary">mdi-phone</v-icon>
+            </a>
+            <a href="mailto:info@fluescher.ch" title="write email" class="no-underline" :class="{'bigMobileButton mr-2' : $vuetify.breakpoint.smAndDown}">
+              <v-icon class="mr-2" color="primary">mdi-email</v-icon>
+            </a>
+            <a href="https://github.com/falue/szenodb" title="github repo" target="_blank" class="no-underline" :class="{'bigMobileButton mr-2' : $vuetify.breakpoint.smAndDown}">
+              <v-icon class="mr-2" color="primary">mdi-github</v-icon>
+            </a>
+          </p>
+          <br>
+          <p>
+            If you think it's valuable what I do here, buy me a coffee:
+          </p>
+          <v-btn @click="popUpTwint = !popUpTwint" large color="black" class="mr-2">
+            <img style="height:2em" :src="require('@/assets/twintLogo.svg')">
+          </v-btn>
+          <a href="https://www.buymeacoffee.com/falue" target="_blank">
+            <v-btn large color="black" class="pa-0">
+              <img style="height:44px" src="https://cdn.buymeacoffee.com/buttons/v2/default-blue.png" title="Buy Me A Coffee (Credit card)">
+            </v-btn>
+          </a>
+        </v-card-text>
       </v-card-text>
     </v-card>
 
@@ -153,12 +166,14 @@
       width="300"
       light
     >
-    <v-card class="white" @click="popUpTwint = false">
+    <v-card class="white" @click="$vuetify.breakpoint.mdAndUp ? popUpTwint = false : null">
       <img v-if="$vuetify.breakpoint.smAndUp" style="width:100%" :src="require('@/assets/twint.svg')">
       <v-card-text class="ma-0 pa-0 pl-6" v-if="$vuetify.breakpoint.smAndDown">
-        Fabian Lüscher /
+        Fabian Lüscher
+        <Copy data="Fabian Lüscher" dataName="TWINT Name" :opacity="1"></Copy>
+        <br>
         078 742 48 34
-        <Copy data="0787424834" dataName="TWINT number"></Copy>
+        <Copy data="0787424834" dataName="TWINT number" :opacity="1"></Copy>
       </v-card-text>
     </v-card>
     </v-dialog>
