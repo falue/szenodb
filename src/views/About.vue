@@ -91,6 +91,10 @@
         </div>
 
         <hr class="mb-3 mt-16" style="border:none; border-top: solid 1px rgba(255,255,255,.25);">
+
+        This project is open-source. See all the <router-link to="/updates">updates to this site here</router-link>.
+
+        <hr class="mb-3 mt-16" style="border:none; border-top: solid 1px rgba(255,255,255,.25);">
         
         <v-card-title class="justify-center">Whodunit?</v-card-title>
 
@@ -144,7 +148,7 @@
               <v-icon class="mr-2" color="primary">mdi-github</v-icon>
             </a>
           </p>
-          <br>
+          <br v-if="$vuetify.breakpoint.smAndDown">
           <p>
             If you think it's valuable what I do here, buy me a coffee:
           </p>

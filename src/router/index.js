@@ -9,6 +9,7 @@ import Admin from '../views/Admin.vue'
 import Goodies from '../views/Goodies.vue'
 import Resources from '../views/Resources.vue'
 import Profile from '../views/Profile.vue'
+import Updates from '../views/Updates.vue'
 import Login from '../views/Login.vue'
 import Signup from '../views/Signup.vue'
 import ForgotPassword from '../views/ForgotPassword.vue'
@@ -57,6 +58,11 @@ const routes = [
     path: '/login',
     name: 'Login',
     component: Login,
+  },
+  {
+    path: '/updates',
+    name: 'Updates',
+    component: Updates,
   },
   {
     path: '/signup',
