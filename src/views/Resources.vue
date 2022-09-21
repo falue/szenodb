@@ -350,7 +350,7 @@ import EditResource from '@/components/EditResource'
         loading: false,
         filterSet: '',
         loadingCsv: [0,0],
-        singleClickWarningIssued: false,
+        unsubscribeUrlView: function() {},
         maxSearchResults: 100,
         listWasShortened: false,
         reasonOfDelete: {reason:''},
@@ -386,6 +386,8 @@ import EditResource from '@/components/EditResource'
     },
 
     created() {
+      this.viewResourceFromUrl();
+
       let that = this;
       // This sets onkeyup listener multiple times when hot reloading.. but fucck it
       document.body.addEventListener('keyup', function (evt) {
@@ -398,6 +400,10 @@ import EditResource from '@/components/EditResource'
         console.log("Resources were missing. Reload from scratch.");
         this.$store.dispatch('getResources', this.maxSearchResults);
       }
+    },
+
+    beforeDestroy() {
+      this.unsubscribeUrlView();
     },
 
     methods: {
@@ -494,9 +500,30 @@ import EditResource from '@/components/EditResource'
           this.$store.dispatch('showDeletedFlags');
         }
       },
+
+      viewResourceFromUrl() {
+        // get ID from PARAMS
+        let view = this.$route.query.view;
+        if(view) {
+          // URL had "view", load document and display
+          this.unsubscribeUrlView = db.collection("resources")
+          .doc(view)
+          .onSnapshot(doc => {
+            let data = doc.data();
+            if(data) {
+              data.id = doc.id
+              this.viewResource(data);
+            } else {
+              console.log(`Could not find resource with ID ${view}`)
+              this.$toasted.global.error({msg:`Could not find resource with ID ${view}`});
+            }
+          });
+        }
+      },
       
-      viewResource(things) {
-        this.view = things;
+      viewResource(data) {
+        history.pushState(history.state, '', window.location.pathname + '#' + this.$route.path + "?view="+data.id)
+        this.view = data;
         this.drawerOpen = true;
         this.dataMode = 'view'
       },
@@ -665,6 +692,8 @@ import EditResource from '@/components/EditResource'
       },
 
       cancelEditResource() {
+        history.pushState(history.state, '', window.location.pathname + '#' + this.$route.path);
+        this.unsubscribeUrlView();
         this.dataMode = 'new';
         this.success = '';
         this.error = '';

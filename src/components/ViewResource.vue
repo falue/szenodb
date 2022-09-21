@@ -118,8 +118,17 @@
         icon
         class="grey darken-3 mx-2"
         :small="$vuetify.breakpoint.mdAndUp"
-        :color="user.favorites.includes(data.id) ? 'red' : ''"
-        @click="favResource(data.id)">
+        color="primary"
+        @click="$helpers.copyClipBoard(getCurrentUrl(), 'URL')">
+        <v-icon :small="$vuetify.breakpoint.mdAndUp">mdi-share-variant</v-icon>
+      </v-btn>
+      <v-btn
+        icon
+        class="grey darken-3 mx-2"
+        :small="$vuetify.breakpoint.mdAndUp"
+        :color="user.favorites && user.favorites.includes(data.id) ? 'red' : ''"
+        @click="favResource(data.id)"
+      >
         <v-icon :small="$vuetify.breakpoint.mdAndUp">mdi-heart</v-icon>
       </v-btn>
       <v-spacer></v-spacer>
@@ -152,6 +161,10 @@ import VCardExport from '@/components/VCardExport'
       }
     },
     methods: {
+      getCurrentUrl() {
+        let path = window.location.origin + window.location.pathname + '#' + this.$route.fullPath
+        return path;
+      },
       favResource(id) {
         const index = this.user.favorites.indexOf(id);
         if (index > -1) {

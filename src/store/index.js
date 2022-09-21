@@ -82,9 +82,20 @@ const store = new Vuex.Store({
         }
         // set user profile in state
         commit('setUserProfile', {...userProfile.data(), 'emailVerified': user.emailVerified, 'uid': user.uid, 'email': user.email })
-        // change route to dashboard
-        if (router.currentRoute.path === '/login') {
-          //console.log("pushed to home")
+
+        if(router.currentRoute.query.next) {
+          // User was logged out and tried to access authRequiered content,
+          // like profiel, resource or resource?view=..
+          // send to specific link
+          let nextQuery = Object.keys(router.currentRoute.query).map(function (key) {
+            if(key !== 'next' && router.currentRoute.query[key] !== 'authRequiered') {
+              return `${key}=${router.currentRoute.query[key]}`
+            }
+          }).filter(n => n).join('&');
+          router.push(`${router.currentRoute.query.next}?success=loggedIn&${nextQuery}`)
+
+        } else if (router.currentRoute.query.path === '/login') {
+          // User clicked on login link, send to resource list
           router.push('/resources?success=loggedIn')
         }
       }).catch(error => {

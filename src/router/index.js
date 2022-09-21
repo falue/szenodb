@@ -93,7 +93,11 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
   const requiresAuth = to.matched.some(x => x.meta.requiresAuth)
   if (requiresAuth && !auth.currentUser) {
-    next('/login?error=authRequiered')
+    let addQuery = Object.keys(to.query).map(function (key) { 
+      return [key, to.query[key]].join('=');
+    }).join('&');
+    addQuery += '&next='+to.path
+    next('/login?error=authRequiered&'+addQuery)
   } else {
     next()
   }
