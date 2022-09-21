@@ -65,8 +65,8 @@
     
     data () {
       return {
-        apiURL: "https://api.github.com/repos/falue/szenodb/commits?per_page=66&sha=",
-        // apiURL: "https://api.github.com/repos/falue/digiprops-add/commits?per_page=66&sha=",
+        apiURL: "https://api.github.com/repos/falue/szenodb/commits?per_page=250&sha=",
+        // apiURL: "https://api.github.com/repos/falue/digiprops-add/commits?per_page=250&sha=",
         branches: ["main"],
         currentBranch: "main",
         commits: null
