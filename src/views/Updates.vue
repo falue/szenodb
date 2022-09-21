@@ -13,36 +13,40 @@
       <!-- GIT LOG -->
       <v-card-title class="justify-center pb-0">Latest updates</v-card-title>
 
-      <v-card-text class="white--text text-center mb-4">
-       <span class='overline pink--text ml-2 mr-1' style='font-style: initial; line-height:1em'>szeno&middot;DB</span>
-       on <a href="https://github.com/falue/szenodb" target="_blank">github</a> @branch {{ currentBranch }}
+      <v-card-text class="white--text text-center ma-0 pa-0">
+        <span class='overline pink--text ml-2 mr-1' style='font-style: initial; line-height:1em'>szeno&middot;DB</span>
+        on <a href="https://github.com/falue/szenodb" target="_blank">github</a> @branch {{ currentBranch }}
       </v-card-text>
 
-      <div v-if="branches.length > 1">
-        <div v-for="(branch, x) in branches" :key="'key-' + x">
-          <input
-            type="radio"
-            :id="'key-' + branch"
-            :value="branch"
-            name="branch"
-            v-model="currentBranch"
-          />
-          <label :for="branch">{{ branch }}</label>
-        </div>
-      </div>
-      <ul v-if="commits && commits.length" class="pa-0">
+      <v-card-text v-if="branches.length > 1" class="white--text text-center pa-0 mt-1">
+        <span class="mb-6">
+          Select branch:
+          <span v-for="(branch, x) in branches" :key="'key-' + x" class="ml-4">
+            <input
+              type="radio"
+              :id="branch"
+              :value="branch"
+              name="branch"
+              v-model="currentBranch"
+            />
+            <label :for="branch" class="ml-1">{{ x === 0 ? `${branch} (default)` : branch }}</label>
+          </span>
+        </span>
+      </v-card-text>
+
+      <ul v-if="commits && commits.length" class="mt-12 pa-0">
         <li v-for="(record, i) in commits"  :key="'key2-' + i" style="list-style:none" class="mb-4">
           {{ record.commit.message | truncate }}
           <!-- <pre>{{record}}</pre> -->
-          <div class="grey--text italics">
-            Commit 
+          <div class="grey--text caption">
+            {{commits.length-i}}. Commit 
             <a :href="record.html_url" target="_blank" class="commit">
               {{ record.sha.slice(0, 7) }}</a>
             by
-            <a :href="record.author.html_url" target="_blank">
+            <a :href="record.author.html_url" target="_blank" class="mr-1">
               {{ record.commit.author.name }}
             </a>
-            at
+            @
             {{ record.commit.author.date | formatDate }}
           </div>
         </li>
