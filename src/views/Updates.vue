@@ -37,7 +37,7 @@
       <div v-if="issues && issues.length">
         There 
         {{issues.length === 1 ? 'is' : 'are'}} <span class="error--text">{{issues.length}} {{issues.length === 1 ? 'issue' : 'issues'}}</span>
-        on milestone "{{milestones[currentMilestone-1]}}":<br>
+        on milestone "{{milestones[currentMilestone]}}":<br>
         <div v-for="(record, i) in issues"  :key="'key2-' + i" class="grey--text caption">
           <a :href="record.html_url" target="_blank">{{record.number}}</a>
           by
@@ -73,20 +73,28 @@
       <ul v-if="commits && commits.length" class="mt-12 pa-0">
         <li v-for="(record, i) in commits"  :key="'key2-' + i" style="list-style:none" class="mb-4">
           {{ record.commit.message | truncate }}
-          <!-- <pre>{{record}}</pre> -->
           <div class="grey--text caption">
-            {{commits.length-i}}. Commit 
-            <a :href="record.html_url" target="_blank" class="commit">
-              {{ record.sha.slice(0, 7) }}</a>
+            Commit 
+            <a :href="record.html_url" target="_blank">
+              {{ record.sha.slice(0, 7) }}
+            </a>
             by
             <a :href="record.author.html_url" target="_blank">
-              {{ record.commit.author.name }}</a>
-            @
-            {{ record.commit.author.date | formatDate }}
+              {{ record.commit.author.name }}
+            </a>
+            @ {{ record.commit.author.date | formatDate }}
           </div>
         </li>
       </ul>
       <div v-else class="italics grey--text">No commits, or repository private</div>
+      <div v-if="commits.length >= 100" class="italics grey--text">
+        <span class="caption">(...)</span>
+        <br>
+        <br>
+        Showing last 100 commits.
+        <a :href="`https://github.com/falue/szenodb/commits/${currentBranch}`" target="_blank">Click here</a>
+        if you want to see them all.
+      </div>
     </v-card>
 
   </div>
@@ -104,17 +112,14 @@
     
     data () {
       return {
-        apiUrl: "https://api.github.com/repos/falue/szenodb/commits?per_page=250&sha=",
-        apiUrlIssues: "https://api.github.com/repos/falue/szenodb/issues?per_page=250&state=open&milestone=",
+        apiUrl: "https://api.github.com/repos/falue/szenodb/commits?per_page=100&sha=",
+        apiUrlIssues: "https://api.github.com/repos/falue/szenodb/issues?per_page=100&state=open&milestone=",
         apiUrlMilestones: "https://api.github.com/repos/falue/szenodb/milestones?state=open",
         // apiUrl: "https://api.github.com/repos/falue/digiprops-add/commits?per_page=250&sha=",
         branches: ["main"],
         currentBranch: "main",
         milestones: {},
         currentMilestone: 0,
-        // milestones: ["MVP", "FEATURECREEP", "Nice to haves", "HOLY GRAIL"],
-        // currentMilestone: 1,
-        // 1 = MVP, 2 = FEATURECREEP, 3 Nice to haves, 4=HOLY GRAIL
         commits: null,
         issues: null,
       }
