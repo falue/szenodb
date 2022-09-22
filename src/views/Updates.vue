@@ -4,7 +4,7 @@
 
     <v-card
       class=""
-      :class="$vuetify.breakpoint.smAndDown ? 'transparent fill-height ma-0 pa-0' : 'mx-auto my-4 mt-12 pa-8 pt-4'"
+      :class="$vuetify.breakpoint.smAndDown ? 'transparent fill-height ma-0 px-4' : 'mx-auto my-4 mt-12 pa-8 pt-4'"
       :max-width="$vuetify.breakpoint.mdAndUp ? 555 : 6666"
       max-height="80%"
       :flat="$vuetify.breakpoint.smAndDown"
@@ -18,25 +18,26 @@
         on <a href="https://github.com/falue/szenodb" target="_blank">github</a> @branch {{ currentBranch }}
       </v-card-text>
 
-      <v-card-text v-if="milestones.length > 1" class="white--text text-center pa-0 mt-1 mb-6">
+      <v-card-text v-if="Object.keys(milestones).length > 0" class="white--text text-center pa-0 mt-1 mb-6">
         <span class="mb-6">
           Issue milestones:<br>
           <span v-for="(milestone, x) in milestones" :key="'key-' + x" class="ml-4">
             <input
               type="radio"
               :id="'milestone'+milestone"
-              :value="x+1"
+              :value="x"
               name="milestone"
               v-model="currentMilestone"
             />
-            <!-- FIXME: value is only working when order of "milestones" is the same as on github. cannot leave milestones out, etc -->
             <label :for="'milestone'+milestone" class="ml-1">{{milestone}}</label>
           </span>
         </span>
       </v-card-text>
 
       <div v-if="issues && issues.length">
-        There are <span class="error--text">{{issues.length}} issues</span> on milestone "{{milestones[currentMilestone-1]}}":<br>
+        There 
+        {{issues.length === 1 ? 'is' : 'are'}} <span class="error--text">{{issues.length}} {{issues.length === 1 ? 'issue' : 'issues'}}</span>
+        on milestone "{{milestones[currentMilestone-1]}}":<br>
         <div v-for="(record, i) in issues"  :key="'key2-' + i" class="grey--text caption">
           <a :href="record.html_url" target="_blank">{{record.number}}</a>
           by
@@ -105,19 +106,24 @@
       return {
         apiUrl: "https://api.github.com/repos/falue/szenodb/commits?per_page=250&sha=",
         apiUrlIssues: "https://api.github.com/repos/falue/szenodb/issues?per_page=250&state=open&milestone=",
+        apiUrlMilestones: "https://api.github.com/repos/falue/szenodb/milestones?state=open",
         // apiUrl: "https://api.github.com/repos/falue/digiprops-add/commits?per_page=250&sha=",
         branches: ["main"],
         currentBranch: "main",
-        milestones: ["MVP", "FEATURECREEP", "Nice to haves", "HOLY GRAIL"],
-        currentMilestone: 1,
+        milestones: {},
+        currentMilestone: 0,
+        // milestones: ["MVP", "FEATURECREEP", "Nice to haves", "HOLY GRAIL"],
+        // currentMilestone: 1,
         // 1 = MVP, 2 = FEATURECREEP, 3 Nice to haves, 4=HOLY GRAIL
         commits: null,
         issues: null,
       }
     },
 
-    created() {
+    async created() {
       this.fetchData(this.apiUrl, 'commits', this.currentBranch);
+      this.fetchData(this.apiUrlMilestones, 'milestones', '');
+      
       this.fetchData(this.apiUrlIssues, 'issues', this.currentMilestone);
     },
 
@@ -141,6 +147,13 @@
     },
 
     methods: {
+      parseMilestones(milestone) {
+        for (let i = 0; i < milestone.length; i++) {
+          if(i===0) this.currentMilestone = milestone[i].number;
+          this.milestones[milestone[i].number] = milestone[i].title;
+        }
+      },
+
       fetchData(url, target, theme) {
         var xhr = new XMLHttpRequest();
         var that = this;
@@ -148,8 +161,10 @@
         xhr.onload = function() {
           if(target === 'commits') {
             that.commits = JSON.parse(xhr.responseText);
-          } else {
+          } else if(target === 'issues') {
             that.issues = JSON.parse(xhr.responseText);
+          } else if(target === 'milestones') {
+            that.parseMilestones(JSON.parse(xhr.responseText));
           }
         };
         xhr.send();
