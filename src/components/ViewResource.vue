@@ -163,6 +163,7 @@ import VCardExport from '@/components/VCardExport'
     methods: {
       getCurrentUrl() {
         let path = window.location.origin + window.location.pathname + '#' + this.$route.fullPath
+        console.log(path)
         return path;
       },
       favResource(id) {

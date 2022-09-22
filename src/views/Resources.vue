@@ -525,7 +525,8 @@ import EditResource from '@/components/EditResource'
       },
       
       viewResource(data) {
-        history.pushState(history.state, '', window.location.pathname + '#' + this.$route.path + "?view="+data.id)
+        // Set URL to .../#/resources?view=xxx
+        this.$router.replace({query: { view: data.id }})
         this.view = data;
         this.drawerOpen = true;
         this.dataMode = 'view'
@@ -695,7 +696,8 @@ import EditResource from '@/components/EditResource'
       },
 
       cancelEditResource() {
-        history.pushState(history.state, '', window.location.pathname + '#' + this.$route.path);
+        // Reset URL to .../#/resources
+        this.$router.replace({query: {}})
         this.unsubscribeUrlView();
         this.dataMode = 'new';
         this.success = '';
