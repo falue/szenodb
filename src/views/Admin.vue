@@ -11,7 +11,7 @@
       <div class="pb-16 mb-16" v-if="user.role === 'admin'">
         <div class="pb-4">
           <!-- MAKE BACKUP -->
-          <div style="line-height:1em" class="mt-4 mb-2 grey--text text-h4">Backups</div>
+          <v-card-title class="justify-center">Backups</v-card-title>
           <v-btn @click="setBackupName = !setBackupName" :loading="backupInProgress" class="my-2">
             <v-icon color="primary" class="mr-2">mdi-database-plus</v-icon>
             Make backups <span v-if="$vuetify.breakpoint.mdAndUp" class="ml-1">of users & resources</span>
@@ -57,10 +57,10 @@
           <div v-else class="pa-1 my-2 red">No backups yet, or page hard reloaded.</div>
         </div>
 
-        <v-divider class="mb-4"></v-divider>
-
         <!-- USERS -->
-        <div style="line-height:1em" class="mt-6 grey--text text-h4">Users</div>
+        <hr class="mb-3 mt-16" style="border:none; border-top: solid 1px rgba(255,255,255,.25);">
+        <v-card-title class="justify-center">Users</v-card-title>
+
          {{users.length}} users in total, combined effort: {{totalContribution}} contribution points
         <div class="pa-0 py-2">
           <div

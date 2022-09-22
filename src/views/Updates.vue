@@ -11,14 +11,14 @@
       style="overflow-y: auto;"
     >
       <!-- GIT LOG -->
-      <v-card-title class="justify-center pb-0">Project info</v-card-title>
+      <v-card-title class="justify-center">Project info</v-card-title>
 
       <v-card-text class="white--text text-center ma-0 pa-0 mb-12">
         <span class='overline pink--text ml-2 mr-1' style='font-style: initial; line-height:1em'>szeno&middot;DB</span>
         on <a href="https://github.com/falue/szenodb" target="_blank">github</a> @branch {{ currentBranch }}
       </v-card-text>
 
-      <v-card-text v-if="Object.keys(milestones).length > 0" class="white--text text-center pa-0 mt-1 mb-6">
+      <v-card-text v-if="milestones && Object.keys(milestones).length > 0" class="white--text text-center pa-0 mt-1 mb-6">
         <span class="mb-6">
           Issue milestones:<br>
           <span v-for="(milestone, x) in milestones" :key="'key-' + x" class="ml-4">
@@ -52,9 +52,10 @@
         No issues; all done! Congrats 🥳
       </div>
 
-      <v-card-title class="justify-center pb-0 mt-12">Latest updates</v-card-title>
+      <hr class="mb-3 mt-16" style="border:none; border-top: solid 1px rgba(255,255,255,.25);">
+      <v-card-title class="justify-center">Latest updates</v-card-title>
 
-      <v-card-text v-if="branches.length > 1" class="white--text text-center pa-0 mt-1">
+      <v-card-text v-if="branches && branches.length > 1" class="white--text text-center pa-0 mt-1">
         <span class="mb-6">
           Select branch:
           <span v-for="(branch, x) in branches" :key="'key-' + x" class="ml-4">
@@ -87,7 +88,7 @@
         </li>
       </ul>
       <div v-else class="italics grey--text">No commits, or repository private</div>
-      <div v-if="commits.length >= 100" class="italics grey--text">
+      <div v-if="commits && commits.length >= 100" class="italics grey--text">
         <span class="caption">(...)</span>
         <br>
         <br>
@@ -153,9 +154,11 @@
 
     methods: {
       parseMilestones(milestone) {
-        for (let i = 0; i < milestone.length; i++) {
-          if(i===0) this.currentMilestone = milestone[i].number;
+        if(milestone) {
+          for (let i = 0; i < milestone.length; i++) {
+            if(i===0) this.currentMilestone = milestone[i].number;
           this.milestones[milestone[i].number] = milestone[i].title;
+          }
         }
       },
 

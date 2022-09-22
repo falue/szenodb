@@ -45,9 +45,9 @@
         <v-row>
           <template v-for="(card, n) in cards" >
             <!-- CHAPTER TITLE -->
-            <div :id="`chapter-${n}`" :key="n" v-if="card.chapter" style="line-height:1em" class="fill-width pa-4 pt-12 grey--text text-h4 pb-2">
-              <hr class="my-6" style="border:none; border-top: solid 1px rgba(255,255,255,.25);">
-              {{card.chapter}}
+            <div :id="`chapter-${n}`" :key="n" v-if="card.chapter" class="fill-width">
+              <hr class="mb-3 mt-16" style="border:none; border-top: solid 1px rgba(255,255,255,.25);">
+              <v-card-title class="justify-center">{{card.chapter}}</v-card-title>
             </div>
 
             <v-col :key="n" v-else cols="12" xs="12" sm="6" md="6">
@@ -183,7 +183,7 @@
            'dialog': {'title': ``, 'text': ``}
           },
 
-          {'chapter': 'Images and image generation'},
+          {'chapter': 'Images & image generation'},
 
           {'title':`Copyright free images & data`,
            'desc':``,
@@ -300,7 +300,7 @@
            'color':'indigo', 'dialog': {'title': ``, 'text': ``}
           },
 
-          {'chapter': 'Work'},
+          {'chapter': 'Work: Your rights; jobs & money'},
           
           {'title':`SSFV`,
            'desc':`Trade association of movie professionals. Salaries and conditions of employment.`,
