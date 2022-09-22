@@ -113,7 +113,7 @@ import { db } from '../firebase'
 import Copy from '@/components/Copy'
 
   export default {
-    name: 'Test',
+    name: 'Admin',
     props: {
       user: Object,
     },
@@ -129,7 +129,6 @@ import Copy from '@/components/Copy'
         backupName: '',
         loading: false,
         backupInProgress: false,
-        totalContribution: 0,
         users: [],
         backups: [],
         reloadBackupConfirmation: -1,
@@ -158,11 +157,20 @@ import Copy from '@/components/Copy'
           querySnapshot.forEach(doc => {
             let f = doc.data();
             f.id = doc.id;
-            this.totalContribution += f.contribution;
             newData.push(f);
           });
           this.users = newData;
         });
+      }
+    },
+
+    computed: {
+      totalContribution() {
+        let localTotal = 0;
+        this.users.forEach(function(element) {
+            localTotal += element.contribution;
+          });
+        return localTotal;
       }
     },
 
