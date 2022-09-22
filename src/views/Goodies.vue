@@ -69,7 +69,7 @@
                 </v-card-text>
                 <div v-if="card.web.length > 0">
                   <v-card-actions v-for="(web, n) in card.web" :key="n" class="ma-0 pa-0 pt-2">
-                    <a  :href="web" style="text-overflow: ellipsis; white-space:pre; overflow:hidden;" target="_blank">{{$helpers.retrieveDomain(web).replace('./downloads/', '').replace('./goodies/', '').replace('./', '')}}</a>
+                    <a  :href="web" style="text-overflow: ellipsis; white-space:pre; overflow:hidden;" target="_blank">{{displayUrl(web)}}</a>
                     <!-- <a  v-if="web.startsWith('./') && web.endsWith('.html')" :href="web.replace('/index.html','')" download target="_blank">{{$helpers.retrieveDomain(web).replace('./downloads/', '').replace('./goodies/', '').replace('./', '').replace('/index.html', '.zip')}}</a> -->
                   </v-card-actions>
                 </div>
@@ -303,7 +303,7 @@
           {'chapter': 'Work'},
           
           {'title':`SSFV`,
-           'desc':`Salaries and Conditions of Employment for the swiss film industry.`,
+           'desc':`Trade association of movie professionals. Salaries and conditions of employment.`,
            'web':[
              'https://www.ssfv.ch/',
              './downloads/aab--tagesengagement-2014.pdf',
@@ -312,6 +312,35 @@
              './downloads/richtloehne-tagesengagement.pdf',
            ],
            'color':`pink darken-2`,
+           'dialog': {'title': ``, 'text': ``}
+          },
+          
+          {'title':`t.punkt - ACT`,
+           'desc':`Trade association of theater professionals. Salaries and conditions of employment.`,
+           'web':[
+             'https://www.tpunkt.ch/',
+             './downloads/ACT_Richtgagen-und-Richtloehne.pdf',
+           ],
+           'color':`pink darken-2`,
+           'dialog': {'title': ``, 'text': ``}
+          },
+          
+          {'title':`Job Markets`,
+           'desc':``,
+           'web':[
+             'https://www.theaterschweiz.ch/stellenmarkt/',
+             'https://studentenjobs.ch/inserat?query=film',
+             'https://studentfilm.ch/',
+             'https://www.451.ch/451-F//User-Beitraege/Bezahlte-Arbeit',
+           ],
+           'color':`pink darken-2`,
+           'dialog': {'title': ``, 'text': ``}
+          },
+
+          {'title':`Reisespesenbelege (iOS)`,
+           'desc':`Easy way on the road to regularly have your bills up to date and scan receipts with your phone. Makes a .pdf with the statement and the receipts in the end.`,
+           'web':[`https://apps.apple.com/ch/app/reisespesenbelege/id703187946`],
+           'color':`warning`,
            'dialog': {'title': ``, 'text': ``}
           },
 
@@ -323,7 +352,13 @@
            'color':'warning', 'dialog': {'title': ``, 'text': ``}
           },
 
-          {'title':`DOF calculator `,
+          {'title':`Cadrage (iOS)`,
+           'desc':`Insert camera & lense and get an approximation what will be in shot and what may not.`,
+           'web':[`https://apps.apple.com/app/cadrage-directors-viewfinder/id793232740`],
+           'color':'pink darken-2', 'dialog': {'title': ``, 'text': ``}
+          },
+          
+          {'title':`DOF calculator`,
            'desc':`Get a sense of which lense shows what in what distance.`,
            'web':[`https://dofsimulator.net/en/`],
            'color':'pink darken-2', 'dialog': {'title': ``, 'text': ``}
@@ -338,6 +373,13 @@
           {'title':`Deepl Translator`,
            'desc':`Translate text fast and pretty accurate.`,
            'web':[`https://www.deepl.com/de/translator`],
+           'color':`warning`,
+           'dialog': {'title': ``, 'text': ``}
+          },
+
+          {'title':`Sun surveyor (Android/iOS)`,
+           'desc':`Get sun and moon positions now or in the future with your phones camera. Know what the light looks like on location, before being there.`,
+           'web':[`https://play.google.com/store/apps/details?id=com.ratana.sunsurveyor`, 'https://apps.apple.com/us/app/sun-surveyor/id525176875'],
            'color':`warning`,
            'dialog': {'title': ``, 'text': ``}
           },
@@ -367,6 +409,14 @@
     },
 
     methods: {
+      displayUrl(web) {
+        return this.$helpers.retrieveDomain(web)
+          .replace('./downloads/', '')
+          .replace('./goodies/', '')
+          .replace('./', '')
+          .replace('play.google.com', 'Google Play Store')
+          .replace('apps.apple.com', 'Apple Store')
+      },
       showDialog(data) {
         this.infoDialog.model = true;
         this.infoDialog.text = data.text;
