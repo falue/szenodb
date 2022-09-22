@@ -58,7 +58,8 @@
       <pre class="grey--text" style="display:inline">{{user.uid}}</pre>
       <Copy :data="user.uid" dataName="user ID"></Copy>
       <br>
-      and you have {{user.contribution}} contribution points.
+      and you have <span class="orange--text">{{user.contribution}}</span> contribution points. {{"🥳 ".repeat(user.contribution > 500 ? 5 : user.contribution / 100)}}
+      <Info title="Contribution Points" text="are calculated from your activity: Creating or editing resources, and logging in.<br>Currently, they are not used for anything."></Info>
     </v-card>
   </div>
 </template>
@@ -66,6 +67,7 @@
 <script>
 import { db } from '../firebase'
 import Copy from '@/components/Copy'
+import Info from '@/components/Info'
 
   export default {
     name: 'Test',
@@ -73,7 +75,7 @@ import Copy from '@/components/Copy'
       user: Object,
     },
     components: {
-      Copy
+      Copy, Info
     },
 
     data () {
