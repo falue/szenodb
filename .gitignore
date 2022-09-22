@@ -3,7 +3,6 @@ node_modules
 /dist
 /_tools
 src/auth.js
-deploy.sh
 
 # local env files
 .env.local
