@@ -76,14 +76,16 @@ import Copy from '@/components/Copy'
 
     data () {
       return {
-        profile: JSON.parse(JSON.stringify(this.user)),  // does not work on hard refresh!
         success: false,
         somethingWrong: false,
         loading: false,
       }
     },
 
-    created() {
+    computed: {
+      profile() {
+        return JSON.parse(JSON.stringify(this.user));
+      }
     },
 
     methods: {
@@ -98,7 +100,6 @@ import Copy from '@/components/Copy'
           }).then(() => {
             this.success = true;
             console.log('updated profile')
-            this.$store.dispatch('fetchUserProfile', this.user)
             this.loading = false;
           })
 

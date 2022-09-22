@@ -7,6 +7,7 @@ import { authKeys } from '../auth.js'
 Vue.use(Vuex)
 
 let unsubscribe = [];
+let unsubscribeLogin = [];
 
 // STORE STUFF
 const store = new Vuex.Store({
@@ -38,8 +39,8 @@ const store = new Vuex.Store({
       // sign user in
       await fb.auth.signInWithEmailAndPassword(form.email.toLowerCase(), form.password).then(function({ user }) {
         // fetch user profile and set in state
-        dispatch('fetchUserProfile', user).then(function() {
-          fb["db"].collection("users").doc(user.uid).update({
+        dispatch('fetchUserProfile', user).then(async function() {
+          await fb["db"].collection("users").doc(user.uid).update({
             'lastLogin': new Date(),
             'emailVerified': user.emailVerified
           })
@@ -51,57 +52,62 @@ const store = new Vuex.Store({
       });
     },
 
-    async logout({ commit }) {
+    async logout({ commit }, next='success') {
+      unsubscribeLogin();
       store.dispatch('unsubscribeAllBut', '');
 
       await fb.auth.signOut()
       // clear userProfile and redirect to /login
       commit('setUserProfile', {})
-      router.push('/login?success=loggedOut')
+      if(next === 'success') {
+        router.push('/login?success=loggedOut')
+      } else if(next==='kicked') {
+        router.push('/login?error=kicked')
+      }
     },
 
     async fetchUserProfile({ commit }, user) {
-      // fetch user profile
-      return fb.usersCollection.doc(user.uid).get().then(function(userProfile) {
-        /* DELETED USER FILE */
-        if(!userProfile.data()) {
-          console.log(userProfile.data());
-          fb.auth.signOut();
-          commit('setUserProfile', {});
-          router.push(`/login?error=missingUserFile&id=${user.uid}`);
-          return;
-        }
-        
-        /* KICKED! */
-        if(userProfile.data().kicked) {
-          console.log("KICKED USER");
-          fb.auth.signOut();
-          commit('setUserProfile', {});
-          router.push('/login?error=kicked');
-          return
-        }
-        // set user profile in state
-        commit('setUserProfile', {...userProfile.data(), 'emailVerified': user.emailVerified, 'uid': user.uid, 'email': user.email })
-
-        if(router.currentRoute.query.next) {
-          // User was logged out and tried to access authRequiered content,
-          // like profiel, resource or resource?view=..
-          // send to specific link
-          let nextQuery = Object.keys(router.currentRoute.query).map(function (key) {
-            if(key !== 'next' && router.currentRoute.query[key] !== 'authRequiered') {
-              return `${key}=${router.currentRoute.query[key]}`
+      // fetch user profile an keep updates
+      unsubscribeLogin = fb["db"].collection("users")
+          .doc(user.uid)
+          .onSnapshot(userProfile => {
+            /* DELETED USER FILE */
+            if(!userProfile.data()) {
+              console.log(userProfile.data());
+              fb.auth.signOut();
+              commit('setUserProfile', {});
+              router.push(`/login?error=missingUserFile&id=${user.uid}`);
+              return;
             }
-          }).filter(n => n).join('&');
-          router.push(`${router.currentRoute.query.next}?success=loggedIn&${nextQuery}`)
+            
+            /* KICKED! */
+            if(userProfile.data().kicked) {
+              console.log("KICKED USER");
+              fb.auth.signOut();
+              commit('setUserProfile', {});
+              router.push('/login?error=kicked');
+              return
+            }
 
-        } else if (router.currentRoute.path === '/login') {
-          // User clicked on login link, send to resource list
-          router.push('/resources?success=loggedIn')
-        }
-      }).catch(error => {
-        console.error("could not write file to usersCollection", error)
-        throw error
-      });
+            commit('setUserProfile', {...userProfile.data(), 'emailVerified': user.emailVerified, 'uid': user.uid, 'email': user.email })
+            
+            if(router.currentRoute.query.next) {
+              // User was logged out and tried to access authRequiered content,
+              //   like profile, resource or resource?view=..
+              //   send to specific link
+              let nextQuery = Object.keys(router.currentRoute.query).map(function (key) {
+                if(key !== 'next' && router.currentRoute.query[key] !== 'authRequiered') {
+                  return `${key}=${router.currentRoute.query[key]}`
+                }
+              }).filter(n => n).join('&');
+              router.push(`${router.currentRoute.query.next}?success=loggedIn&${nextQuery}`)
+    
+            } else if (router.currentRoute.path === '/login') {
+              // User clicked on login link, send to resource list
+              router.push('/resources?success=loggedIn')
+            }
+          })
+      return;
     },
 
     async signup({ dispatch }, form) {
