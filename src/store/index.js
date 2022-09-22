@@ -94,7 +94,7 @@ const store = new Vuex.Store({
           }).filter(n => n).join('&');
           router.push(`${router.currentRoute.query.next}?success=loggedIn&${nextQuery}`)
 
-        } else if (router.currentRoute.query.path === '/login') {
+        } else if (router.currentRoute.path === '/login') {
           // User clicked on login link, send to resource list
           router.push('/resources?success=loggedIn')
         }
