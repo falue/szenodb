@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Create build
+git push &&
 npm run build &&
 cd ./dist &&
 
