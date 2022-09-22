@@ -11,12 +11,47 @@
       style="overflow-y: auto;"
     >
       <!-- GIT LOG -->
-      <v-card-title class="justify-center pb-0">Latest updates</v-card-title>
+      <v-card-title class="justify-center pb-0">Project info</v-card-title>
 
-      <v-card-text class="white--text text-center ma-0 pa-0">
+      <v-card-text class="white--text text-center ma-0 pa-0 mb-12">
         <span class='overline pink--text ml-2 mr-1' style='font-style: initial; line-height:1em'>szeno&middot;DB</span>
         on <a href="https://github.com/falue/szenodb" target="_blank">github</a> @branch {{ currentBranch }}
       </v-card-text>
+
+      <v-card-text v-if="milestones.length > 1" class="white--text text-center pa-0 mt-1 mb-6">
+        <span class="mb-6">
+          Issue milestones:<br>
+          <span v-for="(milestone, x) in milestones" :key="'key-' + x" class="ml-4">
+            <input
+              type="radio"
+              :id="'milestone'+milestone"
+              :value="x+1"
+              name="milestone"
+              v-model="currentMilestone"
+            />
+            <!-- FIXME: value is only working when order of "milestones" is the same as on github. cannot leave milestones out, etc -->
+            <label :for="'milestone'+milestone" class="ml-1">{{milestone}}</label>
+          </span>
+        </span>
+      </v-card-text>
+
+      <div v-if="issues && issues.length">
+        There are <span class="error--text">{{issues.length}} issues</span> on milestone "{{milestones[currentMilestone-1]}}":<br>
+        <div v-for="(record, i) in issues"  :key="'key2-' + i" class="grey--text caption">
+          <a :href="record.html_url" target="_blank">{{record.number}}</a>
+          by
+          <!-- <pre>{{record}}</pre> -->
+          <a :href="record.user.html_url" target="_blank">
+            {{ record.user.login }}</a>:
+          {{record.title}}
+        </div>
+      <!-- <pre>{{issues}}</pre> -->
+      </div>
+      <div v-else>
+        No issues; all done! Congrats 🥳
+      </div>
+
+      <v-card-title class="justify-center pb-0 mt-12">Latest updates</v-card-title>
 
       <v-card-text v-if="branches.length > 1" class="white--text text-center pa-0 mt-1">
         <span class="mb-6">
@@ -43,9 +78,8 @@
             <a :href="record.html_url" target="_blank" class="commit">
               {{ record.sha.slice(0, 7) }}</a>
             by
-            <a :href="record.author.html_url" target="_blank" class="mr-1">
-              {{ record.commit.author.name }}
-            </a>
+            <a :href="record.author.html_url" target="_blank">
+              {{ record.commit.author.name }}</a>
             @
             {{ record.commit.author.date | formatDate }}
           </div>
@@ -69,40 +103,54 @@
     
     data () {
       return {
-        apiURL: "https://api.github.com/repos/falue/szenodb/commits?per_page=250&sha=",
-        // apiURL: "https://api.github.com/repos/falue/digiprops-add/commits?per_page=250&sha=",
+        apiUrl: "https://api.github.com/repos/falue/szenodb/commits?per_page=250&sha=",
+        apiUrlIssues: "https://api.github.com/repos/falue/szenodb/issues?per_page=250&state=open&milestone=",
+        // apiUrl: "https://api.github.com/repos/falue/digiprops-add/commits?per_page=250&sha=",
         branches: ["main"],
         currentBranch: "main",
-        commits: null
+        milestones: ["MVP", "FEATURECREEP", "Nice to haves", "HOLY GRAIL"],
+        currentMilestone: 1,
+        // 1 = MVP, 2 = FEATURECREEP, 3 Nice to haves, 4=HOLY GRAIL
+        commits: null,
+        issues: null,
       }
     },
 
-    created: function() {
-      this.fetchData();
+    created() {
+      this.fetchData(this.apiUrl, 'commits', this.currentBranch);
+      this.fetchData(this.apiUrlIssues, 'issues', this.currentMilestone);
     },
 
     watch: {
-      currentBranch: "fetchData"
+      currentBranch() {
+        this.fetchData(this.apiUrl, 'commits', this.currentBranch);
+      },
+      currentMilestone() {
+        this.fetchData(this.apiUrlIssues, 'issues', this.currentMilestone);
+      }
     },
 
     filters: {
-      truncate: function(v) {
+      truncate(v) {
         var newline = v.indexOf("\n");
         return newline > 0 ? v?.slice(0, newline) : v;
       },
-      formatDate: function(v) {
+      formatDate(v) {
         return v.replace(/T|Z/g, " ");
       }
     },
 
     methods: {
-      fetchData: function() {
+      fetchData(url, target, theme) {
         var xhr = new XMLHttpRequest();
-        var self = this;
-        xhr.open("GET", this.apiURL + self.currentBranch);
+        var that = this;
+        xhr.open("GET", url + theme);
         xhr.onload = function() {
-          self.commits = JSON.parse(xhr.responseText);
-          console.log(self.commits[0]?.html_url);
+          if(target === 'commits') {
+            that.commits = JSON.parse(xhr.responseText);
+          } else {
+            that.issues = JSON.parse(xhr.responseText);
+          }
         };
         xhr.send();
       }
