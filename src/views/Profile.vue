@@ -57,6 +57,8 @@
       Your user ID is
       <pre class="grey--text" style="display:inline">{{user.uid}}</pre>
       <Copy :data="user.uid" dataName="user ID"></Copy>
+      <br>
+      and you have {{user.contribution}} contribution points.
     </v-card>
   </div>
 </template>
