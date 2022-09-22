@@ -95,7 +95,7 @@
     <v-card-actions v-else class="py-2 fixed bottom grey darken-4 fill-width left">
       <v-btn @click="$emit('cancel')">Cancel</v-btn>
       <v-spacer></v-spacer>
-      <v-btn v-if="user.role === 'admin'" icon class="red mx-2" :small="$vuetify.breakpoint.mdAndUp" @click="$emit('delete', data); $emit('cancel')">
+      <v-btn icon class="red mx-2" :small="$vuetify.breakpoint.mdAndUp" @click="flag($event, data)">
         <v-icon :small="$vuetify.breakpoint.mdAndUp">mdi-delete</v-icon>
       </v-btn>
       <v-spacer></v-spacer>
@@ -134,6 +134,22 @@ import CsvImport from '@/components/CsvImport'
       },
       checkShiftKey(event) {
         this.shiftKeyPressed = event.shiftKey;
+      },
+      flag(event, data) {
+        this.$emit('flag', {
+          shiftKey: event, data: {
+            id: data.id,
+            content: data,
+            flags: {
+              // FIXME: ignores what is currently set
+              // FIXME: forgets reason
+              deleted:false,
+              unreliable:false,
+              reason:'',
+            }
+          }
+        });
+        this.$emit('cancel');
       },
       
       /* IMAGES */

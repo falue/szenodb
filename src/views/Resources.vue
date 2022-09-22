@@ -33,7 +33,7 @@
           :data="post"
           :dataMode="dataMode"
           :user="user"
-          @delete="deleteResource($event)"
+          @flag="setFlags($event.shiftKey, $event.data)"
           @edit="post = $event.newData, oldData=$event.oldData, saveEditedResource()"
           @new="getEmittedNewPost($event)"
           @cancel="cancelEditResource()"
