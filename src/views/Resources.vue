@@ -306,7 +306,7 @@
             <template v-slot:activator="{ on, attrs }">
               <v-btn v-bind="attrs" v-on="on" color="white" class="black--text" :disabled="reasonOfDelete.reason.length === 0"
               @click="reasonOfDelete.display = false, flagForDeletion(reasonOfDelete, false, true), reasonOfDelete = {reason:'', deleted:false, unreliable:false}">
-                Flag as unreliable
+                 {{$vuetify.breakpoint.mdAndUp ? 'Flag unreliable' : 'Unreliable'}}
               </v-btn>
             </template>
             <div>
@@ -316,8 +316,11 @@
             </div>
           </v-tooltip>
           <v-btn color="red" :disabled="reasonOfDelete.reason.length === 0" @click="reasonOfDelete.display = false, flagForDeletion(reasonOfDelete, true, false), reasonOfDelete = {reason:'', deleted:false, unreliable:false}">
-            <span v-if="user.role === 'admin'">Flag as deleted</span>
-            <span v-else>Trust me, I know what I'm doing</span>
+            <span v-if="user.role === 'admin'">
+              {{$vuetify.breakpoint.mdAndUp ? "Flag deleted" : 'Flag Del.'}}</span>
+            <span v-else>
+              {{$vuetify.breakpoint.mdAndUp ? "Trust me, I know what I do" : $vuetify.breakpoint.sm ? 'Delete' : 'Del.'}}
+            </span>
           </v-btn>
           <v-btn color="orange" title="Admins can delete this now!" v-if="user.role === 'admin'" @click="reasonOfDelete.display = false, deleteResource(reasonOfDelete), reasonOfDelete = {reason:'', deleted:false, unreliable:false}">
             <v-icon>mdi-delete-alert</v-icon>
