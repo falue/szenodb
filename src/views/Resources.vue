@@ -178,7 +178,7 @@
                 ? 'px-4'
                 : 'px-2'
             ]"
-            @click="viewResource(resource)"
+            @click="viewResource(i, resource)"
           >
             <div class="pt-1" style="text-decoration: inherit; vertical-align: top; width:20%; display:inline-block;">
               <!-- min-width:150px;  -->
@@ -209,7 +209,7 @@
                   <v-icon>mdi-link-variant</v-icon>
                 </v-btn>
               </a>
-              <v-btn title="View" icon v-if="$vuetify.breakpoint.mdAndUp" class="primary ml-1" :small="$vuetify.breakpoint.mdAndUp" @click.stop="viewResource(resource)">
+              <v-btn title="View" icon v-if="$vuetify.breakpoint.mdAndUp" class="primary ml-1" :small="$vuetify.breakpoint.mdAndUp" @click.stop="viewResource(i, resource)">
                 <v-icon :small="$vuetify.breakpoint.mdAndUp">mdi-eye</v-icon>
               </v-btn>
 
@@ -337,7 +337,7 @@ import ViewResource from '@/components/ViewResource'
 import EditResource from '@/components/EditResource'
 
   export default {
-    name: 'newData',
+    name: 'Resource',
 
     props: {
       user: Object,
@@ -353,11 +353,13 @@ import EditResource from '@/components/EditResource'
         loading: false,
         filterSet: '',
         loadingCsv: [0,0],
+        viewIndex: 0,
         unsubscribeUrlView: function() {},
         maxSearchResults: 100,
         listWasShortened: false,
         reasonOfDelete: {reason:''},
         dataMode: 'new',
+        test: null,
         filter: '',
         searchTimeout: 0,
         view: {},
@@ -388,16 +390,14 @@ import EditResource from '@/components/EditResource'
       },
     },
 
+    mounted() {
+      document.addEventListener('keyup', this.keystrokes, false)
+      document.that = this;  // safe for use in keystrokes(), somehow
+    },
+
     created() {
       this.viewResourceFromUrl();
 
-      let that = this;
-      // This sets onkeyup listener multiple times when hot reloading.. but fucck it
-      document.body.addEventListener('keyup', function (evt) {
-          if (evt.key === "Escape") {
-            that.drawerOpen = false;
-          }
-      });
       if(!this.resources.length) {
         // After login, sometimes resources are loaded before the fetchUserProfile is done, or something
         console.log("Resources were missing. Reload from scratch.");
@@ -407,9 +407,74 @@ import EditResource from '@/components/EditResource'
 
     beforeDestroy() {
       this.unsubscribeUrlView();
+      document.removeEventListener('keyup', this.keystrokes)
     },
 
     methods: {
+      keystrokes(event) {
+        let that = event.currentTarget.that;  // get "this" from "document.that" somehow.. MAGIC
+        // Close drawer with ESC even if in textarea/input
+        if (event.key === "Escape") {
+          if(that.dataMode === 'edit') {
+            that.dataMode = 'view';
+          } else {
+            that.drawerOpen = false;
+          }
+        }
+
+        if(!['INPUT','TEXTAREA'].includes(event.srcElement.tagName)) {
+          /* console.log(event.key) */
+          switch(event.key) {
+            case 'e':
+              if(that.drawerOpen) {
+                if(that.dataMode === 'view') {
+                  // Go to edit mode
+                  that.editResource(that.resources[that.viewIndex]);
+                } else {
+                  // Change back to view if edit was open
+                  that.dataMode = 'view';
+                }
+              }
+              break;
+            case 'd':
+              if(that.drawerOpen) {
+                that.setFlags({}, that.resources[that.viewIndex]);
+              }
+              break;
+            /* case 'D':
+              // Its dangerous to delete immedietly
+              if(that.drawerOpen) {
+                that.deleteResource(that.resources[that.viewIndex]);
+              }
+              break; */
+            case 'ArrowUp':
+              if(that.drawerOpen && that.viewIndex > 0) {
+                that.viewIndex--
+                that.viewResource(that.viewIndex, that.resources[that.viewIndex]);
+              }
+              break;
+            case 'ArrowLeft':
+              if(that.drawerOpen && that.viewIndex > 0) {
+                that.viewIndex--
+                that.viewResource(that.viewIndex, that.resources[that.viewIndex]);
+              }
+              break;
+            case 'ArrowDown':
+              if(that.drawerOpen && that.viewIndex < that.resources.length-1) {
+                that.viewIndex++
+                that.viewResource(that.viewIndex, that.resources[that.viewIndex]);
+              }
+              break;
+            case 'ArrowRight':
+              if(that.drawerOpen && that.viewIndex < that.resources.length-1) {
+                that.viewIndex++
+                that.viewResource(that.viewIndex, that.resources[that.viewIndex]);
+              }
+              break;
+          }
+        }
+      },
+
       resetResource() {
         return {
           'title': '',
@@ -515,7 +580,8 @@ import EditResource from '@/components/EditResource'
             let data = doc.data();
             if(data) {
               data.id = doc.id
-              this.viewResource(data);
+              // TODO: Resource might not be in current list of resources. what should be the index?
+              this.viewResource(0, data);
             } else {
               console.log(`Could not find resource with ID ${view}`)
               this.$toasted.global.error({msg:`Could not find resource with ID ${view}`});
@@ -524,7 +590,8 @@ import EditResource from '@/components/EditResource'
         }
       },
       
-      viewResource(data) {
+      viewResource(index, data) {
+        this.viewIndex = index;
         // Set URL to .../#/resources?view=xxx
         this.$router.replace({query: { view: data.id }})
         this.view = data;
