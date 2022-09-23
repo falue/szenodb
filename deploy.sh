@@ -49,7 +49,8 @@ if [ "$VERSION" != "0" ]; then
     fi
 
     # If changes where made to package.json, stash them all.
-    git stash &&
+    ### SEE BELOW WHY THIS DOES NOT WORK
+    # git stash &&
 
     # Write version number to package.json
     echo "$( jq '.version = "'$VERSION'"' package.json)" > package.json &&
@@ -58,7 +59,8 @@ if [ "$VERSION" != "0" ]; then
     git commit package.json -m "${GITMESSAGE} ${VERSION}" &&
 
     # Reapply changes to local files
-    git stash apply
+    ### FIXME: REAPPLIES JUST THE LAST STASH, IF THERE WERE NO CHANGES STASHED BEFORE HERE, YOU GET A MESS
+    # git stash apply
 
 else
     echo "Keep current version."
