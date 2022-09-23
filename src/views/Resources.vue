@@ -167,6 +167,7 @@
             :style="resource.flags.unreliable ? 'text-decoration: line-through !important' : ''"
             :key="i"
             :class="[
+              viewIndex === i && drawerOpen ? 'primary darken-4' :
               user.role === 'admin' && resource.flags.deleted
               ? 'pink darken-4'
                 : user.role != 'admin' && resource.flags.deleted
