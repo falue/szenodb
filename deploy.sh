@@ -56,7 +56,7 @@ if [ "$VERSION" != "0" ]; then
     echo "$( jq '.version = "'$VERSION'"' package.json)" > package.json &&
     
     # Add to git
-    git commit package.json -m "${GITMESSAGE} ${VERSION}" &&
+    git commit package.json -m "${GITMESSAGE} ${VERSION}"
 
     # Reapply changes to local files
     ### FIXME: REAPPLIES JUST THE LAST STASH, IF THERE WERE NO CHANGES STASHED BEFORE HERE, YOU GET A MESS
