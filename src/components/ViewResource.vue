@@ -193,4 +193,7 @@ import VCardExport from '@/components/VCardExport'
 </script>
 
 <style scoped>
+.lang {
+  white-space: pre-wrap;
+}
 </style>
