@@ -30,12 +30,12 @@ shift $((OPTIND-1))  # ?
 if [ "$VERSION" == "iterate" ]; then
     # get version number
     VERSION=$(jq -r '.version' package.json) &&
-    # echo "Current version: <${VERSION}>" &&
+    # echo "Current version: <${VERSION}>" &&
 
     # increment marginal version number
     # https://stackoverflow.com/questions/8653126/how-to-increment-version-number-in-a-shell-script
     VERSION=$(echo ${VERSION} | awk -F. -v OFS=. '{$NF += 1 ; print}')
-    # echo "Next version: <${VERSION}>"
+    # echo "Next version: <${VERSION}>"
 fi
 
 # GIT STASH, WRITE NEW VERSION TO package.json, GIT COMMIT, GIT STASH APPLY
