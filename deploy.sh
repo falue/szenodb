@@ -73,9 +73,9 @@ cd ./dist &&
 
 # Copy specified dir recursively
 # use port 2121 as per metanet. get IP from metanet gui. foldername of website.
-scp -P 2121 -r ./ filmkulissen@80.74.158.100:/szenodb.telefabi.ch &&
+scp -P 2121 -r ./ filmkulissen@80.74.158.100:/szenodb.ch &&
 
-echo "New version uploaded to szenodb.telefabi.ch: <${VERSION}>"
+echo "New version uploaded to szenodb.ch: <${VERSION}>"
 
 # NOTES
 
