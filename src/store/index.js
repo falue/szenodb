@@ -115,7 +115,7 @@ const store = new Vuex.Store({
       // const { user } = 
       let credentials = {};
       
-      return fb.auth.createUserWithEmailAndPassword(form.email, form.password).then(function(user) {
+      return fb.auth.createUserWithEmailAndPassword(form.email.toLowerCase(), form.password).then(function(user) {
          // create user profile object in userCollections
         credentials = user.user;
         return fb.usersCollection.doc(credentials.uid).set({  // return ?????
