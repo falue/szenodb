@@ -263,6 +263,11 @@
       </v-card>
     </v-card>
 
+    <!-- LOADING EDIT/ADD -->
+    <div v-if="loadingEdit" class="fixed bottom left ml-16 mb-16 pb-5 pl-4 text-shadow--black">
+      <v-progress-circular size="22" width="2" indeterminate color="primary" class="mr-2"></v-progress-circular> Translation in progress..
+    </div>
+
     <!-- DELETE CONFIRMATION -->
     <v-dialog
       v-model="reasonOfDelete.display"
@@ -354,6 +359,7 @@ import EditResource from '@/components/EditResource'
         loading: false,
         filterSet: '',
         loadingCsv: [0,0],
+        loadingEdit: false,
         viewIndex: 0,
         unsubscribeUrlView: function() {},
         maxSearchResults: 100,
@@ -651,11 +657,14 @@ import EditResource from '@/components/EditResource'
       },
 
       addResource() {
+        this.loadingEdit = true;
         this.$store.dispatch('addResource', {"collection": "resources", "post": this.post}).then(() => {
+          this.loadingEdit = false;
           console.log("Success!")
           this.post = this.resetResource();
           this.$toasted.global.success({msg:"Saved new data to firestore database!"});
         }).catch(error => {
+          this.loadingEdit = false;
           console.log(error)
           console.error(error.message);
           this.$toasted.global.error({msg:error.message});
@@ -703,6 +712,7 @@ import EditResource from '@/components/EditResource'
       },
 
       async saveEditedResource() {
+        this.loadingEdit = true;
         // to remove id from post
         let newData = {
             title: this.post.title,
@@ -720,12 +730,14 @@ import EditResource from '@/components/EditResource'
         }
         // TODO: let newData = this.post;
         await this.$store.dispatch('editResource', {'collection': 'resources', 'document': this.post.id, 'post': newData, 'oldData': this.oldData}).then(() => {
+          this.loadingEdit = false;
           console.log('Success edit!')
           this.post = this.resetResource();
           this.dataMode = 'new';
           this.$toasted.global.success({msg:'Sucessfully edited post.'});
           if(this.$route.fullPath != '/resources') this.$router.push({query: {}})
         }).catch(error => {
+          this.loadingEdit = false;
           console.log(error)
           console.error(error.message);
           this.$toasted.global.error({msg:error.message});
