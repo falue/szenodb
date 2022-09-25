@@ -403,6 +403,8 @@ import EditResource from '@/components/EditResource'
         // After login, sometimes resources are loaded before the fetchUserProfile is done, or something
         console.log("Resources were missing. Reload from scratch.");
         this.$store.dispatch('getResources', this.maxSearchResults);
+      } else if(this.resources.length === this.maxSearchResults) {
+        this.listWasShortened = true;
       }
     },
 
