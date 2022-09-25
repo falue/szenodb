@@ -73,16 +73,12 @@ export default {
     'user.kicked'(val) {
       if(val) {
         console.log("KICKED USER");
-        // db.auth.signOut();
         this.$store.dispatch('logout', 'kicked')
-        // commit('setUserProfile', {});
-        // router.push('/login?error=kicked');
       }
     }
   },
 
   computed: {
-    
     ...mapState(['userProfile', 'posts']),
     isLoggedIn() {
       //console.log("User superprofile: ", this.userProfile);
