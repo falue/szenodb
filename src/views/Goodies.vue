@@ -364,9 +364,9 @@
            'color':'pink darken-2', 'dialog': {'title': ``, 'text': ``}
           },
 
-          {'title':`Materials weight calculator`,
-           'desc':`Calulcate weight of aluminium, wood, acrylics, etc`,
-           'web':[`https://schreinerwissen.de/kg.php`],
+          {'title':`Materials weight & beams calculator`,
+           'desc':`Calulcate weight of aluminium, wood, acrylics, etc. Get the correct dimensions on you wood beams.`,
+           'web':[`https://schreinerwissen.de/kg.php`, 'http://www.eurocode-statik-online.de/berechnungen.php'],
            'color':'green', 'dialog': {'title': ``, 'text': ``}
           },
 
