@@ -125,8 +125,12 @@ const store = new Vuex.Store({
           role: 'user',
           uid: user.user.uid,
           favorites: [],
+          tags: [],            // https://github.com/falue/szenodb/issues/25
+          notes: [],           // https://github.com/falue/szenodb/issues/18
+          public: false,       // https://github.com/falue/szenodb/issues/12
+          prevLanguage: 'DE',  // https://github.com/falue/szenodb/issues/14
           contribution: 0,
-          img: '',
+          avatar: '',
           createdOn: new Date(),
           lastLogin: new Date(),
         }).then(async function() {
