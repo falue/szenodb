@@ -28,6 +28,7 @@
 import { mapState } from 'vuex'
 import SiteNav from '@/components/Navigation'
 import {version} from '../package'
+import { db, auth } from "./firebase.js";
 
 export default {
   name: 'App',
@@ -58,6 +59,9 @@ export default {
           this.$toasted.global.success({
             msg: this.message[this.$route.query.success] ? this.message[this.$route.query.success] : this.$route.query.success,
           });
+          if(this.$route.query.success === 'emailVerified') {
+            this.checkUserVerified();
+          }
         } else if(this.$route.query.error) {
           this.$toasted.global.error({
             msg: this.message[this.$route.query.error] ? this.message[this.$route.query.error] : this.$route.query.error,
@@ -89,5 +93,35 @@ export default {
       return this.userProfile  // ??????
     }
   },
+
+  created() {
+    if(this.$route.query.success === 'emailVerified') {
+      this.checkUserVerified("created");
+    }
+  },
+
+  methods: {
+    async checkUserVerified(source) {
+      // Check if user saved in firebase (not user document in collection "users")
+      //   has emailVerified set to true. Write to user document.
+      const currentUser = auth.currentUser;
+      if (currentUser) {
+        //await auth().currentUser.then(async function(user) {
+                      // this.$store.dispatch('fetchUserProfile', this.user)
+          await db.collection("users").doc(currentUser.uid).update({
+            'emailVerified': currentUser.emailVerified
+          })
+          console.log("written to DB, maybe");
+          if(source === 'created') {
+            this.$toasted.global.success({
+                msg: "Thank you for verifying your email.",
+            });
+          }
+        // });
+      } else {
+        console.log("User not logged in to check emailVerified. You should be now on /login.")
+      }
+    }
+  }
 };
 </script>
