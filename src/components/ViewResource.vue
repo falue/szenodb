@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card-title class="pt-2">
+    <v-card-title class="pt-2" style="max-width:85%">
       <span v-html="data.content.title" :style="data.flags.unreliable ? 'text-decoration: line-through': ''"></span>
       <Copy :data="data.content.title" dataName="title" position="right"></Copy>
       <Copy v-if="user.role === 'admin'" :data="data.id" dataName="Document ID" position="right"></Copy>
