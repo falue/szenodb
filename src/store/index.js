@@ -130,7 +130,7 @@ const store = new Vuex.Store({
           tags: [],            // https://github.com/falue/szenodb/issues/25
           notes: [],           // https://github.com/falue/szenodb/issues/18
           public: false,       // https://github.com/falue/szenodb/issues/12
-          prevLanguage: 'DE',  // https://github.com/falue/szenodb/issues/14
+          guiLanguage: 'DE',  // https://github.com/falue/szenodb/issues/14
           contribution: 0,
           avatar: '',
           createdOn: new Date(),
