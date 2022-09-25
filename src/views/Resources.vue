@@ -179,7 +179,7 @@
                 ? 'px-4'
                 : 'px-2'
             ]"
-            @click="viewResource(i, resource)"
+            @click="setViewUrl(resource.id)"
           >
             <div class="pt-1" style="text-decoration: inherit; vertical-align: top; width:20%; display:inline-block;">
               <!-- min-width:150px;  -->
@@ -210,7 +210,7 @@
                   <v-icon>mdi-link-variant</v-icon>
                 </v-btn>
               </a>
-              <v-btn title="View" icon v-if="$vuetify.breakpoint.mdAndUp" class="primary ml-1" :small="$vuetify.breakpoint.mdAndUp" @click.stop="viewResource(i, resource)">
+              <v-btn title="View" icon v-if="$vuetify.breakpoint.mdAndUp" class="primary ml-1" :small="$vuetify.breakpoint.mdAndUp" @click.stop="setViewUrl(resource.id)">
                 <v-icon :small="$vuetify.breakpoint.mdAndUp">mdi-eye</v-icon>
               </v-btn>
 
@@ -389,6 +389,25 @@ import EditResource from '@/components/EditResource'
           this.search(this.filter);
         }, "750");
       },
+      $route(){
+        // Main navigation tool for viewing resources.
+        //   This triggers when history-back in browser was used,
+        //   and when user clicks on resource list to view the resource.
+        if(Object.keys(this.$route.query).length > 0) {
+          if(this.$route.query.view) {
+            // find index & content of complete resource in this.resource from ID in this.$route.query.view
+            let listData = this.getResourceFromId(this.$route.query.view);
+            // FIXME: Drawback of this, i throw away the already laoded resource data in the list
+            // and use just the ID of that, reload it here with getResourceFromId
+            if(listData) {
+              this.viewResource(listData[0], listData[1])
+            }
+          }
+        } else {
+          // Reset page with no drawer
+          this.cancelEditResource()
+        }
+      }
     },
 
     mounted() {
@@ -397,7 +416,7 @@ import EditResource from '@/components/EditResource'
     },
 
     created() {
-      this.viewResourceFromUrl();
+      this.viewResourceFromHardReoadedUrl();
 
       if(!this.resources.length) {
         // After login, sometimes resources are loaded before the fetchUserProfile is done, or something
@@ -453,25 +472,25 @@ import EditResource from '@/components/EditResource'
             case 'ArrowUp':
               if(that.drawerOpen && that.viewIndex > 0) {
                 that.viewIndex--
-                that.viewResource(that.viewIndex, that.resources[that.viewIndex]);
+                that.setViewUrl(that.resources[that.viewIndex].id)
               }
               break;
             case 'ArrowLeft':
               if(that.drawerOpen && that.viewIndex > 0) {
                 that.viewIndex--
-                that.viewResource(that.viewIndex, that.resources[that.viewIndex]);
+                that.setViewUrl(that.resources[that.viewIndex].id)
               }
               break;
             case 'ArrowDown':
               if(that.drawerOpen && that.viewIndex < that.resources.length-1) {
                 that.viewIndex++
-                that.viewResource(that.viewIndex, that.resources[that.viewIndex]);
+                that.setViewUrl(that.resources[that.viewIndex].id)
               }
               break;
             case 'ArrowRight':
               if(that.drawerOpen && that.viewIndex < that.resources.length-1) {
                 that.viewIndex++
-                that.viewResource(that.viewIndex, that.resources[that.viewIndex]);
+                that.setViewUrl(that.resources[that.viewIndex].id)
               }
               break;
           }
@@ -572,7 +591,7 @@ import EditResource from '@/components/EditResource'
         }
       },
 
-      viewResourceFromUrl() {
+      viewResourceFromHardReoadedUrl() {
         // get ID from PARAMS
         let view = this.$route.query.view;
         if(view) {
@@ -583,8 +602,7 @@ import EditResource from '@/components/EditResource'
             let data = doc.data();
             if(data) {
               data.id = doc.id
-              // TODO: Resource might not be in current list of resources. what should be the index?
-              this.viewResource(0, data);
+              this.viewResource(-1, data);
             } else {
               console.log(`Could not find resource with ID ${view}`)
               this.$toasted.global.error({msg:`Could not find resource with ID ${view}`});
@@ -592,14 +610,29 @@ import EditResource from '@/components/EditResource'
           });
         }
       },
+
+      setViewUrl(id) {
+        // Set URL to .../#/resources?view=xxx if not already there
+        if(this.$route.fullPath != `/resources?view=${id}` ) this.$router.push({query: { view: id }})
+      },
       
       viewResource(index, data) {
         this.viewIndex = index;
-        // Set URL to .../#/resources?view=xxx
-        this.$router.replace({query: { view: data.id }})
         this.view = data;
         this.drawerOpen = true;
         this.dataMode = 'view'
+      },
+
+      getResourceFromId(id) {
+        let index = this.$helpers.findKey(this.resources, 'id', id, "list")[0];  // 
+        let data = this.resources[index];
+        if (data) {
+          data.id = id;
+          return [index, data]
+        } else {
+          console.log("Could not find resource in present resources array! Weep.")
+          return false;
+        }
       },
 
       async getEmittedNewPost(data) {
@@ -767,7 +800,7 @@ import EditResource from '@/components/EditResource'
 
       cancelEditResource() {
         // Reset URL to .../#/resources
-        this.$router.replace({query: {}})
+        if(this.$route.fullPath != '/resources') this.$router.push({query: {}})
         this.unsubscribeUrlView();
         this.dataMode = 'new';
         this.success = '';
