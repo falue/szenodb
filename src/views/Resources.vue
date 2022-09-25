@@ -724,6 +724,7 @@ import EditResource from '@/components/EditResource'
           this.post = this.resetResource();
           this.dataMode = 'new';
           this.$toasted.global.success({msg:'Sucessfully edited post.'});
+          if(this.$route.fullPath != '/resources') this.$router.push({query: {}})
         }).catch(error => {
           console.log(error)
           console.error(error.message);
