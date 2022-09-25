@@ -33,7 +33,7 @@
           :title="`${{'DE':'Autotranslate to German','FR':'Autotranslate to French','EN-GB':'Autotranslate to English','IT':'Autotranslate to Italian','original':'See original'}[languages[languageIndex+1 > languages.length-1 ? 0 : languageIndex+1]]}`"
           @click="switchLanguage()"
         >
-          <v-icon small color="primary" class="mr-1">mdi-translate</v-icon> {{$vuetify.breakpoint.smAndUp ? currentLanguage : ''}}
+          <v-icon small color="primary" class="mr-1">mdi-translate</v-icon> {{$vuetify.breakpoint.smAndUp ? currentLanguage === 'original' ? data.content.originalLang : currentLanguage : ''}}
         </v-btn>
 
         <span class="lang lang-original" :lang="data.content.originalLang">{{data.content.resources}}</span>

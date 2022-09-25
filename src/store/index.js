@@ -439,7 +439,7 @@ const store = new Vuex.Store({
         await store.dispatch('translate', {'text': fieldsToTranslate, 'lang': targetLangs[i]}).then(function(text) {
           for (let x = 0; x < text.length; x++) {
             // Takes only the language from the last field => .info
-            if(text[x].text.length && (text[x].detected_source_language === 'EN' || targetLangs.includes(text[x].detected_source_language))) {
+            if(text[x].text.length) {
               originalLang = text[x].detected_source_language === 'EN' ? 'EN-GB' : text[x].detected_source_language;
             }
             translations[targetLangs[i]][objectKeys[x]] = text[x].text;
