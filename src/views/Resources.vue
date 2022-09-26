@@ -162,12 +162,12 @@
           <!-- LIST RESOURCES -->
           <div
             v-for="(resource, i) in resources"
-            class="my-2"
+            class="resource my-2"
             style="height:56px; overflow: hidden;"
             :style="resource.flags.unreliable ? 'text-decoration: line-through !important' : ''"
             :key="i"
             :class="[
-              viewIndex === i && drawerOpen ? 'primary darken-4' :
+              viewIndex === i && drawerOpen || viewIndex === i && editedResource  ? 'primary darken-4' :
               user.role === 'admin' && resource.flags.deleted
               ? 'pink darken-4'
                 : user.role != 'admin' && resource.flags.deleted
@@ -360,6 +360,7 @@ import EditResource from '@/components/EditResource'
         filterSet: '',
         loadingCsv: [0,0],
         loadingEdit: false,
+        editedResource: false,
         viewIndex: 0,
         unsubscribeUrlView: function() {},
         maxSearchResults: 100,
@@ -737,10 +738,13 @@ import EditResource from '@/components/EditResource'
           this.dataMode = 'new';
           this.$toasted.global.success({msg:'Sucessfully edited post.'});
           if(this.$route.fullPath != '/resources') this.$router.push({path: this.$route.path})
+          this.editedResource = true;
           // Scroll to top after list is reloaded.
           // FIXME: Sucks.
           await this.$helpers.sleep(500);
           this.$refs.resourcesList.$el.scrollTop = scrollTop;
+          await this.$helpers.sleep(500);
+          this.editedResource = false;
         }).catch(error => {
           this.loadingEdit = false;
           console.log(error)
@@ -846,7 +850,11 @@ import EditResource from '@/components/EditResource'
 </script>
 
 <style scoped>
-  .addNewResource {
+  .resource {
+    transition: background-color 500ms;
+  }
+
+.addNewResource {
     transform: translate(0, -1.05em); 
     border-top-right-radius:50% !important; 
     border-bottom-right-radius:50% !important;
