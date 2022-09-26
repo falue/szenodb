@@ -13,16 +13,11 @@
           <v-text-field filled v-model.trim="signupForm.title" type="text" placeholder="Profession" id="title"></v-text-field>
           <v-text-field filled v-model.trim="signupForm.email" type="text" placeholder="you@email.com*" id="email2"></v-text-field>
           <v-text-field filled v-model.trim="signupForm.password" type="password" placeholder="Password*" hint="min 6 characters" id="password2"></v-text-field>
-          <v-card-actions class="pl-0">
+          <v-card-actions class="px-0">
+            <v-btn to="/login">Back</v-btn>
+            <v-spacer></v-spacer>
             <v-btn type="submit" color="primary" @click="signup()">Sign Up</v-btn>
-            <!-- ERROR HANDLING -->
-            <span v-if="error" class="ml-3 error--text">
-              {{error}}
-            </span>
           </v-card-actions>
-          <span class="caption grey--text">
-            <router-link to="/login">Back to Log In</router-link>
-          </span>
       </form>
     </v-card>
 </template>
@@ -33,7 +28,6 @@
     
     data () {
       return {
-        error: '',
         signupForm: {
           name: '',
           title: '',
@@ -57,7 +51,7 @@
         }).catch(error => {
           console.log(error);
           console.error(error.message);
-          this.error = error.message;
+          this.$toasted.global.error({msg:error.message});
         });
       }
     },

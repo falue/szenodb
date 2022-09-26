@@ -35,8 +35,12 @@
           <v-btn v-if="!user.emailVerified && !deleteAccountConfirmation" @click="sendEmailVerification()" type="submit" :class="this.$route.query.hint === 'verifyEmail' ? 'error--fade' : ''" color="">
             Resend verification email
           </v-btn>
+
+          <v-btn v-if="!deleteAccountConfirmation" :to="`/forgot-password?email=${user.email}`">
+            Reset password
+          </v-btn>
           
-          <v-btn type="submit" color="primary">Save changes
+          <v-btn type="submit" color="primary">Save {{$vuetify.breakpoint.smAndUp ? "changes" : ""}}
             <v-progress-circular
               :size="16"
               :width="2"
