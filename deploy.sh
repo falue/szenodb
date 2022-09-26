@@ -88,7 +88,10 @@ NC='\033[0m'
 echo -e "\n\n${GREEN}FINISHED${NC}\n${RED}Built files${NC} uploaded to szenodb.ch."
 
 if [ "$VERSION" != "0" ]; then
-    echo -e "New version ${GREEN}${VERSION}${NC} set & committed.\nCommit message: ${BLACK}${ON_GREEN}<${GITMESSAGE} ${VERSION}>${NC}"
+    echo -e "\nNew version ${GREEN}${VERSION}${NC} written to packages.json & committed.\nCommit message: ${BLACK}${ON_GREEN}<${GITMESSAGE} ${VERSION}>${NC}"
+fi
+if [ "$GITSTASHED" == "untracked" ]; then
+    echo -e "\nCurrent local changes where git ${GREEN}stashed & reapplied${NC}."
 fi
 
 # NOTES
