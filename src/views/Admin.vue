@@ -1,7 +1,7 @@
 <template>
   <div class="ma-0 fill-width fill-height">
     <v-card
-      :class="$vuetify.breakpoint.smAndDown ? 'transparent fill-height ma-0 pa-4' : 'mx-auto my-4 mt-12 pa-8'"
+      :class="$vuetify.breakpoint.smAndDown ? 'transparent fill-height ma-0 pa-4 pt-0' : 'mx-auto my-4 mt-12 pa-8 pt-4'"
       :max-width="$vuetify.breakpoint.mdAndUp ? 888 : 6666"
       max-height="80%"
       :flat="$vuetify.breakpoint.smAndDown"
