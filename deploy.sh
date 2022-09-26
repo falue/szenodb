@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# Check if file package.json exists, else, exit
+if [ ! -f package.json ]; then
+    echo "ERROR: package.json not found. You're in the wrong folder or this project is not an npm project."
+    exit 1
+fi
+
 VERSION="0"
 usage() {
     echo "Usage:"
