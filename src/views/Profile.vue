@@ -23,23 +23,13 @@
         <br>
 
         <v-card-actions :class="$vuetify.breakpoint.mdAndUp ? 'pl-0 pr-6' : 'pa-0'">
-          <v-btn v-if="!deleteAccountConfirmation" @click="deleteAccountConfirmation = true">
+          <v-btn @click="deleteAccountConfirmation = !deleteAccountConfirmation">
             Delete my account
           </v-btn>
-          <v-btn v-else :disabled="profile.email === 'info@fluescher.ch'" @click="deleteAccount()" color="red">
-            {{$vuetify.breakpoint.mdAndUp ? 'Delete account now and everything with it.' : 'Delete account now'}}
-          </v-btn>
           <v-spacer></v-spacer>
-
-          <!-- RESEND VERIFACTION EMAIL -->
-          <v-btn v-if="!user.emailVerified && !deleteAccountConfirmation" @click="sendEmailVerification()" type="submit" :class="this.$route.query.hint === 'verifyEmail' ? 'error--fade' : ''" color="">
-            Resend verification email
-          </v-btn>
-
-          <v-btn v-if="!deleteAccountConfirmation" :to="`/forgot-password?email=${user.email}`">
+          <v-btn :to="`/forgot-password?email=${user.email}`">
             Reset password
           </v-btn>
-          
           <v-btn type="submit" color="primary">Save {{$vuetify.breakpoint.smAndUp ? "changes" : ""}}
             <v-progress-circular
               :size="16"
@@ -48,6 +38,16 @@
               indeterminate
               color="primary"
             ></v-progress-circular>
+          </v-btn>
+        </v-card-actions>
+        <v-card-actions :class="$vuetify.breakpoint.mdAndUp ? 'pl-0 pr-6' : 'pa-0'">
+          <v-spacer v-if="deleteAccountConfirmation"></v-spacer>
+          <v-btn v-if="deleteAccountConfirmation" :disabled="profile.email === 'info@fluescher.ch'" @click="deleteAccount()" color="red">
+            {{$vuetify.breakpoint.mdAndUp ? 'Delete account now and everything with it.' : 'Delete account now'}}
+          </v-btn>
+          <v-spacer></v-spacer>
+          <v-btn v-if="!deleteAccountConfirmation && !user.emailVerified" @click="sendEmailVerification()" type="submit" :class="this.$route.query.hint === 'verifyEmail' ? 'error--fade' : ''" color="">
+            Resend verification email
           </v-btn>
         </v-card-actions>
         
