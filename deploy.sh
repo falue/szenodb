@@ -32,13 +32,20 @@ while getopts ":v:i" o; do
 done
 shift $((OPTIND-1))  # ?
 
+# COLORS
+YELLOW='\033[0;33m'
+BLACK='\033[0;30m'
+GREEN='\033[0;32m'
+ON_GREEN='\033[42m'
+NC='\033[0m'
+
 # If changes where made to package.json, stash them all.
 GITSTASHED=$(git diff-index --quiet HEAD -- || echo "untracked")
 if [ "$GITSTASHED" == "untracked" ]; then
-    echo "Needs stashing."
+    echo -e "\n${GREEN}Needs stashing.${NC}"
     git stash
 else
-    echo "Does not need stashing, commence."
+    echo -e "\n${YELLOW}Does not need stashing, commence.${NC}"
 fi
 
 # ITERATE MARGINAL
@@ -55,7 +62,7 @@ fi
 
 # GIT STASH, WRITE NEW VERSION TO package.json, GIT COMMIT, GIT STASH APPLY
 if [ "$VERSION" != "0" ]; then
-    echo "Add version to package.json && git commit."
+    echo -e "${GREEN}Add version to package.json && git commit.${NC}\n"
 
     # Write version number to package.json
     echo "$( jq '.version = "'$VERSION'"' package.json)" > package.json &&
@@ -64,7 +71,7 @@ if [ "$VERSION" != "0" ]; then
     git commit package.json -m "${GITMESSAGE} ${VERSION}"
 
 else
-    echo "Keep current version."
+    echo -e "${BLACK}${ON_GREEN}Keep current version.${NC}\n"
 fi
 
 # Create build
@@ -80,22 +87,17 @@ fi
 # use port 2121 as per metanet. get IP from metanet gui. foldername of website.
 scp -P 2121 -r ./dist filmkulissen@80.74.158.100:/szenodb.ch &&
 
-RED='\033[0;31m'
-BLACK='\033[0;30m'
-YELLOW='\033[0;33m'
-ON_GREEN='\033[42m'
-NC='\033[0m'
-echo -e "\n\n${YELLOW}FINISHED${NC}\n${RED}Built files${NC} uploaded to szenodb.ch."
+echo -e "\n\n${GREEN}FINISHED${NC}\n${YELLOW}Built files${NC} uploaded to szenodb.ch."
 
 if [ "$VERSION" != "0" ]; then
-    echo -e "\nNew version ${YELLOW}${VERSION}${NC} written to packages.json & committed.\nCommit message: ${BLACK}${ON_GREEN}<${GITMESSAGE} ${VERSION}>${NC}"
+    echo -e "\nNew version ${GREEN}${VERSION}${NC} written to packages.json & committed.\nCommit message: ${BLACK}${ON_GREEN}<${GITMESSAGE} ${VERSION}>${NC}"
 else
-    echo -e "\n${YELLOW}No new version${NC} was set. Use options '-i' or '-v x.x.x' to set a new version number."
+    echo -e "\nNo new version was set. Use options '-i' or '-v x.x.x' to set a new version number."
 fi
 if [ "$GITSTASHED" == "untracked" ]; then
-    echo -e "\nCurrent local changes where git ${YELLOW}stashed & reapplied${NC}."
+    echo -e "\nCurrent local changes where git ${GREEN}stashed & reapplied${NC}."
 else
-    echo -e "\nNo local changes detected, ${YELLOW}no git stashing${NC}."
+    echo -e "\nNo local changes detected, ${GREEN}no git stashing."
 fi
 
 # NOTES
