@@ -127,10 +127,8 @@
     },
 
     async created() {
-      this.fetchData(this.apiUrl, 'commits', this.currentBranch);
       this.fetchData(this.apiUrlMilestones, 'milestones', '');
-      
-      this.fetchData(this.apiUrlIssues, 'issues', this.currentMilestone);
+      this.fetchData(this.apiUrl, 'commits', this.currentBranch);
     },
 
     watch: {
@@ -153,11 +151,11 @@
     },
 
     methods: {
-      parseMilestones(milestone) {
-        if(milestone) {
-          for (let i = 0; i < milestone.length; i++) {
-            if(i===0) this.currentMilestone = milestone[i].number;
-          this.milestones[milestone[i].number] = milestone[i].title;
+      parseMilestones(milestones) {
+        if(milestones) {
+          for (let i = 0; i < milestones.length; i++) {
+            if(i===0) this.currentMilestone = milestones[i].number;
+            this.milestones[milestones[i].number] = milestones[i].title;
           }
         }
       },
@@ -173,6 +171,7 @@
             that.issues = JSON.parse(xhr.responseText);
           } else if(target === 'milestones') {
             that.parseMilestones(JSON.parse(xhr.responseText));
+            that.fetchData(that.apiUrlIssues, 'issues', that.currentMilestone);
           }
         };
         xhr.send();
