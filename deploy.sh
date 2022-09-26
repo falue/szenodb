@@ -82,16 +82,20 @@ scp -P 2121 -r ./dist filmkulissen@80.74.158.100:/szenodb.ch &&
 
 RED='\033[0;31m'
 BLACK='\033[0;30m'
-GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
 ON_GREEN='\033[42m'
 NC='\033[0m'
-echo -e "\n\n${GREEN}FINISHED${NC}\n${RED}Built files${NC} uploaded to szenodb.ch."
+echo -e "\n\n${YELLOW}FINISHED${NC}\n${RED}Built files${NC} uploaded to szenodb.ch."
 
 if [ "$VERSION" != "0" ]; then
-    echo -e "\nNew version ${GREEN}${VERSION}${NC} written to packages.json & committed.\nCommit message: ${BLACK}${ON_GREEN}<${GITMESSAGE} ${VERSION}>${NC}"
+    echo -e "\nNew version ${YELLOW}${VERSION}${NC} written to packages.json & committed.\nCommit message: ${BLACK}${ON_GREEN}<${GITMESSAGE} ${VERSION}>${NC}"
+else
+    echo -e "\n${YELLOW}No new version${NC} was set. Use options '-i' or '-v x.x.x' to set a new version number."
 fi
 if [ "$GITSTASHED" == "untracked" ]; then
-    echo -e "\nCurrent local changes where git ${GREEN}stashed & reapplied${NC}."
+    echo -e "\nCurrent local changes where git ${YELLOW}stashed & reapplied${NC}."
+else
+    echo -e "\nNo local changes detected, ${YELLOW}no git stashing${NC}."
 fi
 
 # NOTES
