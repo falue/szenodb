@@ -1,12 +1,12 @@
 <template>
     <!-- LOGIN FORM -->
     <v-card
-      class="mx-auto my-4 mt-12 pa-4"
+      :class="$vuetify.breakpoint.smAndDown ? 'transparent fill-height ma-0 pa-4' : 'mx-auto my-4 mt-12 pa-8'"
       :max-width="$vuetify.breakpoint.mdAndUp ? 344 : 6666"
+      max-height="80%"
+      :flat="$vuetify.breakpoint.smAndDown"
+      style="overflow-y: auto;"
     >
-      <!-- :fill-height="$vuetify.breakpoint.mdAndDown"
-      :fill-width="$vuetify.breakpoint.mdAndDown" -->
-
       <v-card-title class="justify-center">Login</v-card-title>
       <form @submit.prevent>
         <v-text-field filled v-model.trim="loginForm.email" type="text" placeholder="Email" name="username">

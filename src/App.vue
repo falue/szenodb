@@ -2,7 +2,7 @@
   <v-app lang="en-GB">
     <SiteNav :auth="isLoggedIn" :user="this.userProfile" :settings="globalSetting"></SiteNav>
 
-    <v-main class="pt-10">
+    <v-main class="pt-10" :style="$vuetify.breakpoint.smAndDown ? 'background-color: #1E1E1E' : ''">
       <v-container class="pa-0">
         <router-view :auth="isLoggedIn" :user="this.userProfile" :settings="globalSetting"/>
       </v-container>

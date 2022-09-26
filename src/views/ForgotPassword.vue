@@ -1,8 +1,11 @@
 <template>
     <!-- SIGNUP FORM -->
     <v-card
-      class="mx-auto my-4 mt-12 pa-4"
+      :class="$vuetify.breakpoint.smAndDown ? 'transparent fill-height ma-0 pa-4' : 'mx-auto my-4 mt-12 pa-8'"
       :max-width="$vuetify.breakpoint.mdAndUp ? 344 : 6666"
+      max-height="80%"
+      :flat="$vuetify.breakpoint.smAndDown"
+      style="overflow-y: auto;"
     >
       <v-card-title class="justify-center">Reset password</v-card-title>
       <form @submit.prevent>
