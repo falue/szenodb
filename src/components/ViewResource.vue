@@ -14,15 +14,6 @@
         </template>
         <span>{{data.content.web ? `Go to ${$helpers.retrieveDomain(data.content.web)}` : `Do a google for "${data.content.title}"`}}</span>
       </v-tooltip>
-      <!-- <a
-        :href="data.content.web ? data.content.web : `https://www.google.com/search?q=${data.content.title.replaceAll(' ', '+')}`"
-        :title="data.content.web ? `Go to ${data.content.web}` : `Do a google for ${data.content.title}`"
-        v-bind="attrs" v-on="on"
-        class="no-underline"
-        target="_blank"
-      >
-        <span v-html="data.content.title" class="white--text" :style="data.flags.unreliable ? 'text-decoration: line-through': ''"></span>
-      </a> -->
       <Copy :data="data.content.title" dataName="title" position="bottom"></Copy>
       <Copy v-if="user.role === 'admin'" :data="data.id" dataName="Document ID" position="bottom"></Copy>
     </v-card-title>
@@ -183,7 +174,7 @@ import VCardExport from '@/components/VCardExport'
     },
     methods: {
       getCurrentUrl() {
-        let path = window.location.origin + this.$route.fullPath
+        let path = window.location.origin + "/#" + this.$route.fullPath
         console.log(path)
         return path;
       },
