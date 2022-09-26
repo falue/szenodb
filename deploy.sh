@@ -83,9 +83,11 @@ if [ "$GITSTASHED" == "untracked" ]; then
   git stash apply
 fi
 
+cd ./dist &&
+
 # Copy specified dir recursively
 # use port 2121 as per metanet. get IP from metanet gui. foldername of website.
-scp -P 2121 -r ./dist filmkulissen@80.74.158.100:/szenodb.ch &&
+scp -P 2121 -r ./ filmkulissen@80.74.158.100:/szenodb.ch &&
 
 echo -e "\n\n${GREEN}FINISHED${NC}\n${YELLOW}Built files${NC} uploaded to szenodb.ch."
 
