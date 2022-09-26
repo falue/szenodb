@@ -1,6 +1,6 @@
 {
   "name": "szenodb",
-  "version": "0.2.53",
+  "version": "0.2.60",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
