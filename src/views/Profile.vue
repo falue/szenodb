@@ -14,11 +14,11 @@
       {{$vuetify.breakpoint.xl ? 'xl' : ''}}
       </h2> -->
       <form @submit.prevent="saveUserData">
-        <v-text-field filled class="input" :class="$vuetify.breakpoint.mdAndUp ? 'mr-2' : ''" :style="$vuetify.breakpoint.mdAndUp ? 'width:40%; display:inline-block' : ''" label="Name" type="text" placeholder="Name" v-model="profile.name" required></v-text-field>
+        <v-text-field filled class="input" :class="$vuetify.breakpoint.mdAndUp ? 'mr-2' : ''" :style="$vuetify.breakpoint.mdAndUp ? 'width:40%; display:inline-block' : ''" label="Name" type="text" placeholder="Name" v-model="profile.name" :rules="requiered"></v-text-field>
         <v-text-field filled class="input" :style="$vuetify.breakpoint.mdAndUp ? 'width:55%; display:inline-block' : ''" label="Profession" type="text" placeholder="Title" v-model="profile.title"></v-text-field>
-        <v-text-field filled class="input" :class="$vuetify.breakpoint.mdAndUp ? 'mr-2' : ''" :style="$vuetify.breakpoint.mdAndUp ? 'width:40%; display:inline-block' : ''" label="Role" type="text" placeholder="Role" persistent-hint hint="If admin, you can make changes to the system" v-model="profile.role" disabled></v-text-field>
-        <v-text-field filled class="input" :style="$vuetify.breakpoint.mdAndUp ? 'width:55%; display:inline-block' : ''" label="Email" type="text" placeholder="Email" persistent-hint hint="To change your email, please contact the admin" v-model="profile.email" disabled>
-          <v-icon :title="user.emailVerified ? 'Email verified' : 'Email not verified'" slot="append" :class="user.emailVerified ? 'green--text' : 'red--text'">{{user.emailVerified  ? 'mdi-check-circle' : 'mdi-close-circle'}}</v-icon>
+        <v-text-field filled class="input" :class="$vuetify.breakpoint.mdAndUp ? 'mr-2' : ''" :style="$vuetify.breakpoint.mdAndUp ? 'width:40%; display:inline-block' : ''" label="Role" type="text" :placeholder="profile.role" persistent-hint hint="If admin, you can make changes to the system" disabled></v-text-field>
+        <v-text-field filled class="input" :style="$vuetify.breakpoint.mdAndUp ? 'width:55%; display:inline-block' : ''" label="Email" type="text" placeholder="Email" persistent-hint v-model="profile.email" :rules="requiered">
+          <v-icon :title="user.emailVerified ? 'Email verified' : 'Email not verified'" slot="append" :class="user.emailVerified ? 'green--text' : 'red--text'">{{user.emailVerified ? 'mdi-check-circle' : 'mdi-close-circle'}}</v-icon>
         </v-text-field>
         <br>
 
@@ -79,6 +79,7 @@ import Info from '@/components/Info'
       return {
         loading: false,
         deleteAccountConfirmation: false,
+        requiered: [value => !!value || 'Required.'],
       }
     },
 
@@ -90,16 +91,42 @@ import Info from '@/components/Info'
 
     methods: {
       async saveUserData () {
+        if(this.profile.name.length === 0) {
+          this.$toasted.global.error({msg:"Name cannot be empty."});
+          return
+        }
+        if(this.profile.email.length === 0 || !this.$helpers.checkEmail(this.profile.email)) {
+          this.$toasted.global.error({msg:"Email is formatted badly."});
+          return
+        }
+
         try {
           this.loading = true;
+          let changedEmail = this.profile.email != this.user.email
+          let newEmail = this.profile.email;
+
           await db.collection("users").doc(this.user.uid).update({
             'name': this.profile.name,
             'title': this.profile.title,
-            'role': this.profile.role,
+            'role': this.profile.role,  // Someone can shape the sent object and overwrite this..
             'email': this.profile.email,
           }).then(() => {
-            this.$toasted.global.success({msg:"Updated profile"});
-            this.loading = false;
+            if(changedEmail) {
+              auth.currentUser.updateEmail(newEmail).then(() => {
+                this.profile.email = newEmail;
+                this.profile.emailVerified = false;
+                this.$store.commit('setUserProfile', this.profile)
+                this.sendEmailVerification();
+                this.$toasted.global.success({msg:"Updated profile & email"});
+                this.loading = false;
+              }).catch((error) => {
+                this.$toasted.global.error({msg:error.message});
+                this.loading = false;
+              });
+            } else {
+              this.$toasted.global.success({msg:"Updated profile"});
+              this.loading = false;
+            }
           })
         } catch (err) {
           console.log(err)
@@ -110,7 +137,7 @@ import Info from '@/components/Info'
       
       sendEmailVerification() {
         this.$store.dispatch('sendEmailVerification').then(() => {
-          this.$toasted.global.info({msg:"Email sent."});
+          this.$toasted.global.info({msg:"Verification email sent."});
         }).catch(error => {
           console.log(error);
           console.error(error.message);
