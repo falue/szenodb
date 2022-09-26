@@ -18,7 +18,7 @@
         <v-card-actions class="px-0">
           <v-btn :to="`/forgot-password?email=${loginForm.email}`">Forgot PW</v-btn>
           <v-spacer></v-spacer>
-          <v-btn color="pink" to="/signup">Sign up</v-btn>
+          <v-btn :disabled="loginForm.password.length" color="pink" :to="`/signup?email=${loginForm.email}`">Sign up</v-btn>
           <v-spacer></v-spacer>
           <v-btn type="submit" color="primary" @click="login()">Log in</v-btn>
         </v-card-actions>

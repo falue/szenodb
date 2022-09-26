@@ -11,7 +11,7 @@
       <form @submit.prevent>
           <v-text-field filled v-model.trim="signupForm.name" type="text" placeholder="Name*" id="name"></v-text-field>
           <v-text-field filled v-model.trim="signupForm.title" type="text" placeholder="Profession" id="title"></v-text-field>
-          <v-text-field filled v-model.trim="signupForm.email" type="text" placeholder="you@email.com*" id="email2"></v-text-field>
+          <v-text-field filled v-model.trim="signupForm.email" type="text" placeholder="Email*" id="email2"></v-text-field>
           <v-text-field filled v-model.trim="signupForm.password" type="password" placeholder="Password*" hint="min 6 characters" id="password2"></v-text-field>
           <v-card-actions class="px-0">
             <v-btn to="/login">Back</v-btn>
@@ -35,6 +35,9 @@
           password: ''
         }
       }
+    },
+    created() {
+      this.signupForm.email = this.$route.query.email;
     },
 
     methods: {
