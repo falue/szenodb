@@ -80,7 +80,16 @@ fi
 # use port 2121 as per metanet. get IP from metanet gui. foldername of website.
 scp -P 2121 -r ./dist filmkulissen@80.74.158.100:/szenodb.ch &&
 
-echo "New version uploaded to szenodb.ch: <${VERSION}>"
+RED='\033[0;31m'
+BLACK='\033[0;30m'
+GREEN='\033[0;32m'
+ON_GREEN='\033[42m'
+NC='\033[0m'
+echo -e "\n\n${GREEN}FINISHED${NC}\n${RED}Built files${NC} uploaded to szenodb.ch."
+
+if [ "$VERSION" != "0" ]; then
+    echo -e "New version ${GREEN}${VERSION}${NC} set & committed.\nCommit message: ${BLACK}${ON_GREEN}<${GITMESSAGE} ${VERSION}>${NC}"
+fi
 
 # NOTES
 
