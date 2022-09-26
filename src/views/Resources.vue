@@ -48,7 +48,7 @@
         <!-- SPACER LEFT -->
       </v-card>
 
-      <v-card tile flat color="#121212" class="pa-4 mt-16 pb-16 pt-4 flex-grow-1" style="overflow:auto;">
+      <v-card id="resourcesList" ref="resourcesList" tile flat color="#121212" class="pa-4 mt-16 pb-16 pt-4 flex-grow-1" style="overflow:auto;">
         <!-- SEARCH FIELD -->
         <v-text-field
           :loading="loading"
@@ -619,7 +619,7 @@ import EditResource from '@/components/EditResource'
 
       setViewUrl(id) {
         // Set URL to .../#/resources?view=xxx if not already there
-        if(this.$route.fullPath != `/resources?view=${id}` ) this.$router.push({query: { view: id }})
+        if(this.$route.fullPath != `/resources?view=${id}` ) this.$router.push({path: this.$route.fullPath, query: { view: id }})
       },
       
       viewResource(index, data) {
@@ -729,13 +729,18 @@ import EditResource from '@/components/EditResource'
             originalLang: this.post.originalLang
         }
         // TODO: let newData = this.post;
-        await this.$store.dispatch('editResource', {'collection': 'resources', 'document': this.post.id, 'post': newData, 'oldData': this.oldData}).then(() => {
+        let scrollTop = this.$refs.resourcesList.$el.scrollTop;
+        await this.$store.dispatch('editResource', {'collection': 'resources', 'document': this.post.id, 'post': newData, 'oldData': this.oldData}).then(async () => {
           this.loadingEdit = false;
           console.log('Success edit!')
           this.post = this.resetResource();
           this.dataMode = 'new';
           this.$toasted.global.success({msg:'Sucessfully edited post.'});
-          if(this.$route.fullPath != '/resources') this.$router.push({query: {}})
+          if(this.$route.fullPath != '/resources') this.$router.push({path: this.$route.path})
+          // Scroll to top after list is reloaded.
+          // FIXME: Sucks.
+          await this.$helpers.sleep(500);
+          this.$refs.resourcesList.$el.scrollTop = scrollTop;
         }).catch(error => {
           this.loadingEdit = false;
           console.log(error)
@@ -813,7 +818,7 @@ import EditResource from '@/components/EditResource'
 
       cancelEditResource() {
         // Reset URL to .../#/resources
-        if(this.$route.fullPath != '/resources') this.$router.push({query: {}})
+        if(this.$route.fullPath != '/resources') this.$router.push({path: this.$route.path})
         this.unsubscribeUrlView();
         this.dataMode = 'new';
         this.success = '';
