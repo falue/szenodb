@@ -1,10 +1,10 @@
 <template>
   <v-app lang="en-GB">
-    <SiteNav :auth="isLoggedIn" :user="this.userProfile"></SiteNav>
+    <SiteNav :auth="isLoggedIn" :user="this.userProfile" :settings="globalSetting"></SiteNav>
 
     <v-main class="pt-10">
       <v-container class="pa-0">
-        <router-view :auth="isLoggedIn" :user="this.userProfile"/>
+        <router-view :auth="isLoggedIn" :user="this.userProfile" :settings="globalSetting"/>
       </v-container>
     </v-main>
 
@@ -83,14 +83,17 @@ export default {
   },
 
   computed: {
-    ...mapState(['userProfile', 'posts']),
+    ...mapState(['userProfile', 'settings']),
     isLoggedIn() {
       //console.log("User superprofile: ", this.userProfile);
       return Object.keys(this.userProfile).length > 1;
       //return this.userProfile ? Object.keys(this.userProfile).length > 1 : false;
     },
     user() {
-      return this.userProfile  // ??????
+      return this.userProfile
+    },
+    globalSetting() {
+      return this.settings
     }
   },
 

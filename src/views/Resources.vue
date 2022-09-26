@@ -347,6 +347,7 @@ import EditResource from '@/components/EditResource'
 
     props: {
       user: Object,
+      settings: Object,
     },
 
     components: {
@@ -360,6 +361,7 @@ import EditResource from '@/components/EditResource'
         filterSet: '',
         loadingCsv: [0,0],
         loadingEdit: false,
+        timeoutCountdown: null,
         editedResource: false,
         viewIndex: 0,
         unsubscribeUrlView: function() {},
@@ -414,6 +416,23 @@ import EditResource from '@/components/EditResource'
           // Reset page with no drawer
           this.cancelEditResource()
         }
+      },
+      async settings() {
+        if(this.settings.maintenance === true && this.user.role === 'user') {
+          let timeout = 12000;
+          let msg = ""
+          if(this.drawerOpen && this.dataMode === 'edit') {
+            timeout = 45000;
+            msg = " Save your progress now!"
+          }
+          this.$toasted.global.error({msg:`Warning! Maintenance in&nbsp;<b id="timeout">${timeout/1000}</b>s.${msg}`});
+          this.countdown("timeout", timeout);
+          await this.$helpers.sleep(timeout);
+          clearInterval(this.timeoutCountdown);
+          // Re-check if maintanence was not cleared in the meantime
+          if(this.settings.maintenance === true) this.$router.push("/maintenance");
+          this.$toasted.clear();
+        }
       }
     },
 
@@ -440,6 +459,12 @@ import EditResource from '@/components/EditResource'
     },
 
     methods: {
+      async countdown(ref, timeout) {
+        this.timeoutCountdown = setInterval(function() {
+          timeout -= 1000;
+          document.getElementById(ref).innerHTML = timeout/1000;
+        }, 1000);
+      },
       keystrokes(event) {
         let that = event.currentTarget.that;  // get "this" from "document.that" somehow.. MAGIC
         // Close drawer with ESC even if in textarea/input

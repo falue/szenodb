@@ -126,6 +126,12 @@
           <v-icon color="white" x-small>mdi-account-circle</v-icon>
           {{user.name}}
         </div> -->
+
+        <!-- {{settings}} -->
+        <v-btn v-if="settings && settings.maintenance && user.role == 'admin'" small to="/admin" class="mx-1 error">
+          <v-icon :small="$vuetify.breakpoint.mdAndUp" color="yellow">mdi-warning</v-icon>
+          Maintenance mode
+        </v-btn>
       </div>
 
       <v-spacer v-if="$vuetify.breakpoint.mdAndUp"></v-spacer>
@@ -145,6 +151,7 @@ export default {
   props: {
     auth: Boolean,
     user: Object,
+    settings: Object,
   },
   data() {
     return {

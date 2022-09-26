@@ -2,6 +2,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import { auth } from '../firebase'
+import store from "../store";
 
 // Views
 import Home from '../views/Home.vue'
@@ -13,6 +14,7 @@ import Updates from '../views/Updates.vue'
 import Login from '../views/Login.vue'
 import Signup from '../views/Signup.vue'
 import ForgotPassword from '../views/ForgotPassword.vue'
+import Maintenance from '../views/Maintenance.vue'
 
 Vue.use(VueRouter)
 
@@ -70,6 +72,11 @@ const routes = [
     component: Signup,
   },
   {
+    path: '/maintenance',
+    name: 'Maintenance',
+    component: Maintenance,
+  },
+  {
     path: '/forgot-password',
     name: 'ForgotPassword',
     component: ForgotPassword,
@@ -100,12 +107,20 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   const requiresAuth = to.matched.some(x => x.meta.requiresAuth)
+  // If page was hard reloaded; settings is empty, load settigns
+  if ((requiresAuth && !from.name) || ((requiresAuth || to.path === '/maintenance' ) && !store.state.settings.maintenance)) {
+    store.dispatch('setSettings');
+  }
   if (requiresAuth && !auth.currentUser) {
     let addQuery = Object.keys(to.query).map(function (key) { 
       return [key, to.query[key]].join('=');
     }).join('&');
     addQuery += '&next='+to.path
     next('/login?error=authRequiered&'+addQuery)
+
+  } else if (requiresAuth && store.state.settings.maintenance && store.state.userProfile.role != 'admin') {
+    next('/maintenance')
+
   } else {
     next()
   }

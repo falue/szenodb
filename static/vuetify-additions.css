@@ -351,6 +351,14 @@ td.ellipsis div.content--wrap {
   to {background-color: rgba(244, 67, 54), 0;}
 }
 
+.error--text--fade {
+  animation: fade--text 666ms infinite alternate;
+}
+@keyframes fade--text {
+  from {color: rgba(244, 67, 54, 1);}
+  to {color: rgba(244, 67, 54), 0;}
+}
+
 @-webkit-keyframes spinning /* Safari and Chrome */ {
   from {
     -webkit-transform: rotate(0deg);

@@ -8,12 +8,14 @@ Vue.use(Vuex)
 
 let unsubscribe = [];
 let unsubscribeLogin = [];
+let unsubscribeSettings = [];
 
 // STORE STUFF
 const store = new Vuex.Store({
   state: {
     userProfile: {},
-    resources: []
+    resources: [],
+    settings: {}
   },
 
   mutations: {
@@ -21,23 +23,47 @@ const store = new Vuex.Store({
       state.userProfile = val
     },
     setResource(state, val) {
-      // console.log('trigger: setResource')
       state.resources = val
+    },
+    setSettings(state, val) {
+      state.settings = val
     }
   },
 
   getters: {
-    // ...
     resources: state => {
       return state.resources;
+    },
+    settings: state => {
+      return state.settings;
     },
   },
 
   actions: {
+    /* SETTINGS */
+    setSettings({commit}) {
+      // get file froms ettings.settigns
+      let settings = {};
+      if(typeof unsubscribeSettings != 'function') {
+        unsubscribeSettings = fb["db"].collection("settings")
+        .doc("settings")
+        .onSnapshot(doc => {
+          //var source = doc.metadata.hasPendingWrites ? "Local" : "Server";
+          let data = doc.data();
+          // this.about = {"me": data.me, "email": data.email};
+          settings = data;
+          commit('setSettings', settings)
+        });
+      }
+    },
+
     /*  USER STUFFS */
     async login({ dispatch }, form) {
       // sign user in
       await fb.auth.signInWithEmailAndPassword(form.email.toLowerCase(), form.password).then(function({ user }) {
+        // Get global settings
+        store.dispatch('setSettings');
+
         // fetch user profile and set in state
         dispatch('fetchUserProfile', user).then(async function() {
           await fb["db"].collection("users").doc(user.uid).update({
@@ -53,7 +79,8 @@ const store = new Vuex.Store({
     },
 
     async logout({ commit }, next='success') {
-      unsubscribeLogin();
+      if(typeof unsubscribeSettings === 'function') unsubscribeSettings();
+      if(typeof unsubscribeLogin === 'function') unsubscribeLogin();
       store.dispatch('unsubscribeAllBut', '');
 
       await fb.auth.signOut()
@@ -138,6 +165,9 @@ const store = new Vuex.Store({
         }).then(async function() {
           // fetch user profile and set in state
           await dispatch('fetchUserProfile', credentials)
+          
+          // Get global settings
+          store.dispatch('setSettings')
           
           // Send verification email
           store.dispatch('sendEmailVerification');

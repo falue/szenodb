@@ -57,6 +57,25 @@
           <div v-else class="pa-1 my-2 red">No backups yet, or page hard reloaded.</div>
         </div>
 
+        <!-- MAINTENANCE MODE -->
+        <hr class="mb-3 mt-16" style="border:none; border-top: solid 1px rgba(255,255,255,.25);">
+        <v-card-title class="justify-center">Maintenance</v-card-title>
+
+        <p v-if="settings.maintenance" class="my-2">
+          Maintenance mode is on.
+          <br>
+          During maintenance mode (now!), no user is able to login or make changes. Except for you, admin.
+        </p>
+        <p v-else class="my-2">
+          Maintenance mode is off.
+          <br>
+          During maintenance mode, no user is able to login or make changes. Except for you, admin.
+        </p>
+
+        <v-btn @click="setMaintenance(!settings.maintenance)" :color="settings.maintenance ? 'error--fade' : 'green'">
+          {{ settings.maintenance ? 'Turn off Maintenance mode' : 'Turn on Maintenance mode'}}
+        </v-btn>
+
         <!-- USERS -->
         <hr class="mb-3 mt-16" style="border:none; border-top: solid 1px rgba(255,255,255,.25);">
         <v-card-title class="justify-center">Users</v-card-title>
@@ -116,6 +135,7 @@ import Copy from '@/components/Copy'
     name: 'Admin',
     props: {
       user: Object,
+      settings: Object,
     },
     components: {
       Copy
@@ -132,8 +152,8 @@ import Copy from '@/components/Copy'
         users: [],
         backups: [],
         reloadBackupConfirmation: -1,
-        unsubscribeBackups: null,
-        unsubscribeUsers: null
+        unsubscribeBackups: [],
+        unsubscribeUsers: []
       }
     },
 
@@ -175,11 +195,15 @@ import Copy from '@/components/Copy'
     },
 
     beforeDestroy() {
-      this.unsubscribeBackups();
-      this.unsubscribeUsers();
+      if(typeof this.unsubscribeBackups === 'function') this.unsubscribeBackups();
+      if(typeof this.unsubscribeUsers === 'function') this.unsubscribeUsers();
     },
 
     methods: {
+      setMaintenance(value) {
+        this.$store.dispatch('updateField', {'collection': 'settings', 'document': 'settings', 'field': 'maintenance', 'data': value})
+      },
+
       setRoleForUser(newRole, userId) {
         if(userId === this.user.uid) {
           this.$toasted.global.error({msg:'Cannot downgrade yourself, dummy ;)'});
