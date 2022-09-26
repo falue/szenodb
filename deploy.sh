@@ -32,6 +32,15 @@ while getopts ":v:i" o; do
 done
 shift $((OPTIND-1))  # ?
 
+# If changes where made to package.json, stash them all.
+GITSTASHED=$(git diff-index --quiet HEAD -- || echo "untracked")
+if [ "$GITSTASHED" == "untracked" ]; then
+    echo "Needs stashing."
+    git stash
+else
+    echo "Does not need stashing, commence."
+fi
+
 # ITERATE MARGINAL
 if [ "$VERSION" == "iterate" ]; then
     # get version number
@@ -46,27 +55,13 @@ fi
 
 # GIT STASH, WRITE NEW VERSION TO package.json, GIT COMMIT, GIT STASH APPLY
 if [ "$VERSION" != "0" ]; then
-    # Check if file package.json exists, else, exit
-    if [ -f package.json ]; then
-        echo "Add version to package.json && git commit."
-    else
-        echo "ERROR: package.json not found."
-        exit 1
-    fi
-
-    # If changes where made to package.json, stash them all.
-    ### SEE BELOW WHY THIS DOES NOT WORK
-    # git stash &&
+    echo "Add version to package.json && git commit."
 
     # Write version number to package.json
     echo "$( jq '.version = "'$VERSION'"' package.json)" > package.json &&
     
     # Add to git
     git commit package.json -m "${GITMESSAGE} ${VERSION}"
-
-    # Reapply changes to local files
-    ### FIXME: REAPPLIES JUST THE LAST STASH, IF THERE WERE NO CHANGES STASHED BEFORE HERE, YOU GET A MESS
-    # git stash apply
 
 else
     echo "Keep current version."
@@ -75,6 +70,12 @@ fi
 # Create build
 git push &&
 npm run build &&
+
+# Reapply changes to local files
+if [ "$GITSTASHED" == "untracked" ]; then
+  git stash apply
+fi
+
 cd ./dist &&
 
 # Copy specified dir recursively
