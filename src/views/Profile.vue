@@ -40,15 +40,6 @@
             ></v-progress-circular>
           </v-btn>
         </v-card-actions>
-
-        <span v-if="success">
-          &emsp;<v-icon color="green">mdi-thumb-up</v-icon>&emsp;
-          <span class="success--text">Saved to firestore database!</span>
-        </span>
-
-        <span v-if="somethingWrong">
-          &emsp;<v-icon color="error">mdi-thumb-down</v-icon>&emsp;
-        </span>
         
       </form>
 
@@ -80,8 +71,6 @@ import Info from '@/components/Info'
 
     data () {
       return {
-        success: false,
-        somethingWrong: false,
         loading: false,
       }
     },
@@ -102,27 +91,13 @@ import Info from '@/components/Info'
             'role': this.profile.role,
             'email': this.profile.email,
           }).then(() => {
-            this.success = true;
-            console.log('updated profile')
+            this.$toasted.global.success({msg:"Updated profile"});
             this.loading = false;
           })
-
-          // The JSON string/prase thing makes out of timestamp object an
-          //   object with seconds/nanoseconds, whicht is not recognized as
-          //   timestamp object by FB.
-          /* delete this.profile.createdOn;
-          delete this.profile.lastLogin;
-          db.collection("users")
-            .doc(this.user.uid)
-            .set(this.profile)
-            .then(() => {
-              this.success = true;
-              console.log('updated profile')
-              this.$store.dispatch('fetchUserProfile', this.user)
-              this.loading = false;
-            }) */
         } catch (err) {
-          this.somethingWrong = true;
+          console.log(err)
+          this.$toasted.global.error({msg:err.message});
+          this.loading = false;
         }
       },
       
