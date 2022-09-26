@@ -821,8 +821,6 @@ import EditResource from '@/components/EditResource'
         if(this.$route.fullPath != '/resources') this.$router.push({path: this.$route.path})
         this.unsubscribeUrlView();
         this.dataMode = 'new';
-        this.success = '';
-        this.error = '';
         this.post = this.resetResource();
         this.drawerOpen = false;
       },
