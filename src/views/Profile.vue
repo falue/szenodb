@@ -23,10 +23,16 @@
         <br>
 
         <v-card-actions :class="$vuetify.breakpoint.mdAndUp ? 'pl-0 pr-6' : 'pa-0'">
+          <v-btn v-if="!deleteAccountConfirmation" @click="deleteAccountConfirmation = true">
+            Delete my account
+          </v-btn>
+          <v-btn v-else :disabled="profile.email === 'info@fluescher.ch'" @click="deleteAccount()" color="red">
+            {{$vuetify.breakpoint.mdAndUp ? 'Delete account now and everything with it.' : 'Delete account now'}}
+          </v-btn>
           <v-spacer></v-spacer>
 
           <!-- RESEND VERIFACTION EMAIL -->
-          <v-btn v-if="!user.emailVerified" @click="sendEmailVerification()" type="submit" :class="this.$route.query.hint === 'verifyEmail' ? 'error--fade' : ''" color="">
+          <v-btn v-if="!user.emailVerified && !deleteAccountConfirmation" @click="sendEmailVerification()" type="submit" :class="this.$route.query.hint === 'verifyEmail' ? 'error--fade' : ''" color="">
             Resend verification email
           </v-btn>
           
@@ -56,7 +62,7 @@
 </template>
 
 <script>
-import { db } from '../firebase'
+import { db, auth } from '../firebase'
 import Copy from '@/components/Copy'
 import Info from '@/components/Info'
 
@@ -72,6 +78,7 @@ import Info from '@/components/Info'
     data () {
       return {
         loading: false,
+        deleteAccountConfirmation: false,
       }
     },
 
@@ -111,6 +118,27 @@ import Info from '@/components/Info'
           return;
         });
       },
+
+      async deleteAccount() {
+        // Overwrite existing user file - cannot remove file, because that will trigger logout
+        //   & no authority to remove user. Vice versa also!
+        await db.collection("users").doc(auth.currentUser.uid).set({
+          'deletedUser': true,
+          'editedOn': new Date()
+        }).then(() => {
+          auth.currentUser.delete().then(() => {
+            this.$store.commit('setUserProfile', {})
+            this.$router.push("/");
+            this.$toasted.global.info({msg:"Sad to see you go, but thanks for the ride!"});
+          }).catch(function(error) {
+            this.$toasted.global.error({msg:error.message});
+            throw error;
+          });
+        }).catch(error => {
+          this.$toasted.global.error({msg:error.message});
+          throw error;
+        });
+      }
     }
   }
 </script>

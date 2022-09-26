@@ -177,7 +177,7 @@ import Copy from '@/components/Copy'
           querySnapshot.forEach(doc => {
             let f = doc.data();
             f.id = doc.id;
-            newData.push(f);
+            if(!f.deletedUser) newData.push(f);
           });
           this.users = newData;
         });
