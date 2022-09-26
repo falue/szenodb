@@ -326,6 +326,11 @@ export default {
     }
   },
 
+  createWebsiteUrl(url) {
+    if(url.startsWith("http")) return url;
+    return "http://"+url
+  },
+
   /* md5(text) {
     return md5(text);
   }, */

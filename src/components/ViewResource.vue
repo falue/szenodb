@@ -1,9 +1,30 @@
 <template>
   <div>
     <v-card-title class="pt-2" style="max-width:85%">
-      <span v-html="data.content.title" :style="data.flags.unreliable ? 'text-decoration: line-through': ''"></span>
-      <Copy :data="data.content.title" dataName="title" position="right"></Copy>
-      <Copy v-if="user.role === 'admin'" :data="data.id" dataName="Document ID" position="right"></Copy>
+      <v-tooltip :disabled="$vuetify.breakpoint.smAndDown" bottom color="#212121">
+        <template v-slot:activator="{ on, attrs }">
+            <a
+              :href="data.content.web ? $helpers.createWebsiteUrl(data.content.web) : `https://www.google.com/search?q=${data.content.title.replaceAll(' ', '+')}`"
+              v-bind="attrs" v-on="on"
+              class="no-underline"
+              target="_blank"
+            >
+              <span v-html="data.content.title" class="white--text" :style="data.flags.unreliable ? 'text-decoration: line-through': ''"></span>
+            </a>
+        </template>
+        <span>{{data.content.web ? `Go to ${$helpers.retrieveDomain(data.content.web)}` : `Do a google for "${data.content.title}"`}}</span>
+      </v-tooltip>
+      <!-- <a
+        :href="data.content.web ? data.content.web : `https://www.google.com/search?q=${data.content.title.replaceAll(' ', '+')}`"
+        :title="data.content.web ? `Go to ${data.content.web}` : `Do a google for ${data.content.title}`"
+        v-bind="attrs" v-on="on"
+        class="no-underline"
+        target="_blank"
+      >
+        <span v-html="data.content.title" class="white--text" :style="data.flags.unreliable ? 'text-decoration: line-through': ''"></span>
+      </a> -->
+      <Copy :data="data.content.title" dataName="title" position="bottom"></Copy>
+      <Copy v-if="user.role === 'admin'" :data="data.id" dataName="Document ID" position="bottom"></Copy>
     </v-card-title>
 
     <v-card-text v-if="data.flags.deleted || data.flags.unreliable" :class="data.flags.deleted ? 'pink darken-2' : 'error darken-2'" class="pa-4 rounded relative">
@@ -74,7 +95,7 @@
 
       <v-card-text v-if="data.content.web" class="pb-0">
       <div style="line-height:1em" class="grey--text overline">web</div>
-      <a class="no-underline" :class="{'bigMobileButton' : $vuetify.breakpoint.smAndDown}" :href="this.$parent.$parent.createWebsiteUrl(data.content.web)" target="_blank">
+      <a class="no-underline" :class="{'bigMobileButton' : $vuetify.breakpoint.smAndDown}" :href="$helpers.createWebsiteUrl(data.content.web)" target="_blank">
         {{ data.content.web }}</a>
       <Copy :data="data.content.web" dataName="website" position="right"></Copy>
       </v-card-text>

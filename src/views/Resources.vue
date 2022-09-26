@@ -205,7 +205,7 @@
               </div>
             </div>
             <div class="pt-3" v-if="$vuetify.breakpoint.mdAndUp" :style="isSmallWithOpenDrawer ? '' : 'width:80%'" style="width:20%; text-align:right; vertical-align: top; display:inline-block">
-              <a v-if="resource.content.web" :title="resource.content.web" :href="createWebsiteUrl(resource.content.web)" onclick="event.stopPropagation();" target="_blank" class="no-underline">
+              <a v-if="resource.content.web" :title="resource.content.web" :href="$helpers.createWebsiteUrl(resource.content.web)" onclick="event.stopPropagation();" target="_blank" class="no-underline">
                 <v-btn icon class="primary ml-1" :small="$vuetify.breakpoint.mdAndUp">
                   <v-icon>mdi-link-variant</v-icon>
                 </v-btn>
@@ -840,11 +840,6 @@ import EditResource from '@/components/EditResource'
         if(!city) return "Somehwere"
         // return this.$helpers.capitalize(city.trim());
         return city;
-      },
-
-      createWebsiteUrl(url) {
-        if(url.startsWith("http")) return url;
-        return "http://"+url
       },
     },
   }
