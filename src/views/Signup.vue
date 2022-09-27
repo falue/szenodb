@@ -7,7 +7,7 @@
       :flat="$vuetify.breakpoint.smAndDown"
       style="overflow-y: auto;"
     >
-      <v-card-title class="justify-center">Sign up</v-card-title>
+      <v-card-title class="justify-center">Sign up <span class="pink--text ml-1">(always free)</span></v-card-title>
       <form @submit.prevent>
           <v-text-field filled v-model.trim="signupForm.name" type="text" placeholder="Name*" id="name"></v-text-field>
           <v-text-field filled v-model.trim="signupForm.title" type="text" placeholder="Profession" id="title"></v-text-field>
