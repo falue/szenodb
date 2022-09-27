@@ -132,11 +132,13 @@ router.beforeEach((to, from, next) => {
   // If privacy or terms is newer than what was agreed
   if(
     requiresAuth && auth.currentUser && (
-      !store.state.userProfile.consent ||
-      !store.state.userProfile.consent.privacy ||
-      !store.state.userProfile.consent.terms ||
-      store.state.userProfile.consent.privacy.seconds < store.state.settings.consent.privacy.seconds ||
-      store.state.userProfile.consent.terms.seconds < store.state.settings.consent.terms.seconds
+      store.state.userProfile.consent && 
+      store.state.settings.consent && (
+        !store.state.userProfile.consent.privacy ||
+        !store.state.userProfile.consent.terms ||
+        store.state.userProfile.consent.privacy.seconds < store.state.settings.consent.privacy.seconds ||
+        store.state.userProfile.consent.terms.seconds < store.state.settings.consent.terms.seconds
+      )
     )
   ) {
     console.log("not consented / consent not up to date!")
