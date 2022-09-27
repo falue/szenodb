@@ -45,6 +45,9 @@
                 <v-btn color="red" class="mr-2 mb-2" small @click="reloadBackup(backup.date.trim(), 'resources')">
                   <v-icon class="mr-2">mdi-hammer-wrench</v-icon> Reload resources
                 </v-btn>
+                <v-btn color="white" class="mr-2 mb-2 black--text" small @click="reloadBackup(backup.date.trim(), 'settings')">
+                  <v-icon class="mr-2">mdi-wrench</v-icon> Reload settings
+                </v-btn>
                 <v-btn color="white" disabled class="mr-2 mb-2 black--text" small @click="reloadBackup(backup.date.trim(), 'persons')">
                   <v-icon class="mr-2">mdi-account-group</v-icon> Reload persons
                 </v-btn>
@@ -247,6 +250,7 @@ import Copy from '@/components/Copy'
         // this.makeBackup('texts', currentDate);  // test
         await this.makeBackup('users', currentDate);
         // await this.makeBackup('persons', currentDate);
+        await this.makeBackup('settings', currentDate);
         await this.makeBackup('resources', currentDate);
         this.backupInProgress = false;
       },
