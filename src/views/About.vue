@@ -269,11 +269,13 @@ import Copy from '@/components/Copy'
             'question': 'Are images possible? Is functionality X possible?',
             'answer': `Yes. Checkout
                       <a href="https://github.com/falue/szenodb/milestone/2" target="_blank">all the ideas out here</a>.
-                      It just depends on my (or your!) time developing the idea & coding the thing.`
+                      It just depends on my (or your!) time developing the idea & coding the thing.
+                      </p><p>
+                      Specifically, images are implemented. I just need a good backend solution.`
           },
           {
-            'question': 'I have problems on the site.',
-            'answer': `Not really aquestion, but good grief! I hope you're all right. 
+            'question': 'I have problems.',
+            'answer': `Not really a question, but good grief! I hope you're all right. 
                       Drop me a <a href="mailto:info@fluescher.ch">message</a>, or even better,
                       join github and
                       <a href="https://github.com/falue/szenodb/issues/new" target="_blank">create an issue</a>!
