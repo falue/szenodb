@@ -86,16 +86,6 @@
             </v-carousel-item>
           </v-carousel>
         
-        <div class="italics grey--text">
-          Disclaimer: As this is very prototype-y, beware that sometimes it takes a while to load, may not work at all, or may change drastically in the future.
-        </div>
-
-        <hr class="mb-3 mt-16" style="border:none; border-top: solid 1px rgba(255,255,255,.25);">
-
-        This project is open-source under <a href="https://github.com/falue/szenodb/blob/main/COPYING" target="_blank">GNU GPLv3</a>.
-        <br>
-        See all the <router-link to="/updates">updates to this site here</router-link>.
-
         <hr class="mb-3 mt-16" style="border:none; border-top: solid 1px rgba(255,255,255,.25);">
         
         <v-card-title class="justify-center">Whodunit?</v-card-title>
@@ -165,6 +155,12 @@
         </v-card-text>
 
         <hr class="mb-3 mt-16" style="border:none; border-top: solid 1px rgba(255,255,255,.25);">
+        This project is open-source under <a href="https://github.com/falue/szenodb/blob/main/COPYING" target="_blank">GNU GPLv3</a>.
+        <br>
+        See all the <router-link to="/updates">updates & issues here</router-link>.
+        <br>
+        <br>
+
         <router-link to="/privacy">Privacy agreement</router-link>
         &middot;
         <router-link to="/terms">Terms & conditions</router-link>
