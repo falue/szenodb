@@ -57,18 +57,18 @@ export default {
       if(Object.keys(this.$route.query).length > 0) {
         if(this.$route.query.success) {
           this.$toasted.global.success({
-            msg: this.message[this.$route.query.success] ? this.message[this.$route.query.success] : this.$route.query.success,
+            msg: this.message[this.$route.query.success] ? this.message[this.$route.query.success] : this.getMultipleMessages(this.$route.query.success),
           });
           if(this.$route.query.success === 'emailVerified') {
             this.checkUserVerified();
           }
         } else if(this.$route.query.error) {
           this.$toasted.global.error({
-            msg: this.message[this.$route.query.error] ? this.message[this.$route.query.error] : this.$route.query.error,
+            msg: this.message[this.$route.query.error] ? this.message[this.$route.query.error] : this.getMultipleMessages(this.$route.query.error),
           });
         } else if(this.$route.query.info) {
           this.$toasted.global.info({
-            msg: this.message[this.$route.query.info] ? this.message[this.$route.query.info] : this.$route.query.info,
+            msg: this.message[this.$route.query.info] ? this.message[this.$route.query.info] : this.getMultipleMessages(this.$route.query.info),
           });
         }
       }
@@ -123,6 +123,19 @@ export default {
         // });
       } else {
         console.log("User not logged in to check emailVerified. You should be now on /login.")
+      }
+    },
+    getMultipleMessages(queryParams) {
+      if(typeof queryParams === 'object') {
+        const asArray = Object.values(queryParams);
+        let filtered = [];
+        asArray.filter((value) => { 
+          filtered.push(this.message[value])
+        } );
+        return filtered.join("<br>");
+      } else {
+        // Was just string
+        return queryParams
       }
     }
   }
