@@ -1,5 +1,5 @@
 # szeno&middot;DB
-<img src="./public/icon.svg" style="max-width:80px; float:left; margin:0 1em .5em 0"/>
+*![SzenoDB icon](./public/icon.svg)*
 
 This is a tool for the lovely people who work in the art department of switzerland.
 
@@ -55,3 +55,7 @@ export { authKeys }
 
 ## License
 This is published under the [GNU GPLv3](COPYING) license.
+
+<style>
+    em > img { max-width:80px; float:left; margin:0 1em .5em 0 }
+</style>
