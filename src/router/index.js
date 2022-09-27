@@ -11,6 +11,9 @@ import Goodies from '../views/Goodies.vue'
 import Resources from '../views/Resources.vue'
 import Profile from '../views/Profile.vue'
 import Updates from '../views/Updates.vue'
+import Privacy from '../views/Privacy.vue'
+import Terms from '../views/Terms.vue'
+import Consent from '../views/Consent.vue'
 import Login from '../views/Login.vue'
 import Signup from '../views/Signup.vue'
 import ForgotPassword from '../views/ForgotPassword.vue'
@@ -62,6 +65,21 @@ const routes = [
     component: Login,
   },
   {
+    path: '/terms',
+    name: 'Terms',
+    component: Terms,
+  },
+  {
+    path: '/consent',
+    name: 'Consent',
+    component: Consent,
+  },
+  {
+    path: '/privacy',
+    name: 'Privacy',
+    component: Privacy,
+  },
+  {
     path: '/updates',
     name: 'Updates',
     component: Updates,
@@ -111,13 +129,28 @@ router.beforeEach((to, from, next) => {
   if ((requiresAuth && !from.name) || ((requiresAuth || to.path === '/maintenance' ) && !store.state.settings.maintenance)) {
     store.dispatch('setSettings');
   }
-  if (requiresAuth && !auth.currentUser) {
+  // If privacy or terms is newer than what was agreed
+  if(
+    requiresAuth && auth.currentUser && (
+      !store.state.userProfile.consent ||
+      !store.state.userProfile.consent.privacy ||
+      !store.state.userProfile.consent.terms ||
+      store.state.userProfile.consent.privacy.seconds < store.state.settings.consent.privacy.seconds ||
+      store.state.userProfile.consent.terms.seconds < store.state.settings.consent.terms.seconds
+    )
+  ) {
+    console.log("not consented / consent not up to date!")
+    router.push('/consent?next='+to.fullPath)
+  
+    // If not logged in where you should
+  } else if (requiresAuth && !auth.currentUser) {
     let addQuery = Object.keys(to.query).map(function (key) { 
       return [key, to.query[key]].join('=');
     }).join('&');
     addQuery += '&next='+to.path
     next('/login?error=authRequiered&'+addQuery)
 
+  // If maintenance is happening
   } else if (requiresAuth && store.state.settings.maintenance && store.state.userProfile.role != 'admin') {
     next('/maintenance')
 

@@ -92,7 +92,9 @@
 
         <hr class="mb-3 mt-16" style="border:none; border-top: solid 1px rgba(255,255,255,.25);">
 
-        This project is open-source. See all the <router-link to="/updates">updates to this site here</router-link>.
+        This project is open-source under <a href="https://github.com/falue/szenodb/blob/main/COPYING" target="_blank">GNU GPLv3</a>.
+        <br>
+        See all the <router-link to="/updates">updates to this site here</router-link>.
 
         <hr class="mb-3 mt-16" style="border:none; border-top: solid 1px rgba(255,255,255,.25);">
         
@@ -161,6 +163,13 @@
             </v-btn>
           </a>
         </v-card-text>
+
+        <hr class="mb-3 mt-16" style="border:none; border-top: solid 1px rgba(255,255,255,.25);">
+        <router-link to="/privacy">Privacy agreement</router-link>
+        &middot;
+        <router-link to="/terms">Terms & conditions</router-link>
+        &middot;
+        <a href="https://github.com/falue/szenodb/blob/main/COPYING" target="_blank">GNU GPLv3</a>
       </v-card-text>
     </v-card>
 

@@ -149,6 +149,10 @@ const store = new Vuex.Store({
           name: form.name,
           title: form.title,
           email: form.email.toLowerCase(),
+          consent: {
+            privacy: form.privacy,
+            terms: form.terms,
+          },
           role: 'user',
           uid: user.user.uid,
           favorites: [],
