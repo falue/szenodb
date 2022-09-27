@@ -87,7 +87,23 @@
           </v-carousel>
         
         <hr class="mb-3 mt-16" style="border:none; border-top: solid 1px rgba(255,255,255,.25);">
-        
+        <v-card-title class="justify-center">FAQ</v-card-title>
+
+        <v-row justify="center" >
+          <v-expansion-panels accordion v-model="faqIndex">
+            <v-expansion-panel
+              v-for="(faq,i) in faqs"
+              :key="i"
+            >
+              <v-expansion-panel-header style="min-height:initial;" :class="faqIndex === i ? 'pink darken-4':'grey darken-3'" >{{faq.question}}</v-expansion-panel-header>
+              <v-expansion-panel-content class="grey darken-4">
+                <p class="pt-4" v-html="faq.answer"></p>
+              </v-expansion-panel-content>
+            </v-expansion-panel>
+          </v-expansion-panels>
+        </v-row>
+
+        <hr class="mb-3 mt-16" style="border:none; border-top: solid 1px rgba(255,255,255,.25);">
         <v-card-title class="justify-center">Whodunit?</v-card-title>
 
         <v-card-title v-if="$vuetify.breakpoint.smAndDown" two-line class="justify-center">
@@ -207,6 +223,63 @@ import Copy from '@/components/Copy'
       return {
         showQuotes: false,
         popUpTwint: false,
+        faqIndex: 0,
+        faqs: [
+          {
+            'question': 'How are these resources curated?',
+            'answer': `This list is created & curated by you, the users.
+                      </p><p>
+                      It is not meant to be a fixed, always correct and up-to-date list. It changes.
+                      Double check.
+                      </p><p>
+                      Its a starting point for your own research.`
+          },
+          {
+            'question': 'What types of resources should be here?',
+            'answer': `Every company you've researched that delivers good stuff on time;
+                      specialists for all kind of curiosities or skillsets that are hard to find;
+                      or someone with a collection of things to rent or buy should be here.
+                      </p><p>
+                      That said, I'd like to keep this community driven, so if you think this should be different,
+                      <a href="mailto:info@fluescher.ch">get in touch</a>.
+                      </p><p>
+                      This is not a material exchange. At least not yet.
+                      </p><p>
+                      For now, <span class="overline pink--text" style="line-height:1em">szeno&middot;DB</span>
+                      is not meant for short-term one-off exchanges of goods
+                      (it CAN be though, <a href="https://github.com/falue/szenodb" target="_blank">if you're willing
+                      to help</a>).
+                      </p><p>Have an old carpet from a project?
+                      Maybe post it in our chat,
+                      <a href="https://tutti.ch" target="_blank">tutti</a>,
+                      or <a href="https://ricardo.ch" target="_blank">ricardo</a>.
+                      Have a small room of stuff that fills & empties all the time? Yes please.`
+          },
+          {
+            'question': 'I found incorrect data. What to do?',
+            'answer': `If information is outdated here - update the resource, for the others to know!
+                      </p><p>
+                      You can delete the resource entirely, but sometimes its useful to mark it as
+                      "unreliable" and leave a comment why that is. Is the company defunct? Hostile?
+                      Owned by murderers?
+                      </p><p>
+                      No need for others to find out for themselves if you know it already.`
+          },
+          {
+            'question': 'Are images possible? Is functionality X possible?',
+            'answer': `Yes. Checkout
+                      <a href="https://github.com/falue/szenodb/milestone/2" target="_blank">all the ideas out here</a>.
+                      It just depends on my (or your!) time developing the idea & coding the thing.`
+          },
+          {
+            'question': 'I have problems on the site.',
+            'answer': `Not really aquestion, but good grief! I hope you're all right. 
+                      Drop me a <a href="mailto:info@fluescher.ch">message</a>, or even better,
+                      join github and
+                      <a href="https://github.com/falue/szenodb/issues/new" target="_blank">create an issue</a>!
+                      Sometimes I can solve things fast. Sometimes not, but I will try hard.`
+          },
+        ],
         classes: [
           'indigo--text italics',
           'warning--text',
