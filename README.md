@@ -1,6 +1,6 @@
-# szeno&middot;DB
-*![SzenoDB icon](./public/icon.svg)*
+*![SzenoDB icon](./public/icon_small.png)*
 
+# szeno&middot;DB
 This is a tool for the lovely people who work in the art department of switzerland.
 
 szeno&middot;DB is a searchable collection of links of connections, materials, services and problem solvers.
@@ -55,7 +55,3 @@ export { authKeys }
 
 ## License
 This is published under the [GNU GPLv3](COPYING) license.
-
-<style>
-    em > img { max-width:80px; float:left; margin:0 1em .5em 0 }
-</style>
