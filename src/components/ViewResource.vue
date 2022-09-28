@@ -111,7 +111,7 @@
           :style="$vuetify.breakpoint.sm ? 'width: 50%' : 'width: 100%'"
         >
           <v-img
-            class="elevation-8 green"
+            class="elevation-8"
             @click="magnify(img, x)"
             :src="img.url"
             lazy
