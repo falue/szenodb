@@ -472,7 +472,7 @@ import EditResource from '@/components/EditResource'
           if(that.dataMode === 'edit') {
             that.dataMode = 'view';
           } else {
-            that.drawerOpen = false;
+            this.cancelEditResource();
           }
         }
 
@@ -869,6 +869,11 @@ import EditResource from '@/components/EditResource'
       cancelEditResource() {
         // Reset URL to .../#/resources
         if(this.$route.fullPath != '/resources') this.$router.push({path: this.$route.path})
+        // Delete temporary uploaded files before saved as new
+        if(this.dataMode === 'new' && this.post.imgs.length > 0) {
+          console.log('Temp. image added - remove them from storage.');
+          this.$store.dispatch('deleteFolder', `resources/${this.post.id}`);
+        }
         this.unsubscribeUrlView();
         this.dataMode = 'new';
         this.post = this.resetResource();
