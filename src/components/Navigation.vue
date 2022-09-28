@@ -48,12 +48,13 @@
 
       <!-- Breakpoint helpers -->
       <!-- https://vuetifyjs.com/en/features/breakpoints/#breakpoint-service -->
-      <!-- <h2 class="px-1" :class="$vuetify.breakpoint.xs ? 'green--text' : 'grey--text text--darken-2'">{{$vuetify.breakpoint.xs ? 'XS' : 'XS'}}</h2>
-      <h2 class="px-1" :class="$vuetify.breakpoint.sm ? 'green--text' : 'grey--text text--darken-2'">{{$vuetify.breakpoint.sm ? 'SM' : 'SM'}}</h2>
-      <h2 class="px-1" :class="$vuetify.breakpoint.md ? 'green--text' : 'grey--text text--darken-2'">{{$vuetify.breakpoint.md ? 'MD' : 'MD'}}</h2>
-      <h2 class="px-1" :class="$vuetify.breakpoint.lg ? 'green--text' : 'grey--text text--darken-2'">{{$vuetify.breakpoint.lg ? 'LG' : 'LG'}}</h2>
-      <h2 class="px-1" :class="$vuetify.breakpoint.xl ? 'green--text' : 'grey--text text--darken-2'">{{$vuetify.breakpoint.xl ? 'XL' : 'XL'}}</h2>
-      <v-spacer></v-spacer> -->
+      <div class="fixed top left pa-3 text-h4" style="background-color:rgba(0,0,0,0.75)">
+        <span class="px-1" :class="$vuetify.breakpoint.xs ? 'green--text' : 'grey--text text--darken-2'">{{$vuetify.breakpoint.xs ? 'XS' : 'XS'}}</span>
+        <span class="px-1" :class="$vuetify.breakpoint.sm ? 'green--text' : 'grey--text text--darken-2'">{{$vuetify.breakpoint.sm ? 'SM' : 'SM'}}</span>
+        <span class="px-1" :class="$vuetify.breakpoint.md ? 'green--text' : 'grey--text text--darken-2'">{{$vuetify.breakpoint.md ? 'MD' : 'MD'}}</span>
+        <span class="px-1" :class="$vuetify.breakpoint.lg ? 'green--text' : 'grey--text text--darken-2'">{{$vuetify.breakpoint.lg ? 'LG' : 'LG'}}</span>
+        <span class="px-1" :class="$vuetify.breakpoint.xl ? 'green--text' : 'grey--text text--darken-2'">{{$vuetify.breakpoint.xl ? 'XL' : 'XL'}}</span>
+      </div>
 
       <!-- PUBLIC NAV -->
       <v-tooltip open-delay="1250" :open-on-click="false" bottom :disabled="$vuetify.breakpoint.smAndDown">
