@@ -17,16 +17,6 @@
 
     <!-- IMAGE MANAGER -->
     <div class="grey--text text--lighten-1 caption mt-1 mb-1">Images ({{data.imgs.length}})</div>
-
-    <!-- Folder deletion
-    TODO WHEN FINALLY DELETING BY ADMIN!!!!!!!!!!!!!!!!
-    <v-btn
-      icon
-      class="red"
-      @click="deleteFolder(`resources/${data.id}`)"
-    ><v-icon small class=" white--text">mdi-close</v-icon>  
-    </v-btn>
-    <br> -->
     
     <FileUpload
       class="inline mr-2"
