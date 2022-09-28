@@ -7,6 +7,40 @@
       :flat="$vuetify.breakpoint.smAndDown"
       style="overflow-y: auto;"
     >
+
+    <v-card-title class="justify-center pa-0 pb-8">
+      <div class="relative">
+        <v-avatar :size="120" >
+          <v-img v-if="profile.avatar && profile.avatar.length > 0" :src="profile.avatar" :alt="user.name" />
+          <!-- https://avatars.dicebear.com/ -->
+          <v-img v-else :src="`https://avatars.dicebear.com/api/adventurer-neutral/${$helpers.md5(user.name+user.email)}.svg`" class="grey darken-3" :alt="user.name" />
+        </v-avatar>
+        <v-btn
+          v-if="user.avatar && user.avatar.length"
+          icon
+          small
+          dense
+          class="absolute top right op-50"
+          @click="deleteImage(user.avatar)"
+        ><v-icon small class="grey--text">mdi-close</v-icon>
+        </v-btn>
+        <FileUpload
+          class="absolute bottom right"
+          type="image/*"
+          :target="`users/${user.uid}`"
+          :multiple="false"
+          :icon="user.avatar && user.avatar.length ? 'camera' : 'camera-plus'"
+          iconClasses=""
+          buttonClasses=""
+          position="right"
+          tooltip="Change avatar"
+          @uploadStarted="user.avatar=''"
+          @uploaded="profile.avatar=$event.url, saveUserData()"
+          @error="$toasted.global.error({msg:$event})"
+        ></FileUpload>
+      </div>
+    </v-card-title>
+
       <!-- <h2>{{$vuetify.breakpoint.xs ? 'xs' : ''}}
       {{$vuetify.breakpoint.sm ? 'sm' : ''}}
       {{$vuetify.breakpoint.md ? 'md' : ''}}
@@ -71,6 +105,7 @@
 <script>
 import { db, auth } from '../firebase'
 import Copy from '@/components/Copy'
+import FileUpload from '@/components/FileUpload'
 import Info from '@/components/Info'
 
   export default {
@@ -79,7 +114,7 @@ import Info from '@/components/Info'
       user: Object,
     },
     components: {
-      Copy, Info
+      Copy, Info, FileUpload
     },
 
     data () {
@@ -113,6 +148,7 @@ import Info from '@/components/Info'
           let newEmail = this.profile.email;
 
           await db.collection("users").doc(this.user.uid).update({
+            'avatar': this.profile.avatar,
             'name': this.profile.name,
             'title': this.profile.title,
             'role': this.profile.role,  // Someone can shape the sent object and overwrite this..
@@ -151,6 +187,12 @@ import Info from '@/components/Info'
           this.$toasted.global.error({msg:error.message});
           return;
         });
+      },
+
+      deleteImage(current) {
+        this.$store.dispatch('deleteFile', current)
+        this.user.avatar='';
+        this.saveUserData();
       },
 
       async deleteAccount() {
