@@ -9,14 +9,13 @@
     >
       <v-card-title class="justify-center">Reset password</v-card-title>
       <form @submit.prevent>
-        <v-text-field :disabled="auth" filled v-model.trim="email" type="email" label="Email" id="email2"></v-text-field>
+        <v-text-field filled v-model.trim="email" type="email" label="Email" id="email2"></v-text-field>
       </form>
 
       <v-card-actions class="px-0">
-        <v-btn v-if="auth" to="/profile" >Back</v-btn>
-        <v-btn v-else to="/Login" >Back</v-btn>
+        <v-btn to="/Login" >Back</v-btn>
         <v-spacer></v-spacer>
-        <v-btn type="submit" color="primary" @click="resetPassword()" >Reset password</v-btn>
+        <v-btn type="submit" color="primary" @click="requestResetPassword()" >Reset password</v-btn>
       </v-card-actions>
     </v-card>
 </template>
@@ -40,11 +39,10 @@ import { auth } from '@/firebase'
       this.email = this.$route.query.email;
     },
     methods: {
-      async resetPassword() {
-        this.errorMsg = ''
+      async requestResetPassword() {
         try {
           await auth.sendPasswordResetEmail(this.email)
-          this.$toasted.global.success({msg:"Success! Check your email for a reset link."});
+          this.$toasted.global.success({msg:"Check your email inbox for a reset link."});
         } catch (err) {
           this.$toasted.global.error({msg:err.message});
         }

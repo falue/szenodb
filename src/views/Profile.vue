@@ -61,7 +61,7 @@
             Delete my account
           </v-btn>
           <v-spacer></v-spacer>
-          <v-btn v-if="$vuetify.breakpoint.smAndUp" :to="`/forgot-password?email=${user.email}`">
+          <v-btn v-if="$vuetify.breakpoint.smAndUp" @click="requestResetPassword()">
             Reset password
           </v-btn>
           <v-btn type="submit" color="primary">Save {{$vuetify.breakpoint.smAndUp ? "changes" : ""}}
@@ -187,6 +187,15 @@ import Info from '@/components/Info'
           this.$toasted.global.error({msg:error.message});
           return;
         });
+      },
+
+      async requestResetPassword() {
+        try {
+          await auth.sendPasswordResetEmail(this.user.email)
+          this.$toasted.global.success({msg:"Check your email inbox for a reset link."});
+        } catch (err) {
+          this.$toasted.global.error({msg:err.message});
+        }
       },
 
       deleteImage(current) {
