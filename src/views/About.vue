@@ -146,14 +146,14 @@
           <p>
             Get in contact if you have questions or want to improve this:
             <br>
-            <a href="tel:0787424834" title="call" class="no-underline" :class="{'bigMobileButton mr-2' : $vuetify.breakpoint.smAndDown}">
-              <v-icon class="mr-2" color="primary">mdi-phone</v-icon>
+            <a href="tel:0787424834" title="call" class="mr-2 no-underline" :class="{'bigMobileButton' : $vuetify.breakpoint.smAndDown}">
+              <v-icon color="primary">mdi-phone</v-icon>
             </a>
-            <a href="mailto:info@fluescher.ch" title="write email" class="no-underline" :class="{'bigMobileButton mr-2' : $vuetify.breakpoint.smAndDown}">
-              <v-icon class="mr-2" color="primary">mdi-email</v-icon>
+            <a href="mailto:info@fluescher.ch" title="write email" class="mr-2 no-underline" :class="{'bigMobileButton' : $vuetify.breakpoint.smAndDown}">
+              <v-icon color="primary">mdi-email</v-icon>
             </a>
-            <a href="https://github.com/falue/szenodb" title="github repo" target="_blank" class="no-underline" :class="{'bigMobileButton mr-2' : $vuetify.breakpoint.smAndDown}">
-              <v-icon class="mr-2" color="primary">mdi-github</v-icon>
+            <a href="https://github.com/falue/szenodb" title="github repo" target="_blank" class="mr-2 no-underline" :class="{'bigMobileButton' : $vuetify.breakpoint.smAndDown}">
+              <v-icon color="primary">mdi-github</v-icon>
             </a>
           </p>
           <br v-if="$vuetify.breakpoint.smAndDown">

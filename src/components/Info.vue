@@ -21,5 +21,4 @@
 
 <style scoped>
   .hover:hover { opacity: 1 !important;}
-  .bigMobileButton { transform: translateY(-.25em); padding: .25em .5em; line-height: 1em; }
 </style>

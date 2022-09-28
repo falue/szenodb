@@ -1,7 +1,7 @@
 <template>
   <v-tooltip :disabled="$vuetify.breakpoint.smAndDown" :bottom="!position" :right="position === 'right'" :left="position === 'left'" :top="position === 'top'" color="#212121">
     <template v-slot:activator="{ on, attrs }">
-        <v-icon class="hover" :class="[iconClasses ? iconClasses : 'grey--text ml-2', $vuetify.breakpoint.smAndDown ? 'bigMobileButton' : '']" :small="$vuetify.breakpoint.mdAndUp" v-bind="attrs" v-on="on"
+        <v-icon class="hover" :class="[iconClasses ? iconClasses : 'grey--text ml-2', $vuetify.breakpoint.smAndDown ? 'bigMobileButton' : '']" medium v-bind="attrs" v-on="on"
                 @click="composeVcard(data)">mdi-card-account-mail
         </v-icon>
     </template>
@@ -83,5 +83,4 @@
 <style scoped>
   .hover { opacity: .25 !important;}
   .hover:hover { opacity: 1 !important;}
-  .bigMobileButton { transform: translateY(-.25em); padding: .25em .5em; line-height: 1em; }
 </style>
