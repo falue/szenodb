@@ -262,7 +262,7 @@ import Copy from '@/components/Copy'
                       Maybe post it in our chat,
                       <a href="https://tutti.ch" target="_blank">tutti</a>,
                       or <a href="https://ricardo.ch" target="_blank">ricardo</a>.
-                      Have a small room of stuff that fills & empties all the time? Yes please.`
+                      Have a warehouse full of stuff that fills & empties all the time? Yes please.`
           },
           {
             'question': 'I found incorrect data. What to do?',
@@ -275,18 +275,17 @@ import Copy from '@/components/Copy'
                       No need for others to find out for themselves if you know it already.`
           },
           {
-            'question': 'Are images possible? Is functionality X possible?',
-            'answer': `Yes. Checkout
+            'question': 'Is functionality X possible?',
+            'answer': `Yes. No. Depends. Checkout
                       <a href="https://github.com/falue/szenodb/milestone/2" target="_blank">all the ideas out here</a>.
-                      It just depends on my (or your!) time developing the idea & coding the thing.
-                      </p><p>
-                      Specifically, images are implemented. I just need a good backend solution.`
+                      The time I need (or you need!) for new features can vary massively, and perhaps not in the ways you imagine.`
           },
           {
-            'question': 'I have problems.',
-            'answer': `Not really a question, but good grief! I hope you're all right. 
-                      Drop me a <a href="mailto:info@fluescher.ch">message</a>, or even better,
-                      join github and
+            'question': 'I have problems!',
+            'answer': `Not really a question, but good grief! I hope you're all right.
+                      </p><p>
+                      Drop me a <a href="mailto:info@fluescher.ch">message</a> with all the details you can imagine,
+                      or even better, join github and
                       <a href="https://github.com/falue/szenodb/issues/new" target="_blank">create an issue</a>!
                       Sometimes I can solve things fast. Sometimes not, but I will try hard.`
           },
