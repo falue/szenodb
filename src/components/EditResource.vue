@@ -44,7 +44,7 @@
       >
         <v-img
           class="inline-block pa-0 pr-3 pl-1 mb-2"
-          :class="hover ? 'black' : ''"
+          :class="hover || $vuetify.breakpoint.smAndDown ? 'grey darken-4' : ''"
           elevation-8
           style="vertical-align:middle; transition: background-color .4s ease-in-out;"
           :src="img.url"
@@ -53,7 +53,7 @@
           :width="$vuetify.breakpoint.xs ? '100%' : '50%'"
         >
           <v-btn
-            :style="hover ? 'opacity: 1' : ''"
+            :style="hover || $vuetify.breakpoint.smAndDown ? 'opacity: 1' : ''"
             small color="red" icon absolute light top right class="red--text ma-0 pa-0"
             style="opacity: 0; transition: opacity .4s ease-in-out; background-color:rgba(255,255,255,.25)"
             @click="removeImg(x)"
@@ -61,10 +61,11 @@
           </v-btn>
 
           <div
+            v-if="data['imgs'].length > 1"
             class="absolute bottom left fill-width"
             :class="x === 0 ? 'text-right pr-4' : x === data['imgs'].length-1 ? 'text-left pl-4' : 'text-center'"
             style="opacity: 0; transition: opacity .4s ease-in-out; background-color:rgba(255,255,255,.25)"
-            :style="hover ? 'opacity: 1' : ''"
+            :style="hover || $vuetify.breakpoint.smAndDown ? 'opacity: 1' : ''"
           >
             <v-btn
               v-if="x > 1"
