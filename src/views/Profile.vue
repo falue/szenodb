@@ -41,12 +41,6 @@
       </div>
     </v-card-title>
 
-      <!-- <h2>{{$vuetify.breakpoint.xs ? 'xs' : ''}}
-      {{$vuetify.breakpoint.sm ? 'sm' : ''}}
-      {{$vuetify.breakpoint.md ? 'md' : ''}}
-      {{$vuetify.breakpoint.lg ? 'lg' : ''}}
-      {{$vuetify.breakpoint.xl ? 'xl' : ''}}
-      </h2> -->
       <form @submit.prevent="saveUserData">
         <v-text-field filled class="input" :class="$vuetify.breakpoint.mdAndUp ? 'mr-2' : ''" :style="$vuetify.breakpoint.mdAndUp ? 'width:40%; display:inline-block' : ''" label="Name" type="text" placeholder="Name" v-model="profile.name" :rules="requiered"></v-text-field>
         <v-text-field filled class="input" :style="$vuetify.breakpoint.mdAndUp ? 'width:55%; display:inline-block' : ''" label="Profession" type="text" placeholder="Title" v-model="profile.title"></v-text-field>
