@@ -280,6 +280,10 @@ td.ellipsis div.content--wrap {
 .nudge-x-50 { transform: translateX(0.50em); }
 .nudge-x-100 { transform: translateX(1.00em); }
 .nudge-x-125 { transform: translateX(1.25em); }
+.nudge-x-200 { transform: translateX(2.00em); }
+.nudge-x-300 { transform: translateX(3.00em); }
+.nudge-x-400 { transform: translateX(4.00em); }
+.nudge-x-500 { transform: translateX(5.00em); }
 .nudge-x--25 { transform: translateX(-0.25em); }
 .nudge-x--125 { transform: translateX(-1.25em); }
 .nudge-x--200 { transform: translateX(-2.00em); }

@@ -16,42 +16,110 @@
     <v-text-field label="Website" type="text" v-model="data.web"></v-text-field>
 
     <!-- IMAGE MANAGER -->
-    <!-- <div class="grey--text text--lighten-1 caption mt-1 mb-1">Images</div>
-    <ImageUpload
-      btnClasses="white--text grey lighten-1"
-      labelClasses="grey--text text--darken-1"
-      labelText="Upload an image.."
-      :imagesOnly="true"
-      :maxFileSizeMb="12"
-      :imageSize="400"
-      @base64="saveNewImage($event)"
-      @error="error = $event.message"
-    ></ImageUpload>
+    <div class="grey--text text--lighten-1 caption mt-1 mb-1">Images ({{data.imgs.length}})</div>
 
-    <-- IMAGE PREVIEW --
-    <div v-if="data.imgs && data.imgs.length">
-      <v-img class="black inline-block mr-3 mb-3" v-for="(img, x) in data.imgs" :key="x" :src="img" contain height="125" width="125" >
-        <v-btn
-          fab x-small absolute light top right class="black--text mt-7 mr-0 pa-0"
-          @click="removeImg(x)"
-        ><v-icon x-small>mdi-close</v-icon>
-        </v-btn>
-        <v-btn
-          v-if="x != 0"
-          fab x-small absolute light bottom right class="black--text mb-7 mr-0 pa-0"
-          :class="x != data['imgs'].length-1 ? 'nudge-x--400' : ''"
-          @click="shiftImg(x, x-1)"
-        ><v-icon large>mdi-menu-left</v-icon>
-        </v-btn>
-        <v-btn
-          v-if="x != data['imgs'].length-1"
-          fab x-small absolute light bottom right class="black--text mb-7 mr-0 pa-0"
-          @click="shiftImg(x, x+1)"
-        ><v-icon large>mdi-menu-right</v-icon>
-        </v-btn>
-      </v-img>
+    <!-- Folder deletion
+    TODO WHEN FINALLY DELETING BY ADMIN!!!!!!!!!!!!!!!!
+    <v-btn
+      icon
+      class="red"
+      @click="deleteFolder(`resources/${data.id}`)"
+    ><v-icon small class=" white--text">mdi-close</v-icon>  
+    </v-btn>
+    <br> -->
+    
+    <FileUpload
+      class="inline mr-2"
+      type="image/*"
+      :target="`resources/${data.id}`"
+      :multiple="true"
+      :orderStart="data.imgs.length"
+      icon="image-plus"
+      iconClasses=""
+      buttonClasses=""
+      position="right"
+      @uploaded="data.imgs.push(JSON.parse(JSON.stringify($event))), data.imgs.sort((a, b) => b.order - a.order)"
+      @error="$toasted.global.error({msg:$event})"
+    ></FileUpload>
+    {{data.imgs && data.imgs.length ? 'Upload more images..' : 'Upload images..'}}
+      <!-- @finished="$emit('edit', {'newData': data, 'oldData': oldData})" -->
+      <!-- @uploadStarted="test=[]" -->
+
+    <!-- IMAGE PREVIEW -->
+    <div v-if="data.imgs && data.imgs.length" class="mt-4">
+      <v-hover
+        v-for="(img, x) in data.imgs"
+        :key="x"
+        v-slot="{ hover }"
+      >
+        <v-img
+          class="inline-block pa-0 pr-3 pl-1 mb-2"
+          :class="hover ? 'black' : ''"
+          elevation-8
+          style="vertical-align:middle; transition: background-color .4s ease-in-out;"
+          :src="img.url"
+          contain
+          :height="$vuetify.breakpoint.xs ? '100%' : '50%'"
+          :width="$vuetify.breakpoint.xs ? '100%' : '50%'"
+        >
+          <v-btn
+            :style="hover ? 'opacity: 1' : ''"
+            small color="red" icon absolute light top right class="red--text ma-0 pa-0"
+            style="opacity: 0; transition: opacity .4s ease-in-out; background-color:rgba(255,255,255,.25)"
+            @click="removeImg(x)"
+          ><v-icon small>mdi-delete</v-icon>
+          </v-btn>
+
+          <div
+            class="absolute bottom left fill-width"
+            :class="x === 0 ? 'text-right pr-4' : x === data['imgs'].length-1 ? 'text-left pl-4' : 'text-center'"
+            style="opacity: 0; transition: opacity .4s ease-in-out; background-color:rgba(255,255,255,.25)"
+            :style="hover ? 'opacity: 1' : ''"
+          >
+            <v-btn
+              v-if="x > 1"
+              icon
+              class="mr-0 pa-0"
+              @click="shiftImg(x, 0)"
+            ><v-icon dense medium>mdi-skip-previous</v-icon>
+            </v-btn>
+            <span v-else class="px-4"></span>
+            <!-- :class="x != data['imgs'].length-1 ? 'nudge-x--400' : ''" -->
+            <v-btn
+              v-if="x != 0"
+              icon
+              class="mr-0 pa-0"
+              @click="shiftImg(x, x-1)"
+            ><v-icon large>mdi-menu-left</v-icon>
+            </v-btn>
+
+            <span v-if="x != 0 && x != data['imgs'].length-1" class="px-4"></span>
+
+            <v-btn
+              v-if="x != data['imgs'].length-1"
+              icon
+              class="mr-0 pa-0"
+              @click="shiftImg(x, x+1)"
+            ><v-icon large>mdi-menu-right</v-icon>
+            </v-btn>
+
+            <v-btn
+              v-if="x < data['imgs'].length-2"
+              icon
+              class="mr-0 pa-0"
+              @click="shiftImg(x, data['imgs'].length-1)"
+            ><v-icon medium>mdi-skip-next</v-icon>
+            </v-btn>
+            <span v-else class="px-4"></span>
+          </div>
+        </v-img>
+      </v-hover>
     </div>
-    <hr class="my-2" style="border:none; border-top: solid 1px rgba(255,255,255,.75);"> -->
+
+    <!-- data.imgs:
+    <pre>{{data.imgs}}</pre> -->
+
+    <hr class="mt-2 mb-6" style="border:none; border-top: solid 1px rgba(255,255,255,.75);">
     
     <div class="grey--text text--lighten-1 caption mt-0 mb-1">Rating</div>
     <v-icon v-for="x in data.rating" :key="x" medium class="orange--text" @click="data.rating = x">mdi-star</v-icon>
@@ -105,12 +173,12 @@
 </template>
 
 <script>
-// import ImageUpload from '@/components/ImageUpload'
+import FileUpload from '@/components/FileUpload'
 import CsvImport from '@/components/CsvImport'
   export default {
     props: ['data', 'dataMode', 'user'],
     components: {
-      // ImageUpload, 
+      FileUpload,
       CsvImport,
     },
     data() {
@@ -153,13 +221,10 @@ import CsvImport from '@/components/CsvImport'
       },
       
       /* IMAGES */
-      saveNewImage(img) {
-        this.data.imgs.unshift(img);
-      },
-
       removeImg(index) {
         // console.log(index);
         this.data.imgs.splice(index, 1);
+        this.setNewImageOrder();
       },
 
       shiftImg(oldIndex, newIndex) {
@@ -172,8 +237,17 @@ import CsvImport from '@/components/CsvImport'
             newIndex = array.length - 1;
         }
         array.splice(newIndex, 0, array.splice(oldIndex, 1)[0]);
+        // write to imgs[{.order: newIndex}]
+        this.setNewImageOrder();
         return array;
       },
+      setNewImageOrder() {
+        // Save new order key to resource data
+        for (let i = 0; i < this.data.imgs.length; i++) {
+          // console.log(this.data.imgs.length-i-1, this.data.imgs[i].name, this.data.imgs[i].order)
+          this.data.imgs[i].order = this.data.imgs.length-i-1;
+        }
+      }
     }
   }
 </script>

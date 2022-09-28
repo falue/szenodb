@@ -1,8 +1,10 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import * as fb from '../firebase'
+import * as fb from '../firebase'  // points to file src/firebase.js !
 import router from '../router/index'
 import { authKeys } from '../auth.js'
+let storage = fb.storage;
+// let storageRef = storage.ref();
 
 Vue.use(Vuex)
 
@@ -315,7 +317,7 @@ const store = new Vuex.Store({
       })
     },
 
-    async addResource({ state }, {collection, post}) {  //state, commit  //
+    async addResource({ state }, {id, collection, post}) {  //state, commit  //
       // return if user email not verified
       if(!state.userProfile.emailVerified) throw new Error('Please verify your email address');
       // make sure to not write in not allowed collections if not admin
@@ -335,7 +337,9 @@ const store = new Vuex.Store({
       post.searchfield = await store.dispatch('buildSearchfield', post);
 
       // WRITE TO DB
-      await fb["db"].collection(collection).add({
+      console.log("received id: ", id);
+      await fb["db"].collection(collection).doc(id).set({
+      //await fb["db"].collection(collection).add({
         createdOn: creationDate,
         editedOn: creationDate,
         content: post,
@@ -422,6 +426,7 @@ const store = new Vuex.Store({
         throw {'message': "Error writing document: Not allowed"};
       }
       await fb["db"].collection(collection).doc(document).delete().then(function() {
+        store.dispatch('deleteFolder', `resources/${document}`);
         return true
       }).catch(function(error) {
         throw error;
@@ -537,6 +542,68 @@ const store = new Vuex.Store({
         return true
       }).catch(function(error) {
         throw error;
+      });
+    },
+
+    // eslint-disable-next-line no-unused-vars
+    async uploadFile({state}, {file, target, order}) {
+      console.log("Because of GUI feedback (loading bar while uploading), this function is in FileUpload.vue directly.")
+      console.log(file, target, order)
+    },
+    
+    // eslint-disable-next-line no-unused-vars
+    async deleteFile({state}, url) {
+      // console.log("delete: ", url);
+      let fileRef = await store.dispatch('getStorageRefFromUrl', url);
+      let deletRef = storage.ref().child(fileRef);
+      // Delete the file
+      deletRef.delete().then(() => {
+        // File deleted successfully
+        console.log("success");
+      }).catch((error) => {
+        // Uh-oh, an error occurred!
+        console.log(error.message);
+      });
+    },
+
+    // eslint-disable-next-line no-unused-vars
+    getStorageRefFromUrl({state}, url) {
+      try {
+        // Remove token and hostname and split into folders
+        let fileRef = new URL(url).pathname.split("/");
+        // Get last "folder" after /v0/b/szenodb/o/
+        fileRef = fileRef.pop();
+        // Make "/" out of "%2F"
+        fileRef = decodeURIComponent(fileRef);
+        return fileRef
+      } catch {
+        // Was not URL (e.g. folder)
+        console.log("Path was folder?", url)
+        return url
+      }
+    },
+      
+    // eslint-disable-next-line no-unused-vars
+    deleteFolder({state}, path) {
+      let listRef = storage.ref().child(path);
+      listRef.listAll().then((res) => {
+        res.items.forEach((itemRef) => {
+          // console.log("itemRef.fullPath: ", itemRef.fullPath);
+          // All the items under listRef.
+          itemRef.delete().then(() => {
+            // File deleted successfully
+            // console.log("success deleted:", itemRef.fullPath);
+          }).catch((error) => {
+            // Uh-oh, an error occurred!
+            console.log(error);
+          });
+        })
+      }).then(() => {
+        // FIXME: Does not async await but yeah
+        console.log("Deleted folder ", path)
+      }).catch((error) => {
+        console.log(error);
+        // Uh-oh, an error occurred!
       });
     },
 

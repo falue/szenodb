@@ -1,5 +1,5 @@
 import Vue from 'vue';
-/* import md5 from 'md5'; */
+import md5 from 'md5';
 
 export default {
   gebi: function(id) {
@@ -104,9 +104,8 @@ export default {
 
   copyClipBoard(text, title='Text') {
     if(typeof (text) === 'object') text = text.join("\n");
-    Vue.prototype.$copyText(text).then(function () {
+    Vue.prototype.$copyText(text).then(() => {
       Vue.prototype.$toasted.global.success({msg:`${title} was copied to your clipboard`});
-      // Vue.prototype.$flashStorage.flash(`${title} was copied to your clipboard`, 'success', {timeout: 1000})
     }, function (e) {
       console.log(e);
     });
@@ -331,9 +330,9 @@ export default {
     return "http://"+url
   },
 
-  /* md5(text) {
+  md5(text) {
     return md5(text);
-  }, */
+  },
 
   // Check for EXIF image orientation
   // https://jsfiddle.net/wunderbart/dtwkfjpg/

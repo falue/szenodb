@@ -548,7 +548,8 @@ import EditResource from '@/components/EditResource'
           'web': '',
           'resources': '',
           'tel': '',
-          'email': ''
+          'email': '',
+          'id': this.$helpers.createUid()
         }
       },
 
@@ -684,7 +685,9 @@ import EditResource from '@/components/EditResource'
 
       addResource() {
         this.loadingEdit = true;
-        this.$store.dispatch('addResource', {"collection": "resources", "post": this.post}).then(() => {
+        let id = this.post.id;
+        delete this.post.id;
+        this.$store.dispatch('addResource', {"id": id, "collection": "resources", "post": this.post}).then(() => {
           this.loadingEdit = false;
           console.log("Success!")
           this.post = this.resetResource();
@@ -757,6 +760,24 @@ import EditResource from '@/components/EditResource'
         // TODO: let newData = this.post;
         let scrollTop = this.$refs.resourcesList.$el.scrollTop;
         await this.$store.dispatch('editResource', {'collection': 'resources', 'document': this.post.id, 'post': newData, 'oldData': this.oldData}).then(async () => {
+          // If anything has changed in imgs array
+          if(JSON.stringify(this.oldData.imgs) != JSON.stringify(newData.imgs) ) {
+            console.log("Update storage")
+            // Remove images in storage that are not saved anymore
+            // make array of all new image paths
+            let arrayOfNewImages = newData.imgs.map(x => x.url);
+            for (let i = 0; i < this.oldData.imgs.length; i++) {
+              if(!arrayOfNewImages.includes(this.oldData.imgs[i].url)) {
+                // If old image is not in new image array, delete img froms torage
+                console.log("Delete old image ", this.oldData.imgs[i].name)
+                this.$store.dispatch('deleteFile', this.oldData.imgs[i].url)
+                // } else {
+                //   console.log("levae alone old image ")
+                //   console.log(this.oldData.imgs[i].name)
+              }
+            }
+          }
+
           this.loadingEdit = false;
           console.log('Success edit!')
           this.post = this.resetResource();

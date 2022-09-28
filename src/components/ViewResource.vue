@@ -105,6 +105,7 @@
         <v-img
           class="inline-block elevation-8 mr-3 mb-3"
           v-for="(img, x) in data.content.imgs"
+          @click="magnify(img, x)"
           :key="x"
           :src="img.url"
           max-height="100%"
@@ -156,6 +157,46 @@
       <v-spacer></v-spacer>
       <v-btn right @click="$emit('close')" class="primary mr-2 mb-2">Close</v-btn>
     </v-card-actions>
+
+    <!-- MAGNIFY -->
+    <v-dialog
+      v-model="magnifyDialog"
+      :max-width="$vuetify.breakpoint.smAndDown ? '85%' : '55%'"
+      :fullscreen="$vuetify.breakpoint.xs"
+      :ripple="false"
+      scrollable
+    >
+      <v-card :ripple="false">
+        <v-card-text class="pa-0" :class="$vuetify.breakpoint.xs ? 'relative' : ''">
+            <v-img
+              :class="$vuetify.breakpoint.xs ? 'absolute fill-height fill-width' : 'relative'"
+              :src="magnifyDialogImg.url"
+              @click="magnifyDialog = false"
+              :contain="$vuetify.breakpoint.xs"
+            >
+              <div v-if="data.content.imgs.length > 1" @click.stop="magnifyPrev()" class="absolute left fill-height" style="width:33%"></div>
+              <div v-if="data.content.imgs.length > 1" @click.stop="magnifyNext()" class="absolute right fill-height" style="width:33%"></div>
+            </v-img>
+        </v-card-text>
+      <v-card-actions class="px-2 py-1 caption grey--text">
+        {{magnifyDialogImg.name}}
+        <v-spacer></v-spacer>
+        {{ $moment(magnifyDialogImg.lastModified).format("DD.MM.YYYY") }}
+        <v-spacer></v-spacer>
+        <a :href="magnifyDialogImg.url" target="_blank" class="no-underline">
+          <v-btn
+            icon
+            :small="$vuetify.breakpoint.mdAndUp"
+            color="primary"
+          >
+          <!-- DOES NOT WORK, because this dialog is async and security prevents clipboard-copying from triggering -->
+          <!-- @click="$helpers.copyClipBoard(getCurrentUrl(), 'URL')"> -->
+            <v-icon :small="$vuetify.breakpoint.mdAndUp">mdi-share</v-icon>
+          </v-btn>
+        </a>
+      </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -172,6 +213,9 @@ import VCardExport from '@/components/VCardExport'
       return {
         currentLanguage: this.data.content.originalLang,
         languageIndex: 0,
+        magnifyIndex: 0,
+        magnifyDialog: false,
+        magnifyDialogImg: {},
         languages: ['original', 'DE', 'EN-GB', 'FR', 'IT']
       }
     },
@@ -209,7 +253,29 @@ import VCardExport from '@/components/VCardExport'
         this.$helpers.hideClass('lang');
         this.$helpers.showClass('lang-'+this.languages[this.languageIndex]);
         this.currentLanguage = this.languages[this.languageIndex];
-      }
+      },
+
+      magnify(imgData, index) {
+        this.magnifyDialog = true;
+        this.magnifyIndex = index;
+        this.magnifyDialogImg = imgData;
+      },
+
+      magnifyPrev() {
+        this.magnifyIndex = this.magnifyIndex-1;
+        this.magnifyIndex = this.magnifyIndex < 0
+          ? this.data.content.imgs.length-1
+          : this.magnifyIndex;
+        this.magnifyDialogImg = this.data.content.imgs[this.magnifyIndex];
+      },
+
+      magnifyNext() {
+        this.magnifyIndex = this.magnifyIndex+1;
+        this.magnifyIndex = this.magnifyIndex > this.data.content.imgs.length-1
+          ? 0
+          : this.magnifyIndex;
+        this.magnifyDialogImg = this.data.content.imgs[this.magnifyIndex];
+      },
     }
   }
 </script>
