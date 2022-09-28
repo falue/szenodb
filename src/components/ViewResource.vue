@@ -91,17 +91,27 @@
       <Copy :data="data.content.web" dataName="website" position="right"></Copy>
       </v-card-text>
 
-      <v-card-text v-if="data.content.imgs.length" class="pb-0">
-      <div style="line-height:1em" class="grey--text overline pb-2">{{ data.content.imgs.length == 1 ? '1 image' : data.content.imgs.length + " images" }}</div>
-        <v-img class="inline-block elevation-8 mr-3 mb-3" v-for="(img, x) in data.content.imgs" :key="x" :src="img" max-height="350" max-width="350" lazy>
-        </v-img>
-      </v-card-text>
-
       <v-card-text class="pb-0 grey--text">
       <div style="line-height:1em" class="grey--text overline">rating</div>
       <v-icon v-for="x in data.content.rating" :key="x" small class="orange--text">mdi-star</v-icon>
       <v-icon v-for="n in 5-data.content.rating" :title="data.content.rating+n" :key="'A'+ n" small class="white--text">mdi-star-outline</v-icon>
       {{data.content.rating ? data.content.rating+'/5' : '(unrated)'}}
+      </v-card-text>
+
+      <v-card-text v-if="data.content.imgs.length" class="pb-0">
+        <div style="line-height:1em" class="grey--text overline pb-2">
+          {{ data.content.imgs.length == 1 ? 'image (1)' : "images ("+ data.content.imgs.length + ")" }}
+        </div>
+        <v-img
+          class="inline-block elevation-8 mr-3 mb-3"
+          v-for="(img, x) in data.content.imgs"
+          :key="x"
+          :src="img.url"
+          max-height="100%"
+          max-width="100%"
+          lazy
+        >
+        </v-img>
       </v-card-text>
 
       <v-card-text v-if="data.content.tel || data.content.email || data.content.adress" class="pb-0">
