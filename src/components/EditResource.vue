@@ -160,6 +160,8 @@
       <v-spacer></v-spacer>
       <v-btn type="submit" color="primary" class="mr-0" :disabled="data.title === ''">Save Edit</v-btn>
     </v-card-actions>
+    
+    <hr class="my-8 py-8" style="border:none !important;">
   </form>
 </template>
 
