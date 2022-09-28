@@ -1,10 +1,10 @@
 <template>
   <div class="ma-0 fill-width fill-height">
     <v-card
-      :class="$vuetify.breakpoint.smAndDown ? 'transparent fill-height ma-0 pa-4' : 'mx-auto my-4 mt-12 pa-8'"
-      :max-width="$vuetify.breakpoint.mdAndUp ? 666 : 6666"
+      :class="$vuetify.breakpoint.xs ? 'transparent fill-height ma-0 pa-4' : $vuetify.breakpoint.mdAndUp ? 'mx-auto my-4 mt-12 pa-8' : 'mx-auto my-4 mt-0 pa-8'"
+      :max-width="$vuetify.breakpoint.smAndUp ? 666 : 6666"
       max-height="80%"
-      :flat="$vuetify.breakpoint.smAndDown"
+      :flat="$vuetify.breakpoint.smAndUp"
       style="overflow-y: auto;"
     >
 
@@ -74,7 +74,7 @@
             Reset password
           </v-btn>
           <v-btn v-if="deleteAccountConfirmation" :disabled="profile.email === 'info@fluescher.ch'" @click="deleteAccount()" color="red">
-            {{$vuetify.breakpoint.mdAndUp ? 'Delete account now and everything with it.' : 'Delete account now'}}
+            {{$vuetify.breakpoint.smAndUp ? 'Delete account now and everything with it.' : 'Delete account now'}}
           </v-btn>
           <v-spacer></v-spacer>
           <v-btn v-if="!deleteAccountConfirmation && !user.emailVerified" @click="sendEmailVerification()" type="submit" :class="this.$route.query.hint === 'verifyEmail' ? 'error--fade' : ''" color="">

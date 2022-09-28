@@ -3,10 +3,10 @@
     <div class="hero fill-width fill-height" v-if="$vuetify.breakpoint.mdAndUp"></div>
 
     <v-card
-      :class="$vuetify.breakpoint.smAndDown ? 'transparent fill-height ma-0 pa-4' : 'mx-auto my-4 mt-12 pa-8 pt-4'"
-      :max-width="$vuetify.breakpoint.mdAndUp ? 555 : 6666"
+      :class="$vuetify.breakpoint.xs ? 'transparent fill-height ma-0 pa-4' : $vuetify.breakpoint.mdAndUp ? 'mx-auto my-4 mt-12 pa-8' : 'mx-auto my-4 mt-0 pa-8'"
+      :max-width="$vuetify.breakpoint.smAndUp ? 666 : 6666"
       max-height="80%"
-      :flat="$vuetify.breakpoint.smAndDown"
+      :flat="$vuetify.breakpoint.smAndUp"
       style="overflow-y: auto;"
     >
       <!-- GIT LOG -->

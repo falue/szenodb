@@ -114,7 +114,7 @@
           <span>Manage users & backups</span>
         </v-tooltip>
 
-        <v-tooltip open-delay="1250" :open-on-click="false" bottom :disabled="$vuetify.breakpoint.smAndDown">
+        <v-tooltip open-delay="0" :open-on-click="false" bottom :disabled="$vuetify.breakpoint.smAndDown">
           <template v-slot:activator="{ on, attrs }">
             <v-btn text icon small :circle="$vuetify.breakpoint.mdAndUp" to="/profile" class="mx-1" v-bind="attrs" v-on="on">
               <v-icon color="primary">mdi-account-cowboy-hat</v-icon>
@@ -123,7 +123,7 @@
           <span>Profile {{user.name}}</span>
         </v-tooltip>
 
-        <v-tooltip open-delay="1250" :open-on-click="false" bottom :disabled="$vuetify.breakpoint.smAndDown">
+        <v-tooltip open-delay="0" :open-on-click="false" bottom :disabled="$vuetify.breakpoint.smAndDown">
           <template v-slot:activator="{ on, attrs }">
             <v-btn text icon small :circle="$vuetify.breakpoint.mdAndUp" @click="logout()" class="mx-1" v-bind="attrs" v-on="on">
               <v-icon :small="$vuetify.breakpoint.mdAndUp" color="primary">mdi-logout-variant</v-icon>

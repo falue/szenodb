@@ -104,17 +104,20 @@
         <div style="line-height:1em" class="grey--text overline pb-2">
           {{ data.content.imgs.length == 1 ? 'image (1)' : "images ("+ data.content.imgs.length + ")" }}
         </div>
-        <v-img
-          class="inline-block elevation-8 mr-3 mb-3"
+        <div
+          class="inline-block relative pr-3"
           v-for="(img, x) in data.content.imgs"
-          @click="magnify(img, x)"
           :key="x"
-          :src="img.url"
-          max-height="100%"
-          max-width="100%"
-          lazy
+          :style="$vuetify.breakpoint.sm ? 'width: 50%' : 'width: 100%'"
         >
-        </v-img>
+          <v-img
+            class="elevation-8 green"
+            @click="magnify(img, x)"
+            :src="img.url"
+            lazy
+          >
+          </v-img>
+        </div>
       </v-card-text>
 
       <v-card-text v-if="data.content.tel || data.content.email || data.content.adress" class="pt-8 pb-0">

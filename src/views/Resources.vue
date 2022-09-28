@@ -192,7 +192,7 @@
                 </a>
               </div>
             </div>
-            <div v-if="isSmallWithOpenDrawer" :style="$vuetify.breakpoint.mdAndUp ? 'width:60%' : 'width:80%'" class="grey--text pl-2 pt-1" style="text-decoration: inherit; display:inline-block">
+            <div v-if="isSmallWithOpenDrawer" :style="$vuetify.breakpoint.smAndUp ? 'width:60%' : 'width:80%'" class="grey--text pl-2 pt-1" style="text-decoration: inherit; display:inline-block">
               <div v-if="user.role === 'admin' && resource.flags.deleted">
                 Flagged by
                 {{resource.flags.userName}},
@@ -204,7 +204,7 @@
                   {{resource.content.resources}}
               </div>
             </div>
-            <div class="pt-3" v-if="$vuetify.breakpoint.mdAndUp" :style="isSmallWithOpenDrawer ? '' : 'width:80%'" style="width:20%; text-align:right; vertical-align: top; display:inline-block">
+            <div class="pt-3" v-if="$vuetify.breakpoint.smAndUp" :style="isSmallWithOpenDrawer ? '' : 'width:80%'" style="width:20%; text-align:right; vertical-align: top; display:inline-block">
               <a v-if="resource.content.web" :title="resource.content.web" :href="$helpers.createWebsiteUrl(resource.content.web)" onclick="event.stopPropagation();" target="_blank" class="no-underline">
                 <v-btn icon class="primary ml-1" :small="$vuetify.breakpoint.mdAndUp">
                   <v-icon>mdi-link-variant</v-icon>

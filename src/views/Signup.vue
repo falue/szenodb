@@ -1,10 +1,10 @@
 <template>
     <!-- SIGNUP FORM -->
     <v-card
-      :class="$vuetify.breakpoint.smAndDown ? 'transparent fill-height ma-0 pa-4' : 'mx-auto my-4 mt-12 pa-8 pt-4'"
-      :max-width="$vuetify.breakpoint.mdAndUp ? 344 : 6666"
+      :class="$vuetify.breakpoint.xs ? 'transparent fill-height ma-0 pa-4' : 'mx-auto my-4 mt-12 pa-8'"
+      :max-width="$vuetify.breakpoint.smAndUp ? 344 : 6666"
       max-height="80%"
-      :flat="$vuetify.breakpoint.smAndDown"
+      :flat="$vuetify.breakpoint.smAndUp"
       style="overflow-y: auto;"
     >
       <v-card-title class="justify-center">Sign up <span class="pink--text ml-1">(always free)</span></v-card-title>

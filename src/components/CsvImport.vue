@@ -24,7 +24,9 @@
     </div>
 
     <!-- HINT -->
-    <v-tooltip :disabled="$vuetify.breakpoint.smAndDown" top :open-on-hover="false" :open-on-focus="false">
+    <v-tooltip :v-if="$vuetify.breakpoint.smAndUp" top :open-on-hover="false" :open-on-focus="false"
+      color="grey darken-4"
+    >
       <template v-slot:activator="{ on, attrs }">
         <!-- <v-btn class="primary--text" v-bind="attrs" v-on="on" >
           <v-icon color="primary" small>mdi-help</v-icon>
@@ -37,7 +39,7 @@
         Export your resources from Excel or Numbers in the <pre style="display:inline">csv</pre> format.<br>
         The columns have to be <span class="red--text">exactly</span> in this order:<br>
 
-        <table style="width:100%" class="my-2">
+        <table style="width:100%" class="my-2" :style="$vuetify.breakpoint.xs ? 'font-size:0.85em': ''">
           <thead>
             <tr class="primary--text">
               <th  v-for="(header, x) in ['Title','Contact','Resources','Opinions','Address','Tel','Email','Website']" :key="x">
@@ -88,16 +90,16 @@
     <v-dialog
       v-model="csvDialog"
       width="90%"
-      :fullscreen="$vuetify.breakpoint.smAndDown"
+      :fullscreen="$vuetify.breakpoint.xs"
     >
-      <v-card>
+      <v-card :flat="$vuetify.breakpoint.smAndUp">
         <v-card-title class="text-h5 grey darken-3">
-          Double check your data please
+          Double check your data {{$vuetify.breakpoint.smAndUp ? 'please' : ''}}
         </v-card-title>
 
         <v-card-text class="my-4 " >
           Does this look correct to you?
-
+          <div :style="$vuetify.breakpoint.xs ? 'width:100%; overflow: auto': ''">
           <table style="width:100%" class="my-4 ">
             <thead>
               <tr class="primary--text">
@@ -128,6 +130,7 @@
                 </tr>
             </tbody>
           </table>
+          </div>
 
           <p class="primary--text">Please double-check if the column headers match your data.</p>
 
