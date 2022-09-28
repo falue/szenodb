@@ -14,8 +14,10 @@
         </template>
         <span>{{data.content.web ? `Go to ${$helpers.retrieveDomain(data.content.web)}` : `Do a google for "${data.content.title}"`}}</span>
       </v-tooltip>
-      <Copy :data="data.content.title" dataName="title" position="bottom"></Copy>
-      <Copy v-if="user.role === 'admin'" :data="data.id" dataName="Document ID" position="bottom"></Copy>
+      <div class="nudge-y--25">
+        <Copy :data="data.content.title" dataName="title" position="bottom"></Copy>
+        <Copy v-if="user.role === 'admin'" :data="data.id" dataName="Document ID" position="bottom"></Copy>
+      </div>
     </v-card-title>
 
     <v-card-text v-if="data.flags.deleted || data.flags.unreliable" :class="data.flags.deleted ? 'pink darken-2' : 'error darken-2'" class="pa-4 rounded relative">
@@ -55,7 +57,7 @@
         <span class="lang hide lang-IT" lang="IT">{{data.content.translations['IT'].resources}}</span>
       </v-card-text>
 
-      <v-card-text v-if="data.content.info" class="pb-0">
+      <v-card-text v-if="data.content.info" class="pt-8 pb-0">
         <div style="line-height:1em" class="grey--text overline">Opinions</div>
         <span class="lang lang-original" :lang="data.content.originalLang">{{data.content.info}}</span>
         <span class="lang hide lang-DE" lang="DE">{{data.content.translations['DE'].info}}</span>
@@ -64,7 +66,7 @@
         <span class="lang hide lang-IT" lang="IT">{{data.content.translations['IT'].info}}</span>
       </v-card-text>
 
-      <v-card-text v-if="data.content.address" class="pb-0">
+      <v-card-text v-if="data.content.address" class="pt-8 pb-0">
       <div style="line-height:1em" class="grey--text overline">{{data.content.address.startsWith('http') ? 'Map' : 'Address'}}</div>
       <a class="no-underline" :class="{'bigMobileButton' : $vuetify.breakpoint.smAndDown}" :href="data.content.address.startsWith('http') ? data.content.address :  this.$parent.$parent.createGoogleMapsLink(data.content.address)" target="_blank">
         {{data.content.address.startsWith('http') ? "Google Maps" : data.content.address }}
@@ -72,33 +74,33 @@
       <Copy :data="data.content.address" dataName="address or link" position="right"></Copy>
       </v-card-text>
 
-      <v-card-text v-if="data.content.tel" class="pb-0">
+      <v-card-text v-if="data.content.tel" class="pt-8 pb-0">
       <div style="line-height:1em" class="grey--text overline">tel</div>
       <a class="no-underline" :class="{'bigMobileButton' : $vuetify.breakpoint.smAndDown}" :href="'tel:'+ data.content.tel.replace(/ /g, '')">{{ data.content.tel }}</a>
       <Copy :data="data.content.tel" dataName="number" position="right"></Copy>
       </v-card-text>
 
-      <v-card-text v-if="data.content.email" class="pb-0">
+      <v-card-text v-if="data.content.email" class="pt-8 pb-0">
       <div style="line-height:1em" class="grey--text overline">email</div>
       <a class="no-underline" :class="{'bigMobileButton' : $vuetify.breakpoint.smAndDown}" :href="'mailto:'+ data.content.email">{{ data.content.email }}</a>
       <Copy :data="data.content.email" dataName="email" position="right"></Copy>
       </v-card-text>
 
-      <v-card-text v-if="data.content.web" class="pb-0">
+      <v-card-text v-if="data.content.web" class="pt-8 pb-0">
       <div style="line-height:1em" class="grey--text overline">web</div>
       <a class="no-underline" :class="{'bigMobileButton' : $vuetify.breakpoint.smAndDown}" :href="$helpers.createWebsiteUrl(data.content.web)" target="_blank">
         {{ data.content.web }}</a>
       <Copy :data="data.content.web" dataName="website" position="right"></Copy>
       </v-card-text>
 
-      <v-card-text class="pb-0 grey--text">
+      <v-card-text class="pt-8 pb-0 grey--text">
       <div style="line-height:1em" class="grey--text overline">rating</div>
       <v-icon v-for="x in data.content.rating" :key="x" small class="orange--text">mdi-star</v-icon>
       <v-icon v-for="n in 5-data.content.rating" :title="data.content.rating+n" :key="'A'+ n" small class="white--text">mdi-star-outline</v-icon>
       {{data.content.rating ? data.content.rating+'/5' : '(unrated)'}}
       </v-card-text>
 
-      <v-card-text v-if="data.content.imgs.length" class="pb-0">
+      <v-card-text v-if="data.content.imgs.length" class="pt-8 pb-0">
         <div style="line-height:1em" class="grey--text overline pb-2">
           {{ data.content.imgs.length == 1 ? 'image (1)' : "images ("+ data.content.imgs.length + ")" }}
         </div>
@@ -115,19 +117,23 @@
         </v-img>
       </v-card-text>
 
-      <v-card-text v-if="data.content.tel || data.content.email || data.content.adress" class="pb-0">
+      <v-card-text v-if="data.content.tel || data.content.email || data.content.adress" class="pt-8 pb-0">
       <div style="line-height:1em" class="grey--text overline">Get contact</div>
       Download resource as VCard: <VCardExport :data="data.content"></VCardExport>
       </v-card-text>
 
       <v-card-text class="pb-4 grey--text" style="font-size:.75em">
         Created by <span :title="'User ID: '+data.userId">{{data.userName}}</span><!-- 
-         --><Copy v-if="user.role === 'admin'" :data="data.userId" dataName="user ID"></Copy>,
+         --><Copy v-if="user.role === 'admin'" :data="data.userId" dataName="user ID"></Copy>
+         <br v-if="$vuetify.breakpoint.xs">
+         <span v-else>,</span>
         {{ $helpers.timeRelativeToNow(data.createdOn.toDate()) }},
         {{ $helpers.fbTimeToString(data.createdOn, "DD.MM.YY - HH:mm") }}
         <div v-if="data.editedOn && JSON.stringify(data.createdOn) != JSON.stringify(data.editedOn)">
           Edited by <span :title="'Editor ID: '+data.userIdEdited">{{data.userNameEdited}}</span><!-- 
-         --><Copy v-if="user.role === 'admin'" :data="data.userIdEdited" dataName="Editor ID"></Copy>,
+         --><Copy v-if="user.role === 'admin'" :data="data.userIdEdited" dataName="Editor ID"></Copy>
+         <br v-if="$vuetify.breakpoint.xs">
+         <span v-else>,</span>
           {{ $helpers.timeRelativeToNow(data.editedOn.toDate()) }},
           {{ $helpers.fbTimeToString(data.editedOn, "DD.MM.YY - HH:mm") }}
         </div>

@@ -189,16 +189,25 @@
     <v-dialog
       v-model="popUpTwint"
       width="300"
-      light
+      :light="$vuetify.breakpoint.smAndUp"
     >
-    <v-card class="white" @click="$vuetify.breakpoint.mdAndUp ? popUpTwint = false : null">
-      <img v-if="$vuetify.breakpoint.smAndUp" style="width:100%" :src="require('@/assets/twint.svg')">
-      <v-card-text class="ma-0 pa-0 pl-6" v-if="$vuetify.breakpoint.smAndDown">
+    <v-card :ripple="false" :class="$vuetify.breakpoint.smAndUp ? 'white' : ''" @click="$vuetify.breakpoint.mdAndUp ? popUpTwint = false : null">
+        <v-card-text class="ma-0 pa-4" v-if="$vuetify.breakpoint.smAndUp">
+          <v-card-title class="pa-0 justify-center">Scan with TWINT app</v-card-title>
+          <img style="width:100%" :src="require('@/assets/twint.svg')">
+        </v-card-text>
+      <v-card-text class="ma-0 pa-4" v-if="$vuetify.breakpoint.smAndDown">
+        <v-card-title class="pa-0 mb-6 justify-center">Copy to TWINT app</v-card-title>
         Fabian Lüscher
         <Copy data="Fabian Lüscher" dataName="TWINT Name" :opacity="1"></Copy>
         <br>
         078 742 48 34
         <Copy data="0787424834" dataName="TWINT number" :opacity="1"></Copy>
+        <br>
+        <v-card-subtitle v-if="$vuetify.breakpoint.xs" class="pa-0 mt-6 grey--text">
+          (QR Code when visiting with bigger screen)
+        </v-card-subtitle>
+        
       </v-card-text>
     </v-card>
     </v-dialog>

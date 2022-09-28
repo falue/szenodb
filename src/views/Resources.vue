@@ -196,9 +196,9 @@
               <div v-if="user.role === 'admin' && resource.flags.deleted">
                 Flagged by
                 {{resource.flags.userName}},
-                {{resource.flags.userEmail}} (ID: <pre class="inline">{{resource.flags.userId}}</pre>)
+                {{resource.flags.userEmail}}
                 <br>
-                "{{resource.flags.reason}}"
+                Reason: "{{resource.flags.reason}}"
               </div>
               <div v-else style="text-decoration: inherit; overflow:hidden; display: -webkit-box; -webkit-box-orient: vertical; box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; ">
                   {{resource.content.resources}}
