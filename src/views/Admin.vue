@@ -80,6 +80,12 @@
                 <span class="grey--text">{{x+1}}. </span>
                 <span v-html="starify(backup.name)"></span>
               </span>
+
+              <v-btn icon small class="mr-2" :color="reloadBackupConfirmation === backup.date ? 'red' : 'grey'" @click="reloadBackupConfirmation === backup.date ? reloadBackupConfirmation = -1 :reloadBackupConfirmation = backup.date">
+                <!-- <v-icon small>mdi-database-outline</v-icon> -->
+                <v-icon>mdi-database-clock</v-icon>
+              </v-btn>
+
               <!-- UNIX to date with format... -->
               <div class="grey--text inline-block" :class="$vuetify.breakpoint.xs ? 'pb-5' : ''">
                 {{ $moment(backup.date).format("dddd, DD. MM. YYYY - HH:mm:ss") }}<!-- 
@@ -87,10 +93,6 @@
                 -->{{x === backups.backups.length-1 && x != 0 ? ', oldest' : ''}}
               </div>
 
-              <v-btn icon small class="ml-2" :color="reloadBackupConfirmation === backup.date ? 'red' : 'grey'" @click="reloadBackupConfirmation === backup.date ? reloadBackupConfirmation = -1 :reloadBackupConfirmation = backup.date">
-                <!-- <v-icon small>mdi-database-outline</v-icon> -->
-                <v-icon>mdi-database-clock</v-icon>
-              </v-btn>
               <div class="primary--text pb-8 pl-4" v-if="reloadBackupConfirmation === backup.date">
                 <p class="mb-2">
                   Really sure to delete current data & reload this backup?
