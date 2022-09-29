@@ -329,6 +329,14 @@ td.ellipsis div.content--wrap {
      1px 1px 0 #000;
 }
 
+.text-shadow--white { 
+  text-shadow:
+   -1px -1px 0 #fff,  
+    1px -1px 0 #fff,
+    -1px 1px 0 #fff,
+     1px 1px 0 #fff;
+}
+
 .list__tile__mask {
   color: inherit !important;
   background: inherit !important;

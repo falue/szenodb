@@ -72,7 +72,7 @@
               icon
               class="mr-0 pa-0"
               @click="shiftImg(x, 0)"
-            ><v-icon dense medium>mdi-skip-previous</v-icon>
+            ><v-icon dense medium color="primary" class="text-shadow--white">mdi-skip-previous</v-icon>
             </v-btn>
             <span v-else class="px-4"></span>
             <!-- :class="x != data['imgs'].length-1 ? 'nudge-x--400' : ''" -->
@@ -81,7 +81,7 @@
               icon
               class="mr-0 pa-0"
               @click="shiftImg(x, x-1)"
-            ><v-icon large>mdi-menu-left</v-icon>
+            ><v-icon large color="primary" class="text-shadow--white">mdi-menu-left</v-icon>
             </v-btn>
 
             <span v-if="x != 0 && x != data['imgs'].length-1" class="px-4"></span>
@@ -91,7 +91,7 @@
               icon
               class="mr-0 pa-0"
               @click="shiftImg(x, x+1)"
-            ><v-icon large>mdi-menu-right</v-icon>
+            ><v-icon large color="primary" class="text-shadow--white">mdi-menu-right</v-icon>
             </v-btn>
 
             <v-btn
@@ -99,7 +99,7 @@
               icon
               class="mr-0 pa-0"
               @click="shiftImg(x, data['imgs'].length-1)"
-            ><v-icon medium>mdi-skip-next</v-icon>
+            ><v-icon medium color="primary" class="text-shadow--white">mdi-skip-next</v-icon>
             </v-btn>
             <span v-else class="px-4"></span>
           </div>
