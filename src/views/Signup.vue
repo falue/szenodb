@@ -12,7 +12,7 @@
           <v-text-field filled v-model.trim="signupForm.name" type="text" placeholder="Name*" id="name" autocomplete="username"></v-text-field>
           <v-text-field filled v-model.trim="signupForm.title" type="text" placeholder="Profession" id="title"></v-text-field>
           <v-text-field filled v-model.trim="signupForm.email" type="text" placeholder="Email*" id="email2"></v-text-field>
-          <v-text-field filled v-model.trim="signupForm.password" type="password" placeholder="Password*" hint="min 6 characters" id="password2" autocomplete="new-password" :rules="passwordRules">
+          <v-text-field filled v-model.trim="signupForm.password" type="password" placeholder="Password*" :hint="signupForm.password.length ? 'Seems good!' :'Min 6 characters'" id="password2" autocomplete="new-password" :rules="passwordRules">
             <v-tooltip slot="append" right color="#212121" v-if="signupForm.password.length >= 6">
               <template v-slot:activator="{ on, attrs }">
                 <v-icon  v-bind="attrs" v-on="on"
@@ -29,17 +29,17 @@
                 </v-icon>
               </template>
               <div>
-                Let me double check this password..
+                Double check password.. (optional)
               </div>
             </v-tooltip>
           </v-text-field>
           <v-text-field v-if="doubleCheck"
-            :rules="passwordRepeatRules"
+            :rules="doubleCheckPw.length ? passwordRepeatRules : []"
             filled
             v-model.trim="doubleCheckPw"
             type="password"
             placeholder="Repeat password*"
-            hint="Same as above"
+            :hint="doubleCheckPw.length ? 'Seems good aswell.' :'Same as above (optional)'"
             id="confirm-password-text-field"
             autocomplete="new-password"
           ></v-text-field>

@@ -8,7 +8,7 @@
     >
       <v-card-title class="justify-center">Reset password</v-card-title>
       <form @submit.prevent>
-        <v-text-field filled v-model.trim="email" type="email" label="Email" id="email2"></v-text-field>
+        <v-text-field filled v-model.trim="email" type="email" placeholder="Email" id="email2"></v-text-field>
       </form>
 
       <v-card-actions class="px-0">
