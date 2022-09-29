@@ -47,7 +47,8 @@ const authKeys = {
         apiKey: '...',
         messagingSenderId: '...',
         appId: '...',
-        measurementId: '...'
+        measurementId: '...',
+        storageBucket: '...'
     }
 }
 export { authKeys }
