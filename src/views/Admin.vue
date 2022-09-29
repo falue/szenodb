@@ -7,92 +7,20 @@
       :flat="$vuetify.breakpoint.smAndUp"
       style="overflow-y: auto;"
     >
-      <!-- BACKUP -->
       <div class="pb-16 mb-16" v-if="user.role === 'admin'">
-        <div class="pb-4">
-          <!-- MAKE BACKUP -->
-          <v-card-title class="justify-center">Backups</v-card-title>
-          <v-btn @click="setBackupName = !setBackupName" :loading="backupInProgress" class="my-2">
-            <v-icon color="primary" class="mr-2">mdi-database-plus</v-icon>
-            Make backups <span v-if="$vuetify.breakpoint.mdAndUp" class="ml-1">of users & resources</span>
-          </v-btn>
-          <v-text-field dense height="1em" hide-details style="width:220px;" v-if="setBackupName" filled class="input ml-2 inline-block" placeholder="Set backup Name" type="text" v-model="backupName"></v-text-field>
-          <v-btn :disabled="!backupName.length" v-if="setBackupName" @click="triggerBackups(backupName), backupName = '', setBackupName = false" :loading="backupInProgress" class="ml-2 my-2 primary">
-            GO
-          </v-btn>
-
-          <!-- READ BACKUPS -->
-          <ol class="px-0 py-2" v-if="backups && backups['backups'] && backups['backups'].length">
-            <li style="list-style:none;" v-for="(backup, x) in backups['backups'].slice().reverse()" :key="x">
-              <!-- {{backup}} -->
-              <span class="grey--text">{{x+1}}. </span>
-              <span v-html="starify(backup.name)"></span>
-              <!-- UNIX to date with format... -->
-              <span class="grey--text">
-                {{ $moment(backup.date).format("dddd, DD. MM. YYYY - HH:mm:ss") }}<!-- 
-                -->{{x === 0 ? `, ${$helpers.timeRelativeToNow($moment(backup.date))}, newest` : ''}}<!-- 
-                -->{{x === backups.backups.length-1 && x != 0 ? ', oldest' : ''}}
-              </span>
-
-              <v-btn icon small class="ml-2" :color="reloadBackupConfirmation === backup.date ? 'red' : 'grey'" @click="reloadBackupConfirmation === backup.date ? reloadBackupConfirmation = -1 :reloadBackupConfirmation = backup.date">
-                <!-- <v-icon small>mdi-database-outline</v-icon> -->
-                <v-icon>mdi-database-clock</v-icon>
-              </v-btn>
-              <div class="primary--text pb-4 pl-4" v-if="reloadBackupConfirmation === backup.date">
-                <p class="mb-2">
-                  Really sure to delete current data & reload this backup?
-                </p>
-                <v-btn color="red" class="mr-2 mb-2" small @click="reloadBackup(backup.date.trim(), 'resources')">
-                  <v-icon class="mr-2">mdi-hammer-wrench</v-icon> Reload resources
-                </v-btn>
-                <v-btn color="white" class="mr-2 mb-2 black--text" small @click="reloadBackup(backup.date.trim(), 'settings')">
-                  <v-icon class="mr-2">mdi-wrench</v-icon> Reload settings
-                </v-btn>
-                <v-btn color="white" disabled class="mr-2 mb-2 black--text" small @click="reloadBackup(backup.date.trim(), 'persons')">
-                  <v-icon class="mr-2">mdi-account-group</v-icon> Reload persons
-                </v-btn>
-                <v-btn color="primary"  class="mr-2 mb-2" small @click="reloadBackup(backup.date.trim(), 'users')">
-                  <v-icon class="mr-2">mdi-account-cowboy-hat</v-icon> Reload users
-                </v-btn>
-              </div>
-            </li>
-          </ol>
-          <div v-else class="pa-1 my-2 red">No backups yet, or page hard reloaded.</div>
-        </div>
-
-        <!-- MAINTENANCE MODE -->
-        <hr class="mb-3 mt-16" style="border:none; border-top: solid 1px rgba(255,255,255,.25);">
-        <v-card-title class="justify-center">Maintenance</v-card-title>
-
-        <p v-if="settings.maintenance" class="my-2">
-          Maintenance mode is on.
-          <br>
-          During maintenance mode (now!), no user is able to login or make changes. Except for you, admin.
-        </p>
-        <p v-else class="my-2">
-          Maintenance mode is off.
-          <br>
-          During maintenance mode, no user is able to login or make changes. Except for you, admin.
-        </p>
-
-        <v-btn @click="setMaintenance(!settings.maintenance)" :color="settings.maintenance ? 'error--fade' : 'green'">
-          {{ settings.maintenance ? 'Turn off Maintenance mode' : 'Turn on Maintenance mode'}}
-        </v-btn>
-
         <!-- USERS -->
-        <hr class="mb-3 mt-16" style="border:none; border-top: solid 1px rgba(255,255,255,.25);">
         <v-card-title class="justify-center">Users</v-card-title>
 
-         {{users.length}} users in total, combined effort: {{totalContribution}} contribution points
-        <div class="pa-0 py-2">
+         {{users.length}} users in total, combined effort: <span class="orange--text">{{totalContribution}}</span> contribution points
+        <div class="pa-0 py-4" style="max-height:1000px; overflow-y:auto;">
           <div
             v-for="(singleUser, i) in users"
-            class="my-2 py-2 px-4 relative"
+            class="my-2 py-2 relative"
             :key="i"
             :class="i % 2 == 0 ? 'grey darken-4' : ''"
           >
             <div class="pr-2" :style="$vuetify.breakpoint.mdAndUp ? 'width:25%;' : 'width:100%;'" style="overflow:hidden; vertical-align: top; display:inline-block;">
-              <span class="text-h6 primary--text">
+              <span class="text-h6 ">
               {{singleUser.name}}
               </span>
               <br>
@@ -125,6 +53,86 @@
             </div>
           </div>
         </div>
+        
+        <hr class="mb-3 mt-16" style="border:none; border-top: solid 1px rgba(255,255,255,.25);">
+
+        <v-card-title class="text-h3 justify-center italics error--text">DAGER ZONE!</v-card-title>
+
+        <div class="pb-4">
+          <!-- MAKE BACKUP -->
+          <v-card-title class="justify-center">Backups</v-card-title>
+          <v-card-title class="justify-center">
+            <v-btn @click="setBackupName = !setBackupName" :loading="backupInProgress" class="green my-2">
+              <v-icon color="white" class="mr-2">mdi-database-plus</v-icon>
+              Make backups <span v-if="$vuetify.breakpoint.mdAndUp" class="ml-1">of users & resources</span>
+            </v-btn>
+            <v-text-field dense height="1em" hide-details style="width:220px;" v-if="setBackupName" filled class="input ml-2 inline-block" placeholder="Set backup Name" type="text" v-model="backupName"></v-text-field>
+            <v-btn :disabled="!backupName.length" v-if="setBackupName" @click="triggerBackups(backupName), backupName = '', setBackupName = false" :loading="backupInProgress" class="ml-2 my-2 primary">
+              GO
+            </v-btn>
+          </v-card-title>
+
+          <!-- READ BACKUPS -->
+          <ol class="px-0 py-2" v-if="backups && backups['backups'] && backups['backups'].length">
+            <li style="list-style:none;" v-for="(backup, x) in backups['backups'].slice().reverse()" :key="x">
+              <!-- {{backup}} -->
+              <span class="inline-block" :style="$vuetify.breakpoint.xs ? 'width:100%' : 'width:225px'">
+                <span class="grey--text">{{x+1}}. </span>
+                <span v-html="starify(backup.name)"></span>
+              </span>
+              <!-- UNIX to date with format... -->
+              <div class="grey--text inline-block" :class="$vuetify.breakpoint.xs ? 'pb-5' : ''">
+                {{ $moment(backup.date).format("dddd, DD. MM. YYYY - HH:mm:ss") }}<!-- 
+                -->{{x === 0 ? `, ${$helpers.timeRelativeToNow($moment(backup.date))}, newest` : ''}}<!-- 
+                -->{{x === backups.backups.length-1 && x != 0 ? ', oldest' : ''}}
+              </div>
+
+              <v-btn icon small class="ml-2" :color="reloadBackupConfirmation === backup.date ? 'red' : 'grey'" @click="reloadBackupConfirmation === backup.date ? reloadBackupConfirmation = -1 :reloadBackupConfirmation = backup.date">
+                <!-- <v-icon small>mdi-database-outline</v-icon> -->
+                <v-icon>mdi-database-clock</v-icon>
+              </v-btn>
+              <div class="primary--text pb-8 pl-4" v-if="reloadBackupConfirmation === backup.date">
+                <p class="mb-2">
+                  Really sure to delete current data & reload this backup?
+                </p>
+                <v-btn color="red" class="mr-2 mb-2" small @click="reloadBackup(backup.date.trim(), 'resources')">
+                  <v-icon class="mr-2">mdi-hammer-wrench</v-icon> Reload resources
+                </v-btn>
+                <v-btn color="white" class="mr-2 mb-2 black--text" small @click="reloadBackup(backup.date.trim(), 'settings')">
+                  <v-icon class="mr-2">mdi-wrench</v-icon> Reload settings
+                </v-btn>
+                <v-btn color="white" disabled class="mr-2 mb-2 black--text" small @click="reloadBackup(backup.date.trim(), 'persons')">
+                  <v-icon class="mr-2">mdi-account-group</v-icon> Reload persons
+                </v-btn>
+                <v-btn color="primary"  class="mr-2 mb-2" small @click="reloadBackup(backup.date.trim(), 'users')">
+                  <v-icon class="mr-2">mdi-account-cowboy-hat</v-icon> Reload users
+                </v-btn>
+              </div>
+            </li>
+          </ol>
+          <div v-else class="pa-1 my-2 red">No backups yet, or page hard reloaded.</div>
+        </div>
+
+        <!-- MAINTENANCE MODE -->
+        <hr class="mb-3 mt-16" style="border:none; border-top: solid 1px rgba(255,255,255,.25);">
+        <v-card-title class="justify-center">Maintenance</v-card-title>
+        <v-card-title class="justify-center">
+          <v-btn @click="setMaintenance(!settings.maintenance)" :color="settings.maintenance ? 'error--fade' : 'green'">
+            {{ settings.maintenance ? 'Turn off Maintenance mode' : 'Turn on Maintenance mode'}}
+          </v-btn>
+        </v-card-title>
+
+        <p v-if="settings.maintenance" class="my-2">
+          Maintenance mode is on.
+          <br>
+          During maintenance mode (now!), no user is able to login or make changes. Except for you, admin.
+        </p>
+        <p v-else class="my-2">
+          Maintenance mode is off.
+          <br>
+          During maintenance mode, no user is able to login or make changes. Except for you, admin.
+        </p>
+
       </div>
     </v-card>
   </div>
