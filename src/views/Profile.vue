@@ -115,6 +115,7 @@ import Info from '@/components/Info'
       return {
         loading: false,
         deleteAccountConfirmation: false,
+        useOriginal: false,
         requiered: [value => !!value || 'Required.'],
       }
     },
@@ -190,6 +191,13 @@ import Info from '@/components/Info'
         } catch (err) {
           this.$toasted.global.error({msg:err.message});
         }
+      },
+
+      getResizedImgName(url) {
+        console.log("url");
+        url = url.length ? url.replace('.jpg','_1000x1000.jpg') : url;
+        console.log(url);
+        return url
       },
 
       deleteImage(current) {
