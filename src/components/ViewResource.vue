@@ -188,7 +188,7 @@
             </v-img>
         </v-card-text>
       <v-card-actions class="px-2 py-1 caption grey--text">
-        {{magnifyDialogImg.name}}
+        {{$helpers.truncate(magnifyDialogImg.name, 25)}}
         <v-spacer></v-spacer>
         {{ $moment(magnifyDialogImg.lastModified).format("DD.MM.YYYY") }}
         <v-spacer></v-spacer>
