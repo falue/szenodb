@@ -28,7 +28,7 @@
       iconClasses=""
       buttonClasses=""
       position="right"
-      @uploaded="data.imgs.push(JSON.parse(JSON.stringify($event))), data.imgs.sort((a, b) => b.order - a.order)"
+      @uploaded="saveNewImage($event)"
       @error="$toasted.global.error({msg:$event})"
     ></FileUpload>
     {{data.imgs && data.imgs.length ? 'Upload more images..' : 'Upload images..'}}
@@ -211,6 +211,11 @@ import CsvImport from '@/components/CsvImport'
           }
         });
         this.$emit('cancel');
+      },
+
+      saveNewImage(event) {
+        this.data.imgs.push(JSON.parse(JSON.stringify(event)));
+        this.data.imgs.sort((a, b) => b.order - a.order);
       },
       
       /* IMAGES */
