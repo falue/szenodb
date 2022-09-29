@@ -331,6 +331,7 @@ export default {
   },
 
   md5(text) {
+    if(!text) return text;  // Return falsy values
     return md5(text);
   },
 
