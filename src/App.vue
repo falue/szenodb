@@ -141,3 +141,9 @@ export default {
   }
 };
 </script>
+
+<style>
+  .v-image__image--preload {
+    filter: none;
+  }
+</style>

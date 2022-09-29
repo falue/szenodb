@@ -10,10 +10,13 @@
 
     <v-card-title class="justify-center pa-0 pb-8">
       <div class="relative">
-        <v-avatar :size="120" >
-          <v-img v-if="profile.avatar && profile.avatar.length > 0" :src="profile.avatar" :alt="user.name" />
+        <v-avatar :size="120" class="elevation-8">
+          <v-img v-if="profile.avatar && profile.avatar.length > 0" :src="profile.avatar" :alt="user.name"
+            class="grey darken-3 "
+            :lazy-src="require('@/assets/processImageSmall.png')"
+          />
           <!-- https://avatars.dicebear.com/ -->
-          <v-img v-else :src="`https://avatars.dicebear.com/api/adventurer-neutral/${$helpers.md5(user.name+user.email)}.svg`" class="grey darken-3" :alt="user.name" />
+          <v-img v-else :src="`https://avatars.dicebear.com/api/adventurer-neutral/${$helpers.md5(user.uid)}.svg`" class="grey darken-3" :alt="user.name" />
         </v-avatar>
         <v-btn
           v-if="user.avatar && user.avatar.length"
@@ -31,7 +34,7 @@
           :multiple="false"
           :icon="user.avatar && user.avatar.length ? 'camera' : 'camera-plus'"
           iconClasses=""
-          buttonClasses=""
+          buttonClasses="pink darken-3 elevation-8"
           position="right"
           tooltip="Change avatar"
           @uploadStarted="user.avatar=''"
@@ -103,7 +106,7 @@ import FileUpload from '@/components/FileUpload'
 import Info from '@/components/Info'
 
   export default {
-    name: 'Test',
+    name: 'Profile',
     props: {
       user: Object,
     },
