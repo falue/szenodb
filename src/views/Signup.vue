@@ -101,8 +101,9 @@
           "1992", "biteme", "maggie", "querty", "rangers", "charlie", "martin", "ginger", "yankees", "thunder",
           "Michelle", "aaaaaa"],
         passwordRules: [
-          v => v !== '123456' || `This cannot be your password. Haven't you seen Space Balls? We cannot guarantee any security that way - its the number one of most used passwords of all time.`,
+          v => v !== '123456' || `This cannot be your password. We cannot guarantee any security that way - its the number one of most used passwords of all time.`,
           v => v.toLowerCase() !== 'password' || `This cannot be your password. We cannot guarantee any security that way - its the number two of most used passwords.`,
+          v => v !== '12345' || `This cannot be your password. Haven't you seen Space Balls? We cannot guarantee any security that way - its the number five of most used passwords.`,
           v => !this.veryBadPasswords.includes(v.toLowerCase()) || `This has place ${this.veryBadPasswords.indexOf(v)+1} of the 100 most used passwords ever. Please choose something safe.`,
           v => v.length >= 6 || 'Password must be longer than 6 characters.',
           v => !/^(.)\1*$/.test(v) || 'Password cannot be only one repeated character.',
