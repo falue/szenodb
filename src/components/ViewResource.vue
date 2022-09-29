@@ -176,6 +176,11 @@
       scrollable
     >
       <v-card :ripple="false">
+        <div v-if="$vuetify.breakpoint.smAndUp" class="text-right fixed top right">
+          <v-btn icon @click="magnifyDialog = false" >
+            <v-icon class="red--text">mdi-close</v-icon>
+          </v-btn>
+        </div>
         <v-card-text class="pa-0" :class="$vuetify.breakpoint.xs ? 'relative' : ''">
             <v-img
               :class="$vuetify.breakpoint.xs ? 'absolute fill-height fill-width' : 'relative'"
@@ -183,8 +188,15 @@
               @click="magnifyDialog = false"
               :contain="$vuetify.breakpoint.xs"
             >
+              
               <div v-if="data.content.imgs.length > 1" @click.stop="magnifyPrev()" class="absolute left fill-height" style="width:33%"></div>
-              <div v-if="data.content.imgs.length > 1" @click.stop="magnifyNext()" class="absolute right fill-height" style="width:33%"></div>
+              <div v-if="data.content.imgs.length > 1" @click.stop="magnifyNext()" class="absolute right fill-height" style="width:33%">
+                <div v-if="$vuetify.breakpoint.xs" class="text-right fixed top right">
+                  <v-btn icon @click.stop="magnifyDialog = false" >
+                    <v-icon class="red--text">mdi-close</v-icon>
+                  </v-btn>
+                </div>
+              </div>
             </v-img>
         </v-card-text>
       <v-card-actions class="px-2 py-1 caption grey--text">
