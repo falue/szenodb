@@ -248,7 +248,7 @@ export default {
   },
 
   truncate(string, length, dots='...') {
-    if(string.length <= length) return string;
+    if(!string || string.length <= length) return string;
     length -= dots.length;
     return  string.substring(0,length/2) + dots + string.substring(string.length-length/2, string.length)
   },
