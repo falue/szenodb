@@ -134,6 +134,7 @@ export default {
               imageType: fileData.imageType,
               width: fileData.width,
               height: fileData.height,
+              aspect: fileData.width / fileData.height,
             }
           }),
         order: (this.orderStart ? this.orderStart : 0) + order - this.totalFilesUploaded.length - 1,
