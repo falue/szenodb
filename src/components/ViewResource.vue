@@ -185,7 +185,6 @@
           </v-btn>
         </div>
         <v-card-text class="pa-0" :class="$vuetify.breakpoint.xs ? 'relative' : ''">
-          <pre>{{magnifyDialogImg}}</pre>
             <v-img
               class="grey darken-3"
               :class="$vuetify.breakpoint.xs ? 'absolute fill-height fill-width' : 'relative'"
