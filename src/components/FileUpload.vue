@@ -3,12 +3,13 @@
     <v-tooltip :disabled="!tooltip || $vuetify.breakpoint.smAndDown" :bottom="!position || position === 'bottom'" :right="position === 'right'" :left="position === 'left'" :top="position === 'top'" color="#212121">
       <template v-slot:activator="{ on, attrs }">
         <v-btn dense icon @click="$refs.fileInput.click()" :class="buttonClasses ? buttonClasses : 'pink darken-3'" v-bind="attrs" v-on="on">
-          <v-icon v-if="progress === 0" :class="iconClasses ? iconClasses : 'white--text'" v-bind="attrs" v-on="on">
+          <v-icon v-if="progress === 0 && !resizing" :class="iconClasses ? iconClasses : 'white--text'" v-bind="attrs" v-on="on">
             mdi-{{icon ? icon : 'upload' }}
           </v-icon>
-          <v-progress-circular v-else :value="progress">
+          <v-progress-circular v-else :value="progress" :indeterminate="resizing">
             <div style="font-size:.85em; font-family:sans-serif; line-height:1em; letter-spacing:-1px">
-              {{progress > 9 ? progress : progress+'%'}}
+              <v-icon v-if="resizing" class="heartBeat">mdi-fullscreen-exit</v-icon>
+              <span v-else>{{progress > 9 ? progress : progress+'%'}}</span>
             </div></v-progress-circular>
         </v-btn>
       </template>
@@ -29,16 +30,16 @@
 <script>
 import { storage } from '../firebase'
 export default {
-  props: ['type', 'target', 'multiple', 'orderStart', 'icon', 'iconClasses', 'buttonClasses', 'tooltip', 'position'],
+  props: ['type', 'target', 'multiple', 'maxImageSize', 'orderStart', 'icon', 'iconClasses', 'buttonClasses', 'tooltip', 'position'],
 
   data() {
     return {
-      downloadUrl: "",
       imageData: null,
       progress: 0,
       totalBytes: 0,
       totalFiles: 0,
       totalFilesUploaded: [],
+      resizing: false,
     };
   },
 
@@ -46,22 +47,27 @@ export default {
     async startUpload(event) {
       this.$emit('uploadStarted');
       this.progress = 1;
+      this.maxImageSize = this.maxImageSize ? this.maxImageSize : 0;
       this.totalFiles = event.target.files.length;
       this.totalFilesUploaded = [];
       for (let i = 0; i < event.target.files.length; i++) {
         this.uploadData(event.target.files[i], event.target.files.length-i);
       }
     },
+    
     async uploadData(fileData, order) {
-      // if image, get width/height/type
-      // TODO: image resize
-      fileData = await this.processImage(fileData, 1000, 1000);
+      if(this.maxImageSize > 0) {
+        this.resizing = true;  // display icon in GUI
+        // Get image sizes and resize if necessary
+        fileData = await this.processImage(fileData);
+        this.resizing = false;  // display icon in GUI
+      }
 
+      // Create path with filename but with additional random ID to allow dulicate names of files
       let path = [this.target, `${this.$helpers.createUid()}-${fileData.name}`].join("/");
-      // console.log(path)
-      // console.log(fileData);
-      this.downloadUrl = '';
-      let currentStorageRef =  storage.ref(path).put(fileData);
+      
+      // Save file to db, either original or from resized blob
+      let currentStorageRef =  storage.ref(path).put(fileData.blob ? fileData.blob : fileData);
       // const storageRef = uploadBytes(path).put(fileData);
       currentStorageRef.on(`state_changed`, (snapshot) => {
           this.totalBytes = snapshot.totalBytes;
@@ -85,36 +91,25 @@ export default {
     },
 
     // eslint-disable-next-line no-unused-vars
-    async processImage(fileData, maxWidth, maxHeight) {
+    async processImage(fileData) {
       // Check if is type image with absolute sizes (not vector)
       let isPixelImage = fileData.type.startsWith('image/') && !fileData.type.startsWith('image/svg');
-      // Get img sizes
       if(isPixelImage) {
-        fileData.imageType = "image/pixel";
-
-        let img = new Image()
-        let dimensions = await new Promise((resolve, reject) => {
-          img.onload = () => resolve({
-              width: img.width,
-              height: img.height,
-            }
-          )
-          img.src = window.URL.createObjectURL(fileData)
-          img.onerror = reject
-        }).catch(err => {
-          return {
-              error: err.message,
-              width: 0,
-              height: 0,
-            }
-        })
-        fileData.width = dimensions.width;
-        fileData.height = dimensions.height;
-        img.remove()
+        fileData.imageType = "image";
+        // render image behind the scenes and get new sizes if necessary
+        let resizedImage = await this.resizeImage(fileData, this.maxImageSize)
+        .then(function (resizedImage) {
+          return resizedImage
+        }).catch(function (err) {
+          console.error(err);
+        });
+        fileData.width = resizedImage.width;
+        fileData.height = resizedImage.height;
+        if(resizedImage.blob) fileData.blob = resizedImage.blob;
         return fileData;
 
       } else if(fileData.type.startsWith('image/')) {
-        // Was vector / svg  /else..
+        // Was vector/svg/other img type?..
         fileData.imageType = fileData.type;
         return fileData;
 
@@ -131,8 +126,8 @@ export default {
         path: path,
         url: url,
         lastModified: fileData.lastModified,
-        fileSize: fileData.size,
-        humanSize: this.$helpers.humanSize(fileData.size),
+        fileSize: fileData.blob ? fileData.blob.size : fileData.size,
+        humanSize: this.$helpers.humanSize(fileData.blob ? fileData.blob.size : fileData.size),
         type: fileData.type,
         ...(fileData.imageType && {
             image: {
@@ -159,6 +154,75 @@ export default {
       }
       this.totalBytes = 0;
       this.$refs.fileInput.value='';  // reset form for later use of the same file
+    },
+
+    /* COPY PASTA */
+    /* https://stackoverflow.com/a/39235724 */
+    resizeImage(file, maxSize) {
+      var reader = new FileReader();
+      var image = new Image();
+      var canvas = document.createElement('canvas');
+      var dataURItoBlob = function (dataURI) {
+          var bytes = dataURI.split(',')[0].indexOf('base64') >= 0 ?
+              atob(dataURI.split(',')[1]) :
+              unescape(dataURI.split(',')[1]);
+          var mime = dataURI.split(',')[0].split(':')[1].split(';')[0];
+          var max = bytes.length;
+          var ia = new Uint8Array(max);
+          for (var i = 0; i < max; i++)
+              ia[i] = bytes.charCodeAt(i);
+          return new Blob([ia], { type: mime });
+      };
+
+      var resize = function() {
+          var width = image.width;
+          var height = image.height;
+          if (width > height) {
+            if (width > maxSize) {
+                height *= maxSize / width;
+                width = maxSize;
+              }
+          } else {
+            if (height > maxSize) {
+                width *= maxSize / height;
+                height = maxSize;
+              }
+          }
+
+          // Don't do canvas rendering if image was small enough
+          if(width != image.width) {
+            canvas.width = width;
+            canvas.height = height;
+            canvas.getContext('2d').drawImage(image, 0, 0, width, height);
+            var dataUrl = canvas.toDataURL('image/jpeg');
+            canvas.remove();
+
+            return {
+              blob: dataURItoBlob(dataUrl),
+              width: parseInt(width),
+              height: parseInt(height),
+            };
+          } else {
+            return {
+              width: image.width,
+              height: image.height,
+            }
+          }
+      };
+
+      return new Promise(function (ok, no) {
+          if (!file.type.match(/image.*/)) {
+              no(new Error("Not an image"));
+              return;
+          }
+          reader.onload = function (readerEvent) {
+              image.onload = function () { 
+                return ok(resize());
+              };
+              image.src = readerEvent.target.result;
+          };
+          reader.readAsDataURL(file);
+      });
     },
   },
 };

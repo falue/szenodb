@@ -23,6 +23,7 @@
       type="image/*"
       :target="`resources/${data.id}`"
       :multiple="true"
+      :maxImageSize="1000"
       :orderStart="data.imgs.length"
       icon="image-plus"
       iconClasses=""

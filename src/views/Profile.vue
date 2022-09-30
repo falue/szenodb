@@ -11,7 +11,7 @@
     <v-card-title class="justify-center pa-0 pb-8">
       <div class="relative">
         <v-avatar :size="120" class="elevation-8">
-          <v-img v-if="profile.avatar && profile.avatar.length > 0" :src="profile.avatar" :alt="user.name"
+          <v-img v-if="profile.avatar && profile.avatar.url && profile.avatar.url.length > 0" :src="profile.avatar.url" :alt="user.name"
             class="grey darken-3 "
             :lazy-src="require('@/assets/processImageSmall.png')"
           />
@@ -19,12 +19,12 @@
           <v-img v-else :src="`https://avatars.dicebear.com/api/adventurer-neutral/${$helpers.md5(user.uid)}.svg`" class="grey darken-3" :alt="user.name" />
         </v-avatar>
         <v-btn
-          v-if="user.avatar && user.avatar.length"
+          v-if="profile.avatar && user.avatar.url && user.avatar.url.length"
           icon
           small
           dense
           class="absolute top right op-50"
-          @click="deleteImage(user.avatar)"
+          @click="deleteImage(user.avatar.url)"
         ><v-icon small class="grey--text">mdi-close</v-icon>
         </v-btn>
         <FileUpload
@@ -32,13 +32,14 @@
           type="image/*"
           :target="`users/${user.uid}`"
           :multiple="false"
-          :icon="user.avatar && user.avatar.length ? 'camera' : 'camera-plus'"
+          :maxImageSize="666"
+          :icon="profile.avatar && user.avatar.url && user.avatar.url.length ? 'camera' : 'camera-plus'"
           iconClasses=""
           buttonClasses="pink darken-3 elevation-8"
           position="right"
           tooltip="Change avatar"
-          @uploadStarted="user.avatar=''"
-          @uploaded="profile.avatar=$event.url, saveUserData()"
+          @uploadStarted="user.avatar={}"
+          @uploaded="profile.avatar=$event, saveUserData()"
           @error="$toasted.global.error({msg:$event})"
         ></FileUpload>
       </div>
@@ -197,7 +198,7 @@ import Info from '@/components/Info'
 
       deleteImage(current) {
         this.$store.dispatch('deleteFile', current)
-        this.user.avatar='';
+        this.user.avatar={};
         this.saveUserData();
       },
 

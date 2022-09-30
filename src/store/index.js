@@ -165,7 +165,7 @@ const store = new Vuex.Store({
           public: false,       // https://github.com/falue/szenodb/issues/12
           guiLanguage: 'DE',  // https://github.com/falue/szenodb/issues/14
           contribution: 0,
-          avatar: '',
+          avatar: {},
           createdOn: new Date(),
           lastLogin: new Date(),
         }).then(async function() {
@@ -559,9 +559,10 @@ const store = new Vuex.Store({
       // Delete the file
       deletRef.delete().then(() => {
         // File deleted successfully
-        console.log("success");
+        console.log("Successfully deleted.");
       }).catch((error) => {
         // Uh-oh, an error occurred!
+        console.log("Error while deleting file @ URL", url);
         console.log(error.message);
       });
     },

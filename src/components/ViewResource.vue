@@ -111,7 +111,7 @@
           :style="$vuetify.breakpoint.sm ? 'width: 50%' : 'width: 100%'"
         >
           <v-img
-            class="elevation-8"
+            class="elevation-8 grey darken-3"
             @click="magnify(img, x)"
             :src="img.url"
             lazy
@@ -170,7 +170,10 @@
     <!-- MAGNIFY -->
     <v-dialog
       v-model="magnifyDialog"
-      :max-width="$vuetify.breakpoint.smAndDown ? '85%' : '55%'"
+      :max-width="$vuetify.breakpoint.sm
+        ? '85%'
+        : magnifyDialogImg.image && magnifyDialogImg.image.width > magnifyDialogImg.image.height ? '85%': '45%'
+      "
       :fullscreen="$vuetify.breakpoint.xs"
       :ripple="false"
       scrollable
@@ -182,7 +185,9 @@
           </v-btn>
         </div>
         <v-card-text class="pa-0" :class="$vuetify.breakpoint.xs ? 'relative' : ''">
+          <pre>{{magnifyDialogImg}}</pre>
             <v-img
+              class="grey darken-3"
               :class="$vuetify.breakpoint.xs ? 'absolute fill-height fill-width' : 'relative'"
               :src="magnifyDialogImg.url"
               @click="magnifyDialog = false"
