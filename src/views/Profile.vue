@@ -24,7 +24,7 @@
           small
           dense
           class="absolute top right op-50"
-          @click="deleteImage(user.avatar.url)"
+          @click="deleteImage(user.avatar.path)"
         ><v-icon small class="grey--text">mdi-close</v-icon>
         </v-btn>
         <FileUpload

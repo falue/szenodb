@@ -770,7 +770,7 @@ import EditResource from '@/components/EditResource'
               if(!arrayOfNewImages.includes(this.oldData.imgs[i].url)) {
                 // If old image is not in new image array, delete img froms torage
                 console.log("Delete old image ", this.oldData.imgs[i].name)
-                this.$store.dispatch('deleteFile', this.oldData.imgs[i].url)
+                this.$store.dispatch('deleteFile', this.oldData.imgs[i].path)
                 // } else {
                 //   console.log("levae alone old image ")
                 //   console.log(this.oldData.imgs[i].name)

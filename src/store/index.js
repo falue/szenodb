@@ -552,36 +552,18 @@ const store = new Vuex.Store({
     },
     
     // eslint-disable-next-line no-unused-vars
-    async deleteFile({state}, url) {
+    async deleteFile({state}, path) {
       // console.log("delete: ", url);
-      let fileRef = await store.dispatch('getStorageRefFromUrl', url);
-      let deletRef = storage.ref().child(fileRef);
+      let deletRef = storage.ref().child(path);
       // Delete the file
       deletRef.delete().then(() => {
         // File deleted successfully
-        console.log("Successfully deleted.");
+        console.log("Successfully deleted file @ path ", path);
       }).catch((error) => {
         // Uh-oh, an error occurred!
-        console.log("Error while deleting file @ URL", url);
+        console.log("Error while deleting file @ path ", path);
         console.log(error.message);
       });
-    },
-
-    // eslint-disable-next-line no-unused-vars
-    getStorageRefFromUrl({state}, url) {
-      try {
-        // Remove token and hostname and split into folders
-        let fileRef = new URL(url).pathname.split("/");
-        // Get last "folder" after /v0/b/szenodb/o/
-        fileRef = fileRef.pop();
-        // Make "/" out of "%2F"
-        fileRef = decodeURIComponent(fileRef);
-        return fileRef
-      } catch {
-        // Was not URL (e.g. folder)
-        console.log("Path was folder?", url)
-        return url
-      }
     },
       
     // eslint-disable-next-line no-unused-vars
