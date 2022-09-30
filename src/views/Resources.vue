@@ -89,7 +89,7 @@
                 class="grey darken-3 mx-2"
                 :small="$vuetify.breakpoint.mdAndUp"
                 :color="filterSet === 'showFavs' ? 'red' : ''"
-                @click="loadFavs()">
+                @click="loadFavs(), viewIndex = -1">
                 <v-icon :small="$vuetify.breakpoint.mdAndUp">mdi-heart</v-icon>
                 <!-- :color="user.favorites.includes(view.id) ? 'red' : ''" -->
               </v-btn>
@@ -105,7 +105,7 @@
                 class="grey darken-3 mx-2"
                 :small="$vuetify.breakpoint.mdAndUp"
                 :color="filterSet === 'showOwnResources' ? 'primary' : ''"
-                @click="loadOwnResources()">
+                @click="loadOwnResources(), viewIndex = -1">
                 <v-icon :small="$vuetify.breakpoint.mdAndUp">mdi-account-eye</v-icon>
                 <!-- :color="user.favorites.includes(view.id) ? 'red' : ''" -->
               </v-btn>
@@ -121,7 +121,7 @@
                 class="grey darken-3 mx-2"
                 :color="filterSet === 'deleted' ? 'red' : ''"
                 :small="$vuetify.breakpoint.mdAndUp"
-                @click="loadDeletedResources()">
+                @click="loadDeletedResources(), viewIndex = -1">
                 <v-icon :small="$vuetify.breakpoint.mdAndUp">mdi-delete</v-icon>
                 <!-- :color="user.favorites.includes(view.id) ? 'red' : ''" -->
               </v-btn>
@@ -137,7 +137,7 @@
                 v-bind="attrs" v-on="on"
                 class="mx-2 red--text"
                 :small="$vuetify.breakpoint.mdAndUp"
-                @click="resetSearch(maxSearchResults), filter = ''">
+                @click="resetSearch(maxSearchResults), filter = '', viewIndex = -1">
                 <v-icon :small="$vuetify.breakpoint.mdAndUp">mdi-close</v-icon>
                 <!-- :color="user.favorites.includes(view.id) ? 'red' : ''" -->
               </v-btn>
