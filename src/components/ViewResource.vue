@@ -193,8 +193,25 @@
               :contain="$vuetify.breakpoint.xs"
             >
               
-              <div v-if="data.content.imgs.length > 1" @click.stop="magnifyPrev()" class="absolute left fill-height" style="width:33%"></div>
-              <div v-if="data.content.imgs.length > 1" @click.stop="magnifyNext()" class="absolute right fill-height" style="width:33%">
+              <div v-if="data.content.imgs.length > 1"
+                v-touch="{
+                  left: () => magnifyPrev(),
+                  right: () => magnifyNext(),
+                }"
+                @click.stop="magnifyPrev()"
+                class="absolute left fill-height"
+                :style="$vuetify.breakpoint.xs ? 'width:50%' : 'width:33%'"
+              >
+              </div>
+              <div v-if="data.content.imgs.length > 1"
+                v-touch="{
+                  left: () => magnifyPrev(),
+                  right: () => magnifyNext(),
+                }"
+                @click.stop="magnifyNext()"
+                class="absolute right fill-height"
+                :style="$vuetify.breakpoint.xs ? 'width:50%' : 'width:33%'"
+              >
                 <div v-if="$vuetify.breakpoint.xs" class="text-right fixed top right">
                   <v-btn icon @click.stop="magnifyDialog = false" >
                     <v-icon class="red--text">mdi-close</v-icon>
