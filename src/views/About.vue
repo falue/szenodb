@@ -280,6 +280,16 @@ import Copy from '@/components/Copy'
                       The time I need (or you need!) for new features can vary massively, and perhaps not in the ways you imagine.`
           },
           {
+            'question': 'What external services do you use for this?',
+            'answer': `
+                      Frontend by <a href="https://vuejs.org" target="_blank">Vue.js</a> with <a href="https://vuetifyjs.com/" target="_blank">Vuetify</a></p><p>
+                      Backend & Authentication by <a href="https://firebase.google.com/" target="_blank">Google Firebase</a></p><p>
+                      Dynamic image storage by <a href="https://firebase.google.com/products/storage" target="_blank">Google Firebase Storage</a></p><p>
+                      Dynamic translations by <a href="https://deepl.com" target="_blank">Deepl.com</a></p><p>
+                      No tracking/analytics tools are being used.
+                      `
+          },
+          {
             'question': 'I have problems!',
             'answer': `Not really a question, but good grief! I hope you're all right.
                       </p><p>
