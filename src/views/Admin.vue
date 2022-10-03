@@ -19,7 +19,7 @@
          <label class="mx-2 pointer"><input type="radio" name="sortby" @change="getUsers('name','asc')"> Name</label>
          <label class="mx-2 pointer"><input type="radio" name="sortby" @change="getUsers('email','asc')"> Email</label>
          <label class="mx-2 pointer"><input type="radio" name="sortby" @change="getUsers('role','asc')"> Role</label>
-         <label class="mx-2 pointer"><input type="radio" name="sortby" @change="getUsers('lastLogin','desc')"> Lasto login</label>
+         <label class="mx-2 pointer"><input type="radio" name="sortby" @change="getUsers('lastLogin','desc')"> Last login</label>
          <label class="mx-2 pointer"><input type="radio" name="sortby" @change="getUsers('kicked','desc')"> Kicked</label>
         <div class="pa-0 py-4" style="max-height:1000px; overflow-y:auto;">
           <div
