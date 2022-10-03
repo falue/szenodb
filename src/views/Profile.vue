@@ -94,7 +94,7 @@
       <pre class="grey--text" style="display:inline">{{user.uid}}</pre>
       <Copy :data="user.uid" dataName="user ID"></Copy>
       <br>
-      and you have <span class="orange--text">{{user.contribution}}</span> contribution points. {{"🥳 ".repeat(user.contribution > 500 ? 5 : user.contribution / 100)}}
+      and you have <span class="orange--text">{{user.contribution.toLocaleString()}}</span> contribution points. {{"🥳 ".repeat(user.contribution > 500 ? 5 : user.contribution / 100)}}
       <Info title="Contribution Points" text="are calculated from your activity: Creating or editing resources, and logging in.<br>Currently, they are not used for anything."></Info>
     </v-card>
   </div>

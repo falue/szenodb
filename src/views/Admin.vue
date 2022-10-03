@@ -11,7 +11,16 @@
         <!-- USERS -->
         <v-card-title class="justify-center">Users</v-card-title>
 
-         {{users.length}} users in total, combined effort: <span class="orange--text">{{totalContribution}}</span> contribution points
+         {{users.length}} users in total, combined effort: <span class="orange--text">{{totalContribution.toLocaleString()}}</span> contribution points
+         <br>
+         Sort by 
+         <label class="mx-2 pointer"><input type="radio" name="sortby" @change="getUsers('createdOn', 'desc')" checked> Created</label>
+         <label class="mx-2 pointer"><input type="radio" name="sortby" @change="getUsers('contribution','desc')"> Contribution</label>
+         <label class="mx-2 pointer"><input type="radio" name="sortby" @change="getUsers('name','asc')"> Name</label>
+         <label class="mx-2 pointer"><input type="radio" name="sortby" @change="getUsers('email','asc')"> Email</label>
+         <label class="mx-2 pointer"><input type="radio" name="sortby" @change="getUsers('role','asc')"> Role</label>
+         <label class="mx-2 pointer"><input type="radio" name="sortby" @change="getUsers('lastLogin','desc')"> Lasto login</label>
+         <label class="mx-2 pointer"><input type="radio" name="sortby" @change="getUsers('kicked','desc')"> Kicked</label>
         <div class="pa-0 py-4" style="max-height:1000px; overflow-y:auto;">
           <div
             v-for="(singleUser, i) in users"
@@ -182,18 +191,7 @@ import Copy from '@/components/Copy'
             // this.about = {"me": data.me, "email": data.email};
             this.backups = data
         });
-        this.unsubscribeUsers = db.collection('users')
-        .orderBy('createdOn', 'desc')
-        //.where('user_id', '==', firebaseUser.uid)
-        .onSnapshot(querySnapshot => {
-          let newData = [];
-          querySnapshot.forEach(doc => {
-            let f = doc.data();
-            f.id = doc.id;
-            if(!f.deletedUser) newData.push(f);
-          });
-          this.users = newData;
-        });
+        this.getUsers('createdOn', 'desc');
       }
     },
 
@@ -213,6 +211,26 @@ import Copy from '@/components/Copy'
     },
 
     methods: {
+      getUsers(orderBy, sort) {
+        // Terminate earlier snapshots if existing
+        if(typeof unsubscribeSettings === 'function') this.unsubscribeUsers();
+        // Circumvent doubled identical "orderBy" createdOn
+        let secondary = orderBy === 'createdOn' ? 'email' : 'createdOn';
+        this.unsubscribeUsers = db.collection('users')
+        .orderBy(orderBy, sort)
+        .orderBy(secondary, 'desc')
+        //.where('user_id', '==', firebaseUser.uid)
+        .onSnapshot(querySnapshot => {
+          let newData = [];
+          querySnapshot.forEach(doc => {
+            let f = doc.data();
+            f.id = doc.id;
+            if(!f.deletedUser) newData.push(f);
+          });
+          this.users = newData;
+        });
+      },
+
       setMaintenance(value) {
         this.$store.dispatch('updateField', {'collection': 'settings', 'document': 'settings', 'field': 'maintenance', 'data': value})
       },
