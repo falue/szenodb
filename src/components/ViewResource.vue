@@ -68,7 +68,7 @@
 
       <v-card-text v-if="data.content.address" class="pt-8 pb-0">
       <div style="line-height:1em" class="grey--text overline">{{data.content.address.startsWith('http') ? 'Map' : 'Address'}}</div>
-      <a class="no-underline" :class="{'bigMobileButton' : $vuetify.breakpoint.smAndDown}" :href="data.content.address.startsWith('http') ? data.content.address :  this.$parent.$parent.createGoogleMapsLink(data.content.address)" target="_blank">
+      <a class="no-underline" :class="{'bigMobileButton' : $vuetify.breakpoint.smAndDown}" :href="getAddressLink(data)" target="_blank">
         {{data.content.address.startsWith('http') ? "Google Maps" : data.content.address }}
         </a>
       <Copy :data="data.content.address" dataName="address or link" position="right"></Copy>
@@ -151,7 +151,7 @@
         class="grey darken-3 mx-2"
         :small="$vuetify.breakpoint.mdAndUp"
         color="primary"
-        @click="$helpers.copyClipBoard(getCurrentUrl(), 'URL')">
+        @click="$helpers.copyClipBoard(makeShareUrl(data), 'Link for sharing in messengers')">
         <v-icon :small="$vuetify.breakpoint.mdAndUp">mdi-share-variant</v-icon>
       </v-btn>
       <v-btn
@@ -269,6 +269,29 @@ import VCardExport from '@/components/VCardExport'
       }
     },
     methods: {
+      makeShareUrl(data) {
+        console.log(data);
+        let shareText = [
+          data.content.web ? `${this.$helpers.createWebsiteUrl(data.content.web)}\n` : '',
+          [
+            data.content.title,
+            data.content.email ? data.content.email : '',
+            data.content.tel ? data.content.tel : '',
+          ].filter(n => n).join(" | "),
+          "\n",
+          this.$helpers.ellipsis(data.content.resources, 160),
+          "\n",
+          data.content.address ? `\n${this.getAddressLink(data)}\n` : '',
+          "\n",
+          `🛠️ found on szenodb.ch 💜\n${this.$route.query.q ? `Find more ${this.$route.query.q}: ` : ''}${this.getCurrentUrl()}`,
+        ]
+        return  shareText.filter(n => n).join("");
+      },
+
+      getAddressLink(data) {
+        return data.content.address.startsWith('http') ? data.content.address :  this.$parent.$parent.createGoogleMapsLink(data.content.address)
+      },
+
       getCurrentUrl() {
         let path = window.location.origin + "/#" + this.$route.fullPath
         console.log(path)
