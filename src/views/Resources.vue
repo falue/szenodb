@@ -391,6 +391,9 @@ import EditResource from '@/components/EditResource'
 
     watch: {
       filter: function(){
+        if(!this.filter.length) {
+          this.$router.push({path: this.$route.path})
+        }
         if(this.searchTimeout) {
           clearTimeout(this.searchTimeout);  // do not overlapp last search
         }
@@ -411,6 +414,9 @@ import EditResource from '@/components/EditResource'
             if(listData) {
               this.viewResource(listData[0], listData[1])
             }
+          }
+          if(this.$route.query.q) {
+            this.filter = this.$route.query.q;
           }
         } else {
           // Reset page with no drawer
@@ -568,8 +574,13 @@ import EditResource from '@/components/EditResource'
         // kinda "fast" search
         this.loading = true
          this.$store.dispatch('searchResources', payload).then(() => {
-           // console.log("fetched!", this.$route.params.selectedProduction)
-           this.loading = false
+            // console.log("fetched!", this.$route.params.selectedProduction)
+            if(!this.$route.fullPath.includes(`q=${payload}`)) {
+              this.$router.push({path: this.$route.fullPath, query: { 
+                ...(payload.length && {q: payload})
+              }})
+            }
+            this.loading = false
           });
           // TODO
           // do a fine search with similar characters and typos in each field..
@@ -627,6 +638,7 @@ import EditResource from '@/components/EditResource'
       viewResourceFromHardReoadedUrl() {
         // get ID from PARAMS
         let view = this.$route.query.view;
+        let q = this.$route.query.q;
         if(view) {
           // URL had "view", load document and display
           this.unsubscribeUrlView = db.collection("resources")
@@ -642,11 +654,19 @@ import EditResource from '@/components/EditResource'
             }
           });
         }
+        if(q) {
+          this.filter = q;
+        }
       },
 
       setViewUrl(id) {
         // Set URL to .../#/resources?view=xxx if not already there
-        if(this.$route.fullPath != `/resources?view=${id}` ) this.$router.push({path: this.$route.fullPath, query: { view: id }})
+        if(!this.$route.fullPath.includes(`/resources?view=${id}`)) {
+          this.$router.push({path: this.$route.fullPath, query: { 
+            view: id,
+            //...(this.filter.length && {q: this.filter})
+          }})
+        }
       },
       
       viewResource(index, data) {
@@ -868,7 +888,12 @@ import EditResource from '@/components/EditResource'
 
       cancelEditResource() {
         // Reset URL to .../#/resources
-        if(this.$route.fullPath != '/resources') this.$router.push({path: this.$route.path})
+        if(this.$route.fullPath != '/resources') {
+          this.$router.push({
+            path: this.$route.path,
+            query: {...(this.filter.length && {q: this.filter})}
+          })
+        }
         // Delete temporary uploaded files before saved as new
         if(this.dataMode === 'new' && this.post.imgs.length > 0) {
           console.log('Temp. image added - remove them from storage.');
