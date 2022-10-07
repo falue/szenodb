@@ -79,7 +79,7 @@
         </div>
 
         <!-- FILTERS -->
-        <div v-else>
+        <v-card-actions class="pa-0 grey--text " v-else>
           Filter resources: 
           <v-tooltip :disabled="$vuetify.breakpoint.smAndDown" bottom>
             <template v-slot:activator="{ on, attrs }">
@@ -144,7 +144,22 @@
             </template>
             <span>Reset filter</span>
           </v-tooltip>
-        </div>
+          <v-spacer></v-spacer>
+          <v-tooltip :disabled="$vuetify.breakpoint.smAndDown" bottom v-if="this.filter.length">
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                icon
+                v-bind="attrs" v-on="on"
+                class="grey darken-3 mx-2"
+                :small="$vuetify.breakpoint.mdAndUp"
+                color="primary"
+                @click="$helpers.copyClipBoard(shareResults(), 'Current search')">
+                <v-icon :small="$vuetify.breakpoint.mdAndUp">mdi-share-variant</v-icon>
+              </v-btn>
+            </template>
+            <span>Share these results</span>
+          </v-tooltip>
+        </v-card-actions>
 
         <!-- LIST RESOURCES -->
         <v-container v-if="resources.length" class="pa-0 pt-4 ma-0 fill-width" style="max-width:initial">
@@ -633,6 +648,15 @@ import EditResource from '@/components/EditResource'
           this.filterSet = 'deleted';
           this.$store.dispatch('showDeletedFlags');
         }
+      },
+
+      shareResults() {
+        let share = [
+          this.$helpers.getCurrentUrl(),
+          "",
+          `🛠️ found ${this.resources.length} results for '${this.filter}' on szenodb.ch 💜`,
+        ]
+        return share.join("\n");
       },
 
       viewResourceFromHardReoadedUrl() {

@@ -283,7 +283,7 @@ import VCardExport from '@/components/VCardExport'
           "\n",
           data.content.address ? `\n${this.getAddressLink(data)}\n` : '',
           "\n",
-          `🛠️ found on szenodb.ch 💜\n${this.$route.query.q ? `Find more ${this.$route.query.q}: ` : ''}${this.getCurrentUrl()}`,
+          `🛠️ found on szenodb.ch 💜\n${this.$route.query.q ? `Find more ${this.$route.query.q}: ` : ''}${this.$helpers.getCurrentUrl()}`,
         ]
         return  shareText.filter(n => n).join("");
       },
@@ -292,11 +292,6 @@ import VCardExport from '@/components/VCardExport'
         return data.content.address.startsWith('http') ? data.content.address :  this.$parent.$parent.createGoogleMapsLink(data.content.address)
       },
 
-      getCurrentUrl() {
-        let path = window.location.origin + "/#" + this.$route.fullPath
-        console.log(path)
-        return path;
-      },
       favResource(id) {
         const index = this.user.favorites.indexOf(id);
         if (index > -1) {

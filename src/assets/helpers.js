@@ -330,6 +330,12 @@ export default {
     return "http://"+url
   },
 
+  getCurrentUrl() {
+    let path = window.location.href
+    console.log(path)
+    return path;
+  },
+
   md5(text) {
     if(!text) return text;  // Return falsy values
     return md5(text);
