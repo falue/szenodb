@@ -164,7 +164,7 @@
         <!-- LIST RESOURCES -->
         <v-container v-if="resources.length" class="pa-0 pt-4 ma-0 fill-width" style="max-width:initial">
           <!-- TABLE HEADER -->
-          <div class="primary--text italics my-2 grey darken-4" :class="$vuetify.breakpoint.mdAndUp ? 'px-4' : 'px-2'">
+          <div v-if="$vuetify.breakpoint.smAndUp" class="primary--text italics my-2 grey darken-4" :class="$vuetify.breakpoint.mdAndUp ? 'px-4' : 'px-2'">
               <div style="vertical-align: top; width:20%; display:inline-block;">Firm</div>
               <div v-if="isSmallWithOpenDrawer" :style="$vuetify.breakpoint.mdAndUp ? 'width:60%' : 'width:80%'" class="pl-2" style="display:inline-block">
                   Resources
@@ -177,9 +177,13 @@
           <!-- LIST RESOURCES -->
           <div
             v-for="(resource, i) in resources"
-            class="resource my-2"
-            style="height:56px; overflow: hidden;"
-            :style="resource.flags.unreliable ? 'text-decoration: line-through !important' : ''"
+            class="resource rounded"
+            style="overflow: hidden;"
+            :style="resource.flags.unreliable
+                ? $vuetify.breakpoint.smAndUp
+                  ? 'text-decoration: line-through !important; height:56px;'
+                  : 'text-decoration: line-through !important;'
+                  : ''"
             :key="i"
             :class="[
               viewIndex === i && drawerOpen || viewIndex === i && editedResource  ? 'primary darken-4' :
@@ -192,22 +196,42 @@
                     : '',
               $vuetify.breakpoint.mdAndUp
                 ? 'px-4'
-                : 'px-2'
+                : 'px-2',
+              $vuetify.breakpoint.xs
+                ? 'my-6'
+                : 'my-2',
             ]"
             @click="setViewUrl(resource.id)"
           >
-            <div class="pt-1" style="text-decoration: inherit; vertical-align: top; width:20%; display:inline-block;">
+            <div
+              class="pt-1"
+              style="text-decoration: inherit; vertical-align: top; display:inline-block;"
+              :style="$vuetify.breakpoint.smAndUp ? 'width:20%;' : 'width:100%; overflow: hidden; text-overflow:ellipsis; white-space: nowrap;'"
+            >
               <!-- min-width:150px;  -->
-              <div style="text-decoration: inherit; overflow: hidden; text-overflow:ellipsis; white-space: nowrap; text-transform: capitalize;">{{resource.content.title}}
+              <div
+                style="text-decoration: inherit; overflow: hidden; text-overflow:ellipsis; white-space: nowrap; text-transform: capitalize;"
+                :style="$vuetify.breakpoint.xs ? 'display:inline' : ''"
+              >{{resource.content.title}}{{resource.content.address && $vuetify.breakpoint.xs ? ', ' : ''}}
                 <v-icon small color="yellow" title="Exact match" v-if="resource.primaryResult">mdi-star</v-icon>
               </div>
-              <div style="overflow: hidden; text-overflow:ellipsis; white-space: nowrap" v-if="resource.content.address">
+              <div
+                v-if="resource.content.address"
+                style="overflow: hidden; text-overflow:ellipsis; white-space: nowrap"
+                :style="$vuetify.breakpoint.xs ? 'display:inline;' : ''"
+              >
                 <a :href="createGoogleMapsLink(resource.content.address)" target="_blank" onclick="event.stopPropagation();" class="no-underline" style="text-transform: capitalize;">
                   {{guessCity(resource.content.address)}}
                 </a>
               </div>
             </div>
-            <div v-if="isSmallWithOpenDrawer" :style="$vuetify.breakpoint.smAndUp ? 'width:60%' : 'width:80%'" class="grey--text pl-2 pt-1" style="text-decoration: inherit; display:inline-block">
+            <div
+              v-if="isSmallWithOpenDrawer"
+              class="grey--text"
+              :class="$vuetify.breakpoint.smAndUp ? 'pl-2 pt-1' : ''"
+              style="text-decoration: inherit; display:inline-block"
+              :style="$vuetify.breakpoint.smAndUp ? 'width:60%' : $vuetify.breakpoint.xs ? 'width:100%' : 'width:80%'"
+            >
               <div v-if="user.role === 'admin' && resource.flags.deleted">
                 Flagged by
                 {{resource.flags.userName}},
