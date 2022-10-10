@@ -183,7 +183,7 @@
                 ? $vuetify.breakpoint.smAndUp
                   ? 'text-decoration: line-through !important; height:56px;'
                   : 'text-decoration: line-through !important;'
-                  : ''"
+                  : 'height:56px;'"
             :key="i"
             :class="[
               viewIndex === i && drawerOpen || viewIndex === i && editedResource  ? 'primary darken-4' :
