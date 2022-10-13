@@ -7,6 +7,11 @@ module.exports = {
   "transpileDependencies": [
     "vuetify"
   ],
+  devServer: {
+    // https: true,
+    // host: 'localhost',  // those make hot reload possible on desktop, but fail on mobile to display at all
+    // port: 8080  // those make hot reload possible on desktop, but fail on mobile to display at all
+  }
   // Remove this option if deployed & served directly on the root folder on my server:
   /* publicPath: process.env.NODE_ENV === 'production'
     ? "/" + path.basename(path.resolve())
