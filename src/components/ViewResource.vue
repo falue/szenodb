@@ -146,14 +146,14 @@
         <v-icon :small="$vuetify.breakpoint.mdAndUp">mdi-pencil</v-icon>
       </v-btn>
       <v-spacer></v-spacer>
-      <v-btn
-        icon
-        class="grey darken-3 mx-2"
-        :small="$vuetify.breakpoint.mdAndUp"
-        color="primary"
-        @click="$helpers.copyClipBoard(makeShareUrl(data), 'Link for sharing in messengers')">
-        <v-icon :small="$vuetify.breakpoint.mdAndUp">mdi-share-variant</v-icon>
-      </v-btn>
+
+      <Share
+        position="top"
+        buttonClasses="mt-0"
+        :text="makeShareText(data)"
+        tooltip="Share this resource"
+      ></Share>
+      
       <v-btn
         icon
         class="grey darken-3 mx-2"
@@ -245,11 +245,12 @@
 <script>
 import Copy from '@/components/Copy'
 import VCardExport from '@/components/VCardExport'
+import Share from '@/components/Share'
 
   export default {
     props: ['data', 'user'],
     components: {
-      Copy, VCardExport
+      Copy, VCardExport, Share
     },
     data() {
       return {
@@ -269,21 +270,26 @@ import VCardExport from '@/components/VCardExport'
       }
     },
     methods: {
-      makeShareUrl(data) {
-        console.log(data);
+      makeShareText(data) {
         let shareText = [
-          data.content.web ? `${this.$helpers.createWebsiteUrl(data.content.web)}\n` : '',
+          // data.content.web ? `${this.$helpers.createWebsiteUrl(data.content.web)}\n` : '',
+          data.content.web ? this.$helpers.createWebsiteUrl(data.content.web) : this.$helpers.getCurrentUrl(),
+          "\n\n",
+          data.content.title,
+          "\n",
+          this.$helpers.ellipsis(data.content.resources, 160, " (...)"),
+          "\n",
+          data.content.email || data.content.tel || data.content.address ? '\n' : '',
           [
-            data.content.title,
             data.content.email ? data.content.email : '',
-            data.content.tel ? data.content.tel : '',
-          ].filter(n => n).join(" | "),
+            data.content.tel ? data.content.tel.replace(/\s+/g, '') : '',
+            data.content.address ? this.getAddressLink(data) : '',
+          ].filter(n => n).join("\n"),
+          data.content.email || data.content.tel || data.content.address ? '\n' : '',
           "\n",
-          this.$helpers.ellipsis(data.content.resources, 160),
-          "\n",
-          data.content.address ? `\n${this.getAddressLink(data)}\n` : '',
-          "\n",
-          `🛠️ found on szenodb.ch 💜\n${this.$route.query.q ? `Find more ${this.$route.query.q}: ` : ''}${this.$helpers.getCurrentUrl()}`,
+          // ALT: `🛠️ Found on szenodb.ch 💜${this.$route.query.q && !data.content.web ? `\nFind more ${this.$route.query.q}: ${this.$helpers.getCurrentUrl()}` : ''}${data.content.web ? this.$helpers.getCurrentUrl() : ''}`,
+          `🛠️ Found on szenodb.ch 💜\n${this.$route.query.q && data.content.web ? `Find more ${this.$route.query.q}: ` : ''}${data.content.web ? this.$helpers.getCurrentUrl() : ''}`,
+
         ]
         return  shareText.filter(n => n).join("");
       },

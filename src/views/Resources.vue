@@ -146,20 +146,15 @@
             <span>Reset filter</span>
           </v-tooltip>
           <v-spacer></v-spacer>
-          <v-tooltip :disabled="$vuetify.breakpoint.smAndDown" bottom v-if="this.filter.length">
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn
-                icon
-                v-bind="attrs" v-on="on"
-                class="grey darken-3 mx-2"
-                :small="$vuetify.breakpoint.mdAndUp"
-                color="primary"
-                @click="$helpers.copyClipBoard(shareResults(), 'Current search')">
-                <v-icon :small="$vuetify.breakpoint.mdAndUp">mdi-share-variant</v-icon>
-              </v-btn>
-            </template>
-            <span>Share these results</span>
-          </v-tooltip>
+
+          <Share
+            v-if="this.filter.length >= 2"
+            buttonClasses="mt-0"
+            :text="makeShareText()"
+            toastedInfo="Current search"
+            tooltip="Share these results"
+          ></Share>
+
         </v-card-actions>
 
         <!-- LIST RESOURCES -->
@@ -385,6 +380,7 @@
 import { db } from '../firebase'
 import ViewResource from '@/components/ViewResource'
 import EditResource from '@/components/EditResource'
+import Share from '@/components/Share'
 
   export default {
     name: 'Resource',
@@ -395,7 +391,7 @@ import EditResource from '@/components/EditResource'
     },
 
     components: {
-      ViewResource, EditResource
+      ViewResource, EditResource, Share
     },
     
     data () {
@@ -679,16 +675,7 @@ import EditResource from '@/components/EditResource'
         }
       },
 
-      shareResults() {
-        let share = [
-          this.$helpers.getCurrentUrl(),
-          "",
-          `🛠️ found ${this.resources.length} results for '${this.filter}' on szenodb.ch 💜`,
-        ]
-        return share.join("\n");
-      },
-
-      viewResourceFromHardReoadedUrl() {
+viewResourceFromHardReoadedUrl() {
         // get ID from PARAMS
         let view = this.$route.query.view;
         let q = this.$route.query.q;
@@ -974,6 +961,15 @@ import EditResource from '@/components/EditResource'
         // return this.$helpers.capitalize(city.trim());
         return city;
       },
+
+      makeShareText() {
+        let resourcesLength = this.resources.length;
+        let first5Resources = this.resources.map(x => { return x.content.title }).slice(0, 5).join(', ');
+        let titlesOfResources = `${first5Resources}${resourcesLength > 5 ? ', ...' : ''}`;
+        let url = this.$helpers.getCurrentUrl();
+        let text = `${url}\n\n🛠️ Found ${resourcesLength} ${resourcesLength > 1 ? 'results' : 'result'} for '${this.filter}' on szenodb.ch 💜:\n${titlesOfResources}`;
+        return text
+      }
     },
   }
 </script>
