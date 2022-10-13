@@ -776,7 +776,7 @@ import EditResource from '@/components/EditResource'
 
       createNewFromSearch() {
         this.post.title=this.filter; 
-        this.filter=''; 
+        // this.filter='';   // FIXME: Does not work to clear searchfield because drawer gets closed when empty searchfield?
         this.resetSearch(this.maxSearchResults);  // rebuild list
         this.dataMode = 'new'; 
         this.drawerOpen = true;
