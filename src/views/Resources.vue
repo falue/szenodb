@@ -179,11 +179,15 @@
             v-for="(resource, i) in resources"
             class="resource rounded"
             style="overflow: hidden;"
-            :style="resource.flags.unreliable
-                ? $vuetify.breakpoint.smAndUp
-                  ? 'text-decoration: line-through !important; height:56px;'
-                  : 'text-decoration: line-through !important;'
-                  : 'height:56px;'"
+            :style="
+                resource.flags.unreliable
+                ? $vuetify.breakpoint.xs
+                  ? 'text-decoration: line-through !important;'
+                  : 'text-decoration: line-through !important; height:56px;'
+                : $vuetify.breakpoint.xs
+                  ? 'min-height:82px;'
+                  : ''
+            "
             :key="i"
             :class="[
               viewIndex === i && drawerOpen || viewIndex === i && editedResource  ? 'primary darken-4' :
@@ -230,7 +234,7 @@
               class="grey--text"
               :class="$vuetify.breakpoint.smAndUp ? 'pl-2 pt-1' : ''"
               style="text-decoration: inherit; display:inline-block"
-              :style="$vuetify.breakpoint.smAndUp ? 'width:60%' : $vuetify.breakpoint.xs ? 'width:100%' : 'width:80%'"
+              :style="$vuetify.breakpoint.smAndUp ? 'width:55%' : $vuetify.breakpoint.xs ? 'width:100%' : 'width:75%'"
             >
               <div v-if="user.role === 'admin' && resource.flags.deleted">
                 Flagged by
@@ -243,10 +247,10 @@
                   {{resource.content.resources}}
               </div>
             </div>
-            <div class="pt-3" v-if="$vuetify.breakpoint.smAndUp" :style="isSmallWithOpenDrawer ? '' : 'width:80%'" style="width:20%; text-align:right; vertical-align: top; display:inline-block">
+            <div class="pt-3" v-if="$vuetify.breakpoint.smAndUp" :style="isSmallWithOpenDrawer ? '' : 'width:75%'" style="width:25%; text-align:right; vertical-align: top; display:inline-block">
               <a v-if="resource.content.web" :title="resource.content.web" :href="$helpers.createWebsiteUrl(resource.content.web)" onclick="event.stopPropagation();" target="_blank" class="no-underline">
                 <v-btn icon class="primary ml-1" :small="$vuetify.breakpoint.mdAndUp">
-                  <v-icon>mdi-link-variant</v-icon>
+                  <v-icon>mdi-earth</v-icon>
                 </v-btn>
               </a>
               <v-btn title="View" icon v-if="$vuetify.breakpoint.mdAndUp" class="primary ml-1" :small="$vuetify.breakpoint.mdAndUp" @click.stop="setViewUrl(resource.id)">
