@@ -53,6 +53,7 @@
         <v-text-field
           :loading="loading"
           filled
+          ref="filter"
           label="Search.."
           type="text"
           class="mt-4 fill-width"
@@ -62,7 +63,7 @@
           :error="!!filter.length && resources.length == 0"
           v-on:keyup.enter="!!filter.length && resources.length == 0 ? createNewFromSearch() : search(filter)"
         >
-        <v-icon slot="append" :class="filter.length ? 'hover-red' : ''" @click="filter = '';">{{filter.length ? 'mdi-close' : 'mdi-magnify'}}</v-icon>
+        <v-icon slot="append" :class="filter.length ? 'hover-red' : ''" @click="filter = ''; $refs['filter'].blur()">{{filter.length ? 'mdi-close' : 'mdi-magnify'}}</v-icon>
         <template v-slot:append-outer>
           <div class="primary ma-0 addNewResource">
             <v-icon color="white" @click="resetSearch(maxSearchResults), dataMode = 'new'; drawerOpen = true">mdi-plus</v-icon> 
