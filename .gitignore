@@ -3,6 +3,7 @@ node_modules
 /dist
 /_tools
 src/auth.js
+src/fb_rules.js
 
 # local env files
 .env.local
