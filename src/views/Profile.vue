@@ -8,12 +8,16 @@
       style="overflow-y: auto;"
     >
 
+    <!-- user.public: <pre>{{user.public}}</pre> -->
+    <!-- profile.public: <pre>{{profile.public}}</pre> -->
+    <!-- profile.colleague: <pre>{{profile.colleague}}</pre> -->
+    <!-- profile: <pre>{{profile}}</pre> -->
+
     <v-card-title class="justify-center pa-0 pb-8">
       <div class="relative">
         <v-avatar :size="120" class="elevation-8">
           <v-img v-if="profile.avatar && profile.avatar.url && profile.avatar.url.length > 0" :src="profile.avatar.url" :alt="user.name"
             class="grey darken-3 "
-            :lazy-src="require('@/assets/processImageSmall.png')"
           />
           <!-- https://avatars.dicebear.com/ -->
           <v-img v-else :src="`https://avatars.dicebear.com/api/adventurer-neutral/${$helpers.md5(user.uid)}.svg`" class="grey darken-3" :alt="user.name" />
