@@ -188,7 +188,7 @@
 
           {'title':`Copyright free images & data`,
            'desc':``,
-           'web':[`https://pixy.org/`, `https://www.pexels.com/de-de/`, `https://wordpress.org/openverse/?referrer=creativecommons.org`],
+           'web':[`https://pixy.org/`, `https://www.pexels.com/de-de/`, `https://pixabay.com/`, `https://wordpress.org/openverse/?referrer=creativecommons.org`],
            'color':`pink darken-2`,
            'dialog': {'title': ``, 'text': ``}  
           },
