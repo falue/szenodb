@@ -13,7 +13,7 @@
           <v-text-field filled v-model.trim="signupForm.title" type="text" placeholder="Profession" id="title"></v-text-field>
           <v-text-field filled v-model.trim="signupForm.email" type="text" placeholder="Email*" id="email2"></v-text-field>
           <v-text-field filled v-model.trim="signupForm.password" type="password" placeholder="Password*" :hint="signupForm.password.length ? 'Seems good!' :'Min 6 characters'" id="password2" autocomplete="new-password" :rules="passwordRules">
-            <v-tooltip slot="append" right color="#212121" v-if="signupForm.password.length >= 6">
+            <v-tooltip slot="append" right v-if="signupForm.password.length >= 6" color="#303030">
               <template v-slot:activator="{ on, attrs }">
                 <v-icon  v-bind="attrs" v-on="on"
                   :class="signupForm.password.length >= 6  && !doubleCheckPw.length

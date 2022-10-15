@@ -1,5 +1,5 @@
 <template>
-  <v-tooltip :disabled="$vuetify.breakpoint.smAndDown" :bottom="!position || position === 'bottom'" :right="position === 'right'" :left="position === 'left'" :top="position === 'top'">
+  <v-tooltip :bottom="!position || position === 'bottom'" :right="position === 'right'" :left="position === 'left'" :top="position === 'top'" color="#303030">
     <template v-slot:activator="{ on, attrs }">
       <v-btn
         icon

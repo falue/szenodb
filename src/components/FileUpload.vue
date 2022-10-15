@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-tooltip :disabled="!tooltip || $vuetify.breakpoint.smAndDown" :bottom="!position || position === 'bottom'" :right="position === 'right'" :left="position === 'left'" :top="position === 'top'" color="#212121">
+    <v-tooltip :disabled="!tooltip" :bottom="!position || position === 'bottom'" :right="position === 'right'" :left="position === 'left'" :top="position === 'top'" color="#303030">
       <template v-slot:activator="{ on, attrs }">
         <v-btn dense icon @click="$refs.fileInput.click()" :class="buttonClasses ? buttonClasses : 'pink darken-3'" v-bind="attrs" v-on="on">
           <v-icon v-if="progress === 0 && !resizing" :class="iconClasses ? iconClasses : 'white--text'" v-bind="attrs" v-on="on">

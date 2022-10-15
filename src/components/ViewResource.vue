@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-card-title class="pt-2" style="max-width:85%">
-      <v-tooltip :disabled="$vuetify.breakpoint.smAndDown" bottom color="#212121">
+      <v-tooltip bottom color="#303030">
         <template v-slot:activator="{ on, attrs }">
             <a
               :href="data.content.web ? $helpers.createWebsiteUrl(data.content.web) : `https://www.google.com/search?q=${data.content.title.replaceAll(' ', '+')}`"

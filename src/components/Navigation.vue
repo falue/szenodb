@@ -57,7 +57,7 @@
       </div> -->
 
       <!-- PUBLIC NAV -->
-      <v-tooltip open-delay="1250" :open-on-click="false" bottom :disabled="$vuetify.breakpoint.smAndDown">
+      <v-tooltip open-delay="1250" :open-on-click="false" bottom :disabled="$vuetify.breakpoint.smAndDown" color="#303030">
         <template v-slot:activator="{ on, attrs }">
           <v-btn text :icon="$vuetify.breakpoint.xs" dense small to="/about" class="mx-1 primary--text" v-bind="attrs" v-on="on">
             <v-icon v-if="$vuetify.breakpoint.smAndDown" color="primary">mdi-information-outline</v-icon>
@@ -72,7 +72,7 @@
         <v-bt primary" depressed>Login</v-btn>
       </router-link> -->
 
-      <v-tooltip open-delay="1250" :open-on-click="false" bottom v-if="!auth" :disabled="$vuetify.breakpoint.smAndDown">
+      <v-tooltip open-delay="1250" :open-on-click="false" bottom v-if="!auth" :disabled="$vuetify.breakpoint.smAndDown" color="#303030">
         <template v-slot:activator="{ on, attrs }">
           <v-btn text :icon="$vuetify.breakpoint.xs" dense small to="/login" class="mx-1 primary--text" v-bind="attrs" v-on="on">
             <v-icon v-if="$vuetify.breakpoint.smAndDown" color="primary">mdi-login-variant</v-icon>
@@ -84,7 +84,7 @@
 
       <!-- LOGGED IN NAV -->
       <div v-if="auth">
-        <v-tooltip open-delay="1250" :open-on-click="false" bottom :disabled="$vuetify.breakpoint.smAndDown">
+        <v-tooltip open-delay="1250" :open-on-click="false" bottom :disabled="$vuetify.breakpoint.smAndDown" color="#303030">
           <template v-slot:activator="{ on, attrs }">
             <v-btn text :icon="$vuetify.breakpoint.xs" dense small circle to="/resources" class="mx-1 primary--text" v-bind="attrs" v-on="on">
               <v-icon v-if="$vuetify.breakpoint.smAndDown" color="primary">mdi-format-list-text</v-icon>
@@ -104,7 +104,7 @@
           <span>An assortment of things</span>
         </v-tooltip>
 
-        <v-tooltip open-delay="1250" :open-on-click="false" bottom v-if="user.role === 'admin'" :disabled="$vuetify.breakpoint.smAndDown">
+        <v-tooltip open-delay="1250" :open-on-click="false" bottom v-if="user.role === 'admin'" :disabled="$vuetify.breakpoint.smAndDown" color="#303030">
           <template v-slot:activator="{ on, attrs }">
             <v-btn text :icon="$vuetify.breakpoint.xs" dense small circle to="/admin" class="mx-1 primary--text" v-bind="attrs" v-on="on">
               <v-icon v-if="$vuetify.breakpoint.smAndDown" color="primary">mdi-wrench</v-icon>
@@ -114,7 +114,7 @@
           <span>Manage users & backups</span>
         </v-tooltip>
 
-        <v-tooltip open-delay="0" :open-on-click="false" bottom :disabled="$vuetify.breakpoint.smAndDown">
+        <v-tooltip open-delay="0" :open-on-click="false" bottom :disabled="$vuetify.breakpoint.smAndDown" color="#303030">
           <template v-slot:activator="{ on, attrs }">
             <v-btn text icon small :circle="$vuetify.breakpoint.mdAndUp" to="/profile" class="mx-1" v-bind="attrs" v-on="on">
               <v-icon color="primary">mdi-account-cowboy-hat</v-icon>
@@ -123,7 +123,7 @@
           <span>Profile {{user.name}}</span>
         </v-tooltip>
 
-        <v-tooltip open-delay="0" :open-on-click="false" bottom :disabled="$vuetify.breakpoint.smAndDown">
+        <v-tooltip open-delay="0" :open-on-click="false" bottom :disabled="$vuetify.breakpoint.smAndDown" color="#303030">
           <template v-slot:activator="{ on, attrs }">
             <v-btn text icon small :circle="$vuetify.breakpoint.mdAndUp" @click="logout()" class="mx-1" v-bind="attrs" v-on="on">
               <v-icon :small="$vuetify.breakpoint.mdAndUp" color="primary">mdi-logout-variant</v-icon>

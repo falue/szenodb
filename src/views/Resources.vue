@@ -82,7 +82,7 @@
         <!-- FILTERS -->
         <v-card-actions class="pa-0 grey--text " v-else>
           Filter resources: 
-          <v-tooltip :disabled="$vuetify.breakpoint.smAndDown" bottom>
+          <v-tooltip bottom color="#303030">
             <template v-slot:activator="{ on, attrs }">
               <v-btn
                 icon
@@ -98,7 +98,7 @@
             <span>Show your favorit resources</span>
           </v-tooltip>
 
-          <v-tooltip :disabled="$vuetify.breakpoint.smAndDown" bottom>
+          <v-tooltip bottom color="#303030">
             <template v-slot:activator="{ on, attrs }">
               <v-btn
                 icon
@@ -114,7 +114,7 @@
             <span>Show your own resources</span>
           </v-tooltip>
 
-          <v-tooltip v-if="user.role === 'admin'" :disabled="$vuetify.breakpoint.smAndDown" bottom>
+          <v-tooltip v-if="user.role === 'admin'" bottom color="#303030">
             <template v-slot:activator="{ on, attrs }">
               <v-btn
                 icon
@@ -130,7 +130,7 @@
             <span>Show flagged as deleted</span>
           </v-tooltip>
 
-          <v-tooltip v-if="filterSet.length" :disabled="$vuetify.breakpoint.smAndDown" bottom>
+          <v-tooltip v-if="filterSet.length" bottom color="#303030">
             <template v-slot:activator="{ on, attrs }">
               <v-btn
                 text

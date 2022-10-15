@@ -136,7 +136,7 @@
 
       <v-spacer></v-spacer>
 
-      <v-tooltip :disabled="$vuetify.breakpoint.smAndDown" top>
+      <v-tooltip top color="#303030">
         <template v-slot:activator="{ on, attrs }">
           <div v-bind="attrs" v-on="on">
             <v-btn

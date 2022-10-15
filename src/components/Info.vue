@@ -1,7 +1,7 @@
 <template>
-  <v-tooltip :disabled="$vuetify.breakpoint.smAndDown" :bottom="!position" :right="position === 'right'" :left="position === 'left'" :top="position === 'top'" color="#212121">
+  <v-tooltip :open-on-click="$vuetify.breakpoint.smAndDown" :bottom="!position || position === 'bottom'" :right="position === 'right'" :left="position === 'left'" :top="position === 'top'" color="#303030">
     <template v-slot:activator="{ on, attrs }">
-        <v-icon class="hover" :style="opacity ? `opacity: ${opacity} !important;` : `opacity: .25 !important;`" :class="[iconClasses ? iconClasses : 'grey--text ml-2', $vuetify.breakpoint.smAndDown ? 'bigMobileButton' : '']" :small="$vuetify.breakpoint.mdAndUp" v-bind="attrs" v-on="on">
+        <v-icon class="hover" :style="opacity ? `opacity: ${opacity} !important;` : `opacity: .25 !important;`" :class="iconClasses ? iconClasses : 'grey--text ml-2'" :small="$vuetify.breakpoint.mdAndUp" v-bind="attrs" v-on="on">
           mdi-{{icon ? icon : 'information'}}
         </v-icon>
     </template>

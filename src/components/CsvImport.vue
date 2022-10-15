@@ -25,7 +25,7 @@
 
     <!-- HINT -->
     <v-tooltip :v-if="$vuetify.breakpoint.smAndUp" top :open-on-hover="false" :open-on-focus="false"
-      color="grey darken-4"
+      color="#303030"
     >
       <template v-slot:activator="{ on, attrs }">
         <!-- <v-btn class="primary--text" v-bind="attrs" v-on="on" >
