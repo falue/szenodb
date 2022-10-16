@@ -73,7 +73,7 @@
       </div>
 
       <!-- LOGOUT -->
-      <v-tooltip v-if="$vuetify.breakpoint.smAndUp" open-delay="0" :open-on-click="false" bottom color="#303030">
+      <v-tooltip v-if="auth && $vuetify.breakpoint.smAndUp" open-delay="0" :open-on-click="false" bottom color="#303030">
         <template v-slot:activator="{ on, attrs }">
           <v-btn text icon small :circle="$vuetify.breakpoint.mdAndUp" @click="logout()" class="mx-1" v-bind="attrs" v-on="on">
             <v-icon :small="$vuetify.breakpoint.mdAndUp" color="primary">mdi-logout-variant</v-icon>
