@@ -56,107 +56,111 @@
         <span class="px-1" :class="$vuetify.breakpoint.xl ? 'green--text' : 'grey--text text--darken-2'">{{$vuetify.breakpoint.xl ? 'XL' : 'XL'}}</span>
       </div> -->
 
-      <!-- PUBLIC NAV -->
-      <v-tooltip open-delay="1250" :open-on-click="false" bottom :disabled="$vuetify.breakpoint.smAndDown" color="#303030">
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn text :icon="$vuetify.breakpoint.xs" dense small to="/about" class="mx-1 primary--text" v-bind="attrs" v-on="on">
-            <v-icon v-if="$vuetify.breakpoint.smAndDown" color="primary">mdi-information-outline</v-icon>
-            <span v-else>What's this?</span>
-          </v-btn>
-        </template>
-        <span>More info about this</span>
-      </v-tooltip>
-
-      <!-- LOGGED OUT NAV -->
-      <!-- <router-link v-if="!auth" to="/login">
-        <v-bt primary" depressed>Login</v-btn>
-      </router-link> -->
-
-      <v-tooltip open-delay="1250" :open-on-click="false" bottom v-if="!auth" :disabled="$vuetify.breakpoint.smAndDown" color="#303030">
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn text :icon="$vuetify.breakpoint.xs" dense small to="/login" class="mx-1 primary--text" v-bind="attrs" v-on="on">
-            <v-icon v-if="$vuetify.breakpoint.smAndDown" color="primary">mdi-login-variant</v-icon>
-            <span v-else>login</span>
-          </v-btn>
-        </template>
-        <span>Login to see the goodies</span>
-      </v-tooltip>
-
-      <!-- LOGGED IN NAV -->
-      <div v-if="auth">
-        <v-tooltip open-delay="1250" :open-on-click="false" bottom :disabled="$vuetify.breakpoint.smAndDown" color="#303030">
+      <!-- DESKTOP LINKS -->
+      <div v-if="$vuetify.breakpoint.smAndUp">
+        <v-tooltip
+          v-for="link in links.filter(x => { if((x.auth && auth || !x.auth && !auth || x.auth === 'both') && ( !x.admin || x.admin && (user.role == 'admin'))) return x})"
+          :key="link.title"
+          open-delay="750" :open-on-click="false" bottom :disabled="$vuetify.breakpoint.smAndDown" color="#303030">
           <template v-slot:activator="{ on, attrs }">
-            <v-btn text :icon="$vuetify.breakpoint.xs" dense small circle to="/resources" class="mx-1 primary--text" v-bind="attrs" v-on="on">
-              <v-icon v-if="$vuetify.breakpoint.smAndDown" color="primary">mdi-format-list-text</v-icon>
-              <span v-else>Resources</span>
+            <v-btn text :icon="$vuetify.breakpoint.xs" dense small :to="link.to" class="hover px-1 mx-1 primary--text" v-bind="attrs" v-on="on">
+              <v-icon :small="$vuetify.breakpoint.mdAndUp" color="">mdi-{{link.icon}}</v-icon>
+              <span v-if="$vuetify.breakpoint.mdAndUp" class="ml-1">{{link.title}}</span>
             </v-btn>
           </template>
-          <span>See & edit the list of resources</span>
+          <span>{{link.tooltip}}</span>
         </v-tooltip>
-
-        <v-tooltip open-delay="1250" :open-on-click="false" bottom :disabled="$vuetify.breakpoint.smAndDown">
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn text :icon="$vuetify.breakpoint.xs" dense small circle to="/goodies" class="mx-1 primary--text" v-bind="attrs" v-on="on">
-              <v-icon v-if="$vuetify.breakpoint.smAndDown" color="primary">mdi-cupcake</v-icon>
-              <span v-else>Goodies</span>
-            </v-btn>
-          </template>
-          <span>An assortment of things</span>
-        </v-tooltip>
-
-        <v-tooltip open-delay="1250" :open-on-click="false" bottom v-if="user.role === 'admin'" :disabled="$vuetify.breakpoint.smAndDown" color="#303030">
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn text :icon="$vuetify.breakpoint.xs" dense small circle to="/admin" class="mx-1 primary--text" v-bind="attrs" v-on="on">
-              <v-icon v-if="$vuetify.breakpoint.smAndDown" color="primary">mdi-wrench</v-icon>
-              <span v-else>Admin</span>
-            </v-btn>
-          </template>
-          <span>Manage users & backups</span>
-        </v-tooltip>
-
-        <v-tooltip open-delay="0" :open-on-click="false" bottom :disabled="$vuetify.breakpoint.smAndDown" color="#303030">
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn text icon small :circle="$vuetify.breakpoint.mdAndUp" to="/profile" class="mx-1" v-bind="attrs" v-on="on">
-              <v-icon color="primary">mdi-account-cowboy-hat</v-icon>
-            </v-btn>
-          </template>
-          <span>Profile {{user.name}}</span>
-        </v-tooltip>
-
-        <v-tooltip open-delay="0" :open-on-click="false" bottom :disabled="$vuetify.breakpoint.smAndDown" color="#303030">
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn text icon small :circle="$vuetify.breakpoint.mdAndUp" @click="logout()" class="mx-1" v-bind="attrs" v-on="on">
-              <v-icon :small="$vuetify.breakpoint.mdAndUp" color="primary">mdi-logout-variant</v-icon>
-            </v-btn>
-          </template>
-          <span>Logout</span>
-        </v-tooltip>
-        
-        <!-- <div x-small class="white--text absolute right caption nudge-y-150">
-          <v-icon color="white" x-small>mdi-account-circle</v-icon>
-          {{user.name}}
-        </div> -->
-
-        <!-- {{settings}} -->
-        <v-btn v-if="settings && settings.maintenance && user.role == 'admin'" small to="/admin" class="mx-1 error">
-          <v-icon :small="$vuetify.breakpoint.mdAndUp" color="yellow">mdi-warning</v-icon>
-          Maintenance mode
-        </v-btn>
       </div>
 
+      <!-- LOGOUT -->
+      <v-tooltip v-if="$vuetify.breakpoint.smAndUp" open-delay="0" :open-on-click="false" bottom color="#303030">
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn text icon small :circle="$vuetify.breakpoint.mdAndUp" @click="logout()" class="mx-1" v-bind="attrs" v-on="on">
+            <v-icon :small="$vuetify.breakpoint.mdAndUp" color="primary">mdi-logout-variant</v-icon>
+          </v-btn>
+        </template>
+        <span>Logout</span>
+      </v-tooltip>
+      
       <v-spacer v-if="$vuetify.breakpoint.mdAndUp"></v-spacer>
       
-      <v-btn v-if="auth && !user.emailVerified" title="Please verify your email address" small class="red mx-1" :style="$vuetify.breakpoint.mdAndUp ? 'width:161px;' : ''" to="/profile?hint=verifyEmail" type="submit" color="">
+      <!-- SPECIAL WARNING BUTTONS -->
+      <v-btn v-if="auth && !user.emailVerified" small class="red mx-1" :style="$vuetify.breakpoint.mdAndUp ? 'width:161px;' : ''" to="/profile?hint=verifyEmail" type="submit" color="">
         <span v-if="$vuetify.breakpoint.mdAndUp">Please verify email</span>
         <v-icon small v-else>mdi-email-remove</v-icon>
       </v-btn>
       <div v-else-if="$vuetify.breakpoint.mdAndUp" style="width:161px;"></div>
 
+      <v-btn v-if="auth && settings && settings.maintenance && user.role == 'admin'" small to="/admin" class="mx-1 error">
+        <v-icon :small="$vuetify.breakpoint.mdAndUp" color="yellow">mdi-warning</v-icon>
+        Maintenance mode
+      </v-btn>
+
+      <!-- MOBILE HAMBURGER -->
+      <v-btn @click="menu = !menu" v-if="$vuetify.breakpoint.xs" small color="black">
+        <v-icon color="">mdi-menu</v-icon>
+      </v-btn>
     </v-app-bar>
+
+    <!-- MOBILE HAMBURGER MENU -->
+    <v-navigation-drawer
+      v-model="menu"
+      v-if="$vuetify.breakpoint.xs"
+      fixed
+      left
+      temporary
+      width="80%"
+    >
+      <v-list-item>
+        <v-list-item-content>
+          <v-card-title class="overline pink--text pa-0">
+            szeno&middot;DB
+            <span style="text-transform:lowercase;" class="ml-2">v</span>{{appVersion}}
+          </v-card-title>
+        </v-list-item-content>
+      </v-list-item>
+
+      <v-divider></v-divider>
+
+      <v-list dense nav>
+        <v-list-item
+          v-for="link in links.filter(x => { if((x.auth && auth || !x.auth && !auth || x.auth === 'both') && ( !x.admin || x.admin && (user.role == 'admin'))) return x})"
+          :key="link.title"
+          :to="link.to"
+          @click.native="menu = false"
+          link
+        >
+          <v-list-item-avatar>
+            <v-icon color="primary" class="mx-0">mdi-{{ link.icon }}</v-icon>
+          </v-list-item-avatar>
+
+          <v-list-item-content>
+            <v-list-item-title>{{ link.title }}</v-list-item-title>
+            <v-list-item-subtitle v-if="link.tooltip.length">
+            {{ link.tooltip }}
+          </v-list-item-subtitle>
+          </v-list-item-content>
+        </v-list-item>
+
+        <v-divider v-if="auth"></v-divider>
+
+        <v-list-item v-if="auth" @click="logout()" link>
+          <v-list-item-avatar>
+            <v-icon color="primary" class="mx-0">mdi-logout-variant</v-icon>
+          </v-list-item-avatar>
+          <v-list-item-content>
+            <v-list-item-title>Logout</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
+    </v-navigation-drawer>
+
   </v-container>
 </template>
 
 <script>
+import {version} from '../../package'
+
 export default {
   props: {
     auth: Boolean,
@@ -167,6 +171,19 @@ export default {
     return {
       on: false,
       attrs: false,
+      menu: false,
+      appVersion: version,
+      links: [
+        /* NO AUTH OR BOTH */
+        {to: '/about', auth: "both", title: "What's this?", icon: 'information-outline', tooltip: 'More info about this'},
+        {to: '/login', auth: false, title: "Login", icon: 'login-variant', tooltip: 'Login to see the goodies'},
+        /* AUTH */
+        {to: '/resources', auth: true, title: 'Resources', icon: 'format-list-text', tooltip: 'See & edit the list of resources'},
+        // {to: '/colleagues', auth: true, title: 'Colleagues', icon: 'account-group', tooltip: 'Find people to work for or with you'},
+        {to: '/goodies', auth: true, title: 'Goodies', icon: 'cupcake', tooltip: 'An assortment of things'},
+        {to: '/admin', auth: true, admin: true, title: 'Admin', icon: 'wrench', tooltip: 'Manage users & backups'},
+        {to: '/profile', auth: true, title: 'Profile', icon: 'account-cowboy-hat', tooltip: `Your profile`},
+      ],
       slides: [
         'mdi-heart',
         'mdi-hammer-wrench',
@@ -178,6 +195,9 @@ export default {
       ],
     }
   },
+  watch: {
+  },
+
   methods: {
     logout() {
       this.$store.dispatch("logout");
