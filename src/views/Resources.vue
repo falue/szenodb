@@ -182,7 +182,7 @@
                   : 'text-decoration: line-through !important; height:56px;'
                 : $vuetify.breakpoint.xs
                   ? 'min-height:82px;'
-                  : ''
+                  : 'height:56px;'
             "
             :key="i"
             :class="[
@@ -206,7 +206,7 @@
             <div
               class="pt-1"
               style="text-decoration: inherit; vertical-align: top; display:inline-block;"
-              :style="$vuetify.breakpoint.smAndUp ? 'width:20%;' : 'width:100%; overflow: hidden; text-overflow:ellipsis; white-space: nowrap;'"
+              :style="$vuetify.breakpoint.md && drawerOpen ? 'width:45%;' : $vuetify.breakpoint.smAndUp ? 'width:20%;' : 'width:100%; overflow: hidden; text-overflow:ellipsis; white-space: nowrap;'"
             >
               <!-- min-width:150px;  -->
               <div
@@ -243,7 +243,7 @@
                   {{resource.content.resources}}
               </div>
             </div>
-            <div class="pt-3" v-if="$vuetify.breakpoint.smAndUp" :style="isSmallWithOpenDrawer ? '' : 'width:75%'" style="width:25%; text-align:right; vertical-align: top; display:inline-block">
+            <div class="pt-3" v-if="$vuetify.breakpoint.smAndUp" :style="$vuetify.breakpoint.md && drawerOpen ? 'width:55%;' : isSmallWithOpenDrawer ? '' : 'width:75%'" style="width:25%; text-align:right; vertical-align: top; display:inline-block">
               <a v-if="resource.content.web" :title="resource.content.web" :href="$helpers.createWebsiteUrl(resource.content.web)" onclick="event.stopPropagation();" target="_blank" class="no-underline">
                 <v-btn icon class="primary ml-1" :small="$vuetify.breakpoint.mdAndUp">
                   <v-icon>mdi-earth</v-icon>
