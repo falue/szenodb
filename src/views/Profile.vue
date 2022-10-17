@@ -201,8 +201,9 @@ import Info from '@/components/Info'
       },
 
       deleteImage(current) {
-        this.$store.dispatch('deleteFile', current)
+        this.$store.dispatch('deleteFile', current);
         this.user.avatar={};
+        this.profile.avatar={};
         this.saveUserData();
       },
 
