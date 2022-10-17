@@ -11,7 +11,8 @@
     <!-- user.public: <pre>{{user.public}}</pre> -->
     <!-- profile.public: <pre>{{profile.public}}</pre> -->
     <!-- profile.colleague: <pre>{{profile.colleague}}</pre> -->
-    <!-- profile: <pre>{{profile}}</pre> -->
+    <!-- profile: <pre>{{profile.avatar}}</pre> -->
+    <!-- profile.avatar: <pre>{{profile.avatar}}</pre> -->
 
     <v-card-title class="justify-center pa-0 pb-8">
       <div class="relative">
@@ -20,7 +21,7 @@
             class="grey darken-3 "
           />
           <!-- https://avatars.dicebear.com/ -->
-          <v-img v-else :src="`https://avatars.dicebear.com/api/adventurer-neutral/${$helpers.md5(user.uid)}.svg`" class="grey darken-3" :alt="user.name" />
+          <v-img v-else :src="`https://avatars.dicebear.com/api/adventurer-neutral/${profile.avatar && profile.avatar.random ? profile.avatar.random : $helpers.md5(user.uid)}.svg`" class="grey darken-3" :alt="user.name" />
         </v-avatar>
         <v-btn
           v-if="profile.avatar && user.avatar.url && user.avatar.url.length"
@@ -30,6 +31,15 @@
           class="absolute top right op-50"
           @click="deleteImage(user.avatar.path)"
         ><v-icon small class="grey--text">mdi-close</v-icon>
+        </v-btn>
+        <v-btn
+          v-else
+          icon
+          small
+          dense
+          class="absolute top right"
+          @click="getRandomUserImage()"
+        ><v-icon small class="primary--text">mdi-sync</v-icon>
         </v-btn>
         <FileUpload
           class="absolute bottom right"
@@ -198,6 +208,13 @@ import Info from '@/components/Info'
         } catch (err) {
           this.$toasted.global.error({msg:err.message});
         }
+      },
+
+      getRandomUserImage() {
+        let randomImg = this.$helpers.createUid();
+        // this.user.avatar.random = randomImg;
+        this.profile.avatar.random = randomImg;
+        this.$forceUpdate();
       },
 
       deleteImage(current) {
