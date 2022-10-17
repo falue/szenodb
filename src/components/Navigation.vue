@@ -11,11 +11,11 @@
       <v-btn icon class="ml-0" style="background-color:rgba(255,0,255,.2)" to="/" v-bind="attrs" v-on="on">
       <v-carousel
         cycle
-        :continuous="true"
+        :continuous="false"
         height="40"
         hide-delimiter-background
         hide-delimiters
-        interval="4444"
+        interval="444"
         vertical
         hide-arrows
         :show-arrows="false"
@@ -185,13 +185,14 @@ export default {
         {to: '/profile', auth: true, title: 'Profile', icon: 'account-cowboy-hat', tooltip: `Your profile`},
       ],
       slides: [
-        'mdi-heart',
         'mdi-hammer-wrench',
         'mdi-format-paint',
         'mdi-sofa-single',
         'mdi-truck-cargo-container',
         'mdi-desktop-classic',
         'mdi-head-flash',
+        'mdi-heart',
+        'mdi-hammer-wrench',
       ],
     }
   },
