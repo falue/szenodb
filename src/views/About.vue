@@ -9,7 +9,7 @@
       :flat="$vuetify.breakpoint.smAndUp"
       style="overflow-y: auto;"
     >
-      <v-card-title class="justify-center">This is for the art departments needs</v-card-title>
+      <v-card-title class="justify-center" style="word-break: initial;">This is for the art departments needs</v-card-title>
 
       <v-card-text class="white--text italics text-center">
         Don't know where to get hayballs, a spider web spray, an astronaut suit?
