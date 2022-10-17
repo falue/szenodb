@@ -10,7 +10,6 @@
       style="overflow-y: auto;"
     >
       <v-card-title class="justify-center">
-        <v-icon color="pink">mdi-cupcake</v-icon>
         <span class="mx-4">Goodies</span>
         <!-- <v-icon color="pink">mdi-ice-pop</v-icon> -->
       </v-card-title>
