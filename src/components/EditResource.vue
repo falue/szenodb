@@ -119,7 +119,7 @@
       <hr class="my-2" style="border:none; border-top: solid 1px rgba(255,255,255,.75);">
     </div>
 
-    <v-btn @click="addDetails = !addDetails" class="fill-width mt-4" :class="addDetails ? '' : 'primary'">
+    <v-btn @click="addDetails = !addDetails" class="fill-width mt-4">
       {{addDetails ? 'Less details' : 'Add details'}}
       <v-icon :small="$vuetify.breakpoint.mdAndUp" class="ml-2">mdi-{{addDetails ? 'chevron-up' : 'chevron-down-circle'}}</v-icon>
     </v-btn>
@@ -144,10 +144,10 @@
               @mousemove="checkShiftKey($event)"
               @mouseleave="shiftKeyPressed = false"
               @mouseout="shiftKeyPressed = false"
-              :color="shiftKeyPressed ? 'green' : 'primary'"
+              :color="data.title === '' || data.resources === '' ? 'red' :shiftKeyPressed ? 'green' : 'primary'"
+              :style="data.title === '' || data.resources === '' ? 'pointer-events: none' : ''"
               @click="if(shiftKeyPressed) data.newAndNext = true"
               type="submit" class="mr-2 mb-2"
-              :disabled="data.title === '' || data.resources === ''"
             >
               {{shiftKeyPressed ? 'Save & next' : 'Save'}}
             </v-btn>
