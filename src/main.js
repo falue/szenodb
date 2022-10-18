@@ -9,7 +9,6 @@ import "../static/vuetify-additions.css";
 import helpers from "./assets/helpers"; // Use global helper functions
 import Toasted from "vue-toasted"; // alerts & notifications https://github.com/shakee93/vue-toasted
 import VuePapaParse from 'vue-papa-parse' // parse csv to json https://www.papaparse.com/
-import VueClipboard from 'vue-clipboard2';  // https://github.com/Inndy/vue-clipboard2
 import deepl from 'deepl';  // https://www.npmjs.com/package/deepl
 
 Vue.config.productionTip = false;
@@ -25,7 +24,6 @@ const jsHelpers = {
 Vue.use(jsHelpers);
 Vue.use(VueMoment);
 Vue.use(VuePapaParse);
-Vue.use(VueClipboard);
 // Vue.use(deepl);
 Object.defineProperty(Vue.prototype, '$deepl', { value: deepl });
 

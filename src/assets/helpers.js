@@ -104,11 +104,19 @@ export default {
 
   copyClipBoard(text, title='Text') {
     if(typeof (text) === 'object') text = text.join("\n");
-    Vue.prototype.$copyText(text).then(() => {
+    try {
+      /* https://github.com/euvl/v-clipboard/issues/18 */
+      const el = document.createElement('textarea');
+      el.addEventListener('focusin', e => e.stopPropagation());
+      el.value = text;
+      document.body.appendChild(el);
+      el.select();
+      document.execCommand('copy');
+      document.body.removeChild(el);
       Vue.prototype.$toasted.global.success({msg:`${title} was copied to your clipboard`});
-    }, function (e) {
-      console.log(e);
-    });
+    } catch {
+      Vue.prototype.$toasted.global.error({msg:`Could not copy ${title} to your clipboard!`});
+    }
   },
 
   /* .calendar(null, {
