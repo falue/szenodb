@@ -225,17 +225,11 @@
         <v-spacer></v-spacer>
         {{ $moment(magnifyDialogImg.lastModified).format("DD.MM.YYYY") }}
         <v-spacer></v-spacer>
-        <a :href="magnifyDialogImg.url" target="_blank" class="no-underline">
-          <v-btn
-            icon
-            :small="$vuetify.breakpoint.mdAndUp"
-            color="primary"
-          >
-          <!-- DOES NOT WORK, because this dialog is async and security prevents clipboard-copying from triggering -->
-          <!-- @click="$helpers.copyClipBoard(getCurrentUrl(), 'URL')"> -->
-            <v-icon :small="$vuetify.breakpoint.mdAndUp">mdi-share</v-icon>
-          </v-btn>
-        </a>
+        <Share
+          position="bottom"
+          :text="magnifyDialogImg.url"
+          tooltip="Share this image"
+        ></Share>
       </v-card-actions>
       </v-card>
     </v-dialog>
