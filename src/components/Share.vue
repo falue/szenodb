@@ -34,6 +34,7 @@
             this.$toasted.global.info({msg:`Thanks 💯 for sharing!`});
           }).catch(err => {
             console.log(err)
+            this.$toasted.global.error({msg:err});
           });
         } else {
           this.$helpers.copyClipBoard(text, this.toastedInfo ? this.toastedInfo : 'Link for sharing in messengers')
