@@ -64,7 +64,6 @@
             <v-btn type="submit" :disabled="!validForm" color="primary" @click="signup()">Sign Up</v-btn>
           </v-card-actions>
       </v-form>
-      v1.0.8
     </v-card>
 </template>
 
