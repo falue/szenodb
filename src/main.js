@@ -38,12 +38,16 @@ Vue.use(Toasted, {
 // success
 Vue.toasted.register("success", (payload) => {
     if (!payload.msg) { return "Success!"; } else { return payload.msg; }
-  },{ type: "success", icon: "mdi-checkbox-marked-circle", duration: 4000, position: "bottom-left" }
+  },{ type: "success", icon: "mdi-checkbox-marked-circle", duration: 4000, position: "bottom-left", action : {
+    icon : 'mdi-close', onClick : (e, toastObject) => { toastObject.goAway(0); }
+  } }
 );
 // info
 Vue.toasted.register("info", (payload) => {
     if (!payload.msg) { return "Info."; } else { return payload.msg; }
-  },  { type: "info", icon: "mdi-information", duration: 6000, position: "bottom-left" }
+  },  { type: "info", icon: "mdi-information", duration: 6000, position: "bottom-left", action : {
+    icon : 'mdi-close', onClick : (e, toastObject) => { toastObject.goAway(0); }
+  } }
 );
 // error
 Vue.toasted.register("error", (payload) => {
