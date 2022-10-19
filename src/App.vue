@@ -4,7 +4,7 @@
 
     <v-main class="pt-10" :style="$vuetify.breakpoint.smAndDown ? 'background-color: #1E1E1E' : ''">
       <v-container class="pa-0">
-        <router-view :auth="isLoggedIn" :user="this.userProfile" :settings="globalSetting"/>
+        <router-view v-if="$route.meta.requiresAuth ? userProfile.email : true" :auth="isLoggedIn" :user="this.userProfile" :settings="globalSetting"/>
       </v-container>
     </v-main>
 
