@@ -60,7 +60,7 @@ const store = new Vuex.Store({
     },
 
     /*  USER STUFFS */
-    async login({ dispatch }, form) {
+    async login({ commit, dispatch }, form) {
       // sign user in
       await fb.auth.signInWithEmailAndPassword(form.email.toLowerCase(), form.password).then(function({ user }) {
         // Get global settings
@@ -73,6 +73,13 @@ const store = new Vuex.Store({
             'emailVerified': user.emailVerified
           })
           store.dispatch('addContribution', 1);
+        }).catch(err => {
+          console.log("KICKED USER");
+          console.log("FB rules prohibit because user is kicked:\n", err)
+          fb.auth.signOut();
+          commit('setUserProfile', {});
+          router.push('/login?error=kicked');
+          return
         });
         return true
       }).catch(function(error) {
@@ -107,15 +114,6 @@ const store = new Vuex.Store({
               commit('setUserProfile', {});
               router.push(`/login?error=missingUserFile&id=${user.uid}`);
               return;
-            }
-            
-            /* KICKED! */
-            if(userProfile.data().kicked) {
-              console.log("KICKED USER");
-              fb.auth.signOut();
-              commit('setUserProfile', {});
-              router.push('/login?error=kicked');
-              return
             }
 
             commit('setUserProfile', {...userProfile.data(), 'emailVerified': user.emailVerified, 'uid': user.uid, 'email': user.email })
