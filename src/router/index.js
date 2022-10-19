@@ -117,7 +117,7 @@ const router = new VueRouter({
     if (savedPosition) {
       // If history-back was pressed, scroll to that pposition
       return savedPosition
-    } else {
+    } else if(to.path != from.path) {
       return { x: 0, y: 0 }
     }
   }
