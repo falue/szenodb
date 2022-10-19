@@ -40,8 +40,10 @@
         </v-carousel-item>
       </v-carousel>
       </v-btn>
-      <v-card-title v-if="$vuetify.breakpoint.mdAndUp" class="overline pink--text">
-      szeno&middot;DB
+      <v-card-title v-if="$vuetify.breakpoint.mdAndUp" class="overline pink--text" style="line-height:1.5em">
+        szeno&middot;DB
+        <br>
+        BETA
       </v-card-title>
 
       <v-spacer></v-spacer>
