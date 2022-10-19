@@ -8,10 +8,7 @@
       style="overflow-y: auto;"
     >
       <v-card-title class="justify-center">Sign up <span class="pink--text ml-1">(always free)</span></v-card-title>
-      Currently broken :)
-      <br>
-      check back this evening (19.10.).
-      <v-form v-if="false" @submit.prevent v-model="validForm">
+      <v-form @submit.prevent v-model="validForm">
           <v-text-field filled v-model.trim="signupForm.name" type="text" placeholder="Name*" id="name" autocomplete="username"></v-text-field>
           <v-text-field filled v-model.trim="signupForm.title" type="text" placeholder="Profession" id="title"></v-text-field>
           <v-text-field filled v-model.trim="signupForm.email" type="text" placeholder="Email*" id="email2"></v-text-field>
