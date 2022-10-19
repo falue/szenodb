@@ -99,17 +99,19 @@
             {{$vuetify.breakpoint.xs ? 'Verify email' : 'Resend verification email'}}
           </v-btn>
         </v-card-actions>
-        
+
       </form>
 
-      <br>
       <v-divider class="my-4"></v-divider>
       Your user ID is
       <pre class="grey--text" style="display:inline">{{user.uid}}</pre>
       <Copy :data="user.uid" dataName="user ID"></Copy>
+      <a class="no-underline" :href="`mailto:info@fluescher.ch?subject=szenodb.ch%3A%20My%20User%20ID&body=Hello%20there%21%0AThe%20reason%20I%27m%20wrinting%20you%20is%20%28as%20discussed%2Fbecause%20I%27m%20happy%2Fawful%2Fother%29.%0A%0AFor%20further%20troubleshooting%2C%20my%20user%20ID%20is%20${user.uid}%0A%0APlease%20get%20in%20touch%2C%0A${user.name}%0A-----%0ADirect%20admin%20link%3A%0Ahttps%3A%2F%2Fconsole.firebase.google.com%2Fproject%2Fszenodb%2Ffirestore%2Fdata%2F~2Fusers~2F${user.uid}`">
+        <v-icon small class="grey--text pointer ml-2" title="Mail this to the admin">mdi-email</v-icon>
+      </a>
       <br>
-      and you have <span class="orange--text">{{user.contribution.toLocaleString()}}</span> contribution points. {{"🥳 ".repeat(user.contribution > 500 ? 5 : user.contribution / 100)}}
-      <Info title="Contribution Points" text="are calculated from your activity: Creating or editing resources, and logging in.<br>Currently, they are not used for anything."></Info>
+      and you have <span class="orange--text">{{user.contribution ? user.contribution.toLocaleString() : ''}}</span> contribution {{user.contribution > 1 ? 'points' : 'point'}}. {{"🥳 ".repeat(user.contribution > 500 ? 5 : user.contribution / 100)}}
+      <Info title="Contribution Points" text="are calculated from your activity: Creating or editing resources, and being a regular user.<br>They are only used for two things:<br>- With 12 or more points, you can be a public colleague, and your points are shown to other colleagues<br>- If you're very active, maybe you get a bottle of wine from the admins 🍷"></Info>
     </v-card>
   </div>
 </template>
