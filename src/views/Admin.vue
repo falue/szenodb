@@ -76,7 +76,7 @@
         
         <hr class="mb-3 mt-16" style="border:none; border-top: solid 1px rgba(255,255,255,.25);">
 
-        <v-card-title class="text-h3 justify-center italics error--text">DAGER ZONE!</v-card-title>
+        <v-card-title class="text-h3 justify-center italics error--text">DANGER ZONE!</v-card-title>
 
         <div class="pb-4">
           <!-- MAKE BACKUP -->
