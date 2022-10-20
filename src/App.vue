@@ -23,6 +23,8 @@
           This is two things:
           A list of resources of goods & services,
           and a cooperative network to find others and be found.
+          <br>
+          This project is in BETA; some bugs may occur.
 
           <v-card-actions class="pl-0 pt-4 pb-4">
             <v-spacer></v-spacer>
