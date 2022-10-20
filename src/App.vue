@@ -8,7 +8,107 @@
       </v-container>
     </v-main>
 
-<!-- v-if="$vuetify.breakpoint.mdAndUp"  -->
+    <!-- WELCOME DIALOG -->
+    <v-dialog
+      v-model="welcomeDialog"
+      :width="$vuetify.breakpoint.smAndDown ? '85%' : '45%'"
+      :fullscreen="$vuetify.breakpoint.xs"
+      persistent
+    >
+      <v-card>
+        <v-card-title class="text-h5 grey darken-3" style="word-break: initial;">
+          Welcome - but before you start:
+        </v-card-title>
+        <v-card-text class="mt-4 white--text pt-4">
+          This is two things:
+          A list of resources of goods & services,
+          and a cooperative network to find others and be found.
+
+          <v-card-actions class="pl-0 pt-4 pb-4">
+            <v-spacer></v-spacer>
+            <v-spacer></v-spacer>
+            <v-icon small color="pink">mdi-heart</v-icon>
+            <v-spacer></v-spacer>
+            <v-icon small color="pink">mdi-hammer-wrench</v-icon>
+            <v-spacer></v-spacer>
+            <v-icon small color="pink">mdi-format-paint</v-icon>
+            <v-spacer></v-spacer>
+            <v-icon small color="pink">mdi-sofa-single</v-icon>
+            <v-spacer></v-spacer>
+            <v-icon small color="pink">mdi-truck-cargo-container</v-icon>
+            <v-spacer></v-spacer>
+            <v-icon small color="pink">mdi-desktop-classic</v-icon>
+            <v-spacer></v-spacer>
+            <v-icon small color="pink">mdi-head-flash</v-icon>
+            <v-spacer></v-spacer>
+            <v-spacer></v-spacer>
+          </v-card-actions>
+          
+          <v-card-actions align="center" class="pl-0 pt-4">
+            <v-spacer></v-spacer>
+            <span class="orange--text pr-2">
+              BEWARE:
+            </span> The rules of szenodb:
+            <v-spacer></v-spacer>
+          </v-card-actions>
+          <ol class="niceList mt-4 pl-0">
+            <li>
+              You do not talk about
+              <span class="overline pink--text" style="line-height:1em">szeno&middot;DB</span>
+              to <span class="orange--text">people on the resources list</span>
+              (they do not know they're on it)
+            </li>
+            <li class="italics">
+              You do <span class="bolder">not</span> talk about
+              <span class="overline pink--text" style="line-height:1em">szeno&middot;DB</span>
+              to <span class="orange--text">people on the resources list</span>
+              (they do not know they're on it)
+            </li>
+            <li>
+              You do talk a <span class="bolder"><span class="grey--text">*</span>lot<span class="grey--text">*</span></span>
+              about <span class="overline pink--text" style="line-height:1em">szeno&middot;DB</span>
+              to <span class="orange--text">colleagues in the industry</span>
+            </li>
+            <li>
+              Be nice and don't demand services like you're in a marketplace.
+            </li>
+            <li>
+              This is a starting point for your own research.
+            </li>
+            <li>
+              Double check. Some things might be outdated. 
+            </li>
+            <li>
+              Be professional.
+            </li>
+            <li>
+              Edit, create new, improve; become a colleague. <span class="italics pink--text">Or not, and just use it!</span>
+            </li>
+          </ol>
+          <br>
+          Thats all. Enjoy.
+          <v-icon small color="rgba(255,0,255,.5)">mdi-heart</v-icon> Fabian
+
+        </v-card-text>
+        <v-card-actions class="grey darken-3">
+          <v-spacer></v-spacer>
+          <v-btn color="primary" @click="welcomeDialog = false" :disabled="!blockWelcomeDialogClosing">
+            {{blockWelcomeDialogClosing ? 'Join the community!' : 'Please read the rules'}}
+            <v-progress-circular
+              :size="16"
+              :width="2"
+              v-if="!blockWelcomeDialogClosing"
+              indeterminate
+              color="primary"
+              class="ml-1"
+            ></v-progress-circular>
+          </v-btn>
+          <v-spacer></v-spacer>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    
+    <!-- FOOTER -->
     <v-card-title :style="$route.name === 'Resources' ? 'background-color:#121212;' : ''" style="z-index: 1;" class="text-shadow--black caption pink--text justify-center pa-0 ma-0">
       <span class="overline" style="line-height:1em">szeno&middot;DB <span style="text-transform:lowercase;">v</span>{{appVersion}}</span>
       <span class="px-1">made with <v-icon small color="rgba(255,0,255,.5)">mdi-heart</v-icon> by</span>
@@ -40,6 +140,8 @@ export default {
   data () {
     return {
       appVersion: version,
+      welcomeDialog: false,
+      blockWelcomeDialogClosing: false,
       message: {
         'welcome': 'Welcome to this fantastic experience!',
         'loggedIn': 'You have successfully been logged in.',
@@ -67,6 +169,10 @@ export default {
             msg: this.message[this.$route.query.error] ? this.message[this.$route.query.error] : this.getMultipleMessages(this.$route.query.error),
           });
         } else if(this.$route.query.info) {
+          if(this.$route.query.info === 'welcome') {
+            this.showWelcomeDialog();
+            return
+          }
           this.$toasted.global.info({
             msg: this.message[this.$route.query.info] ? this.message[this.$route.query.info] : this.getMultipleMessages(this.$route.query.info),
           });
@@ -137,13 +243,44 @@ export default {
         // Was just string
         return queryParams
       }
-    }
+    },
+    showWelcomeDialog() {
+      this.welcomeDialog = true;
+      this.$router.push({
+        path: this.$route.path
+      })
+      setTimeout(() => {
+          this.blockWelcomeDialogClosing = true;
+      }, 6500);
+    },
   }
 };
 </script>
 
-<style>
+<style scoped>
   .v-image__image--preload {
     filter: none;
   }
+  ol.niceList {
+   list-style: none;
+   counter-reset: item;
+   margin-left: 2em;
+ }
+ .niceList li {
+   counter-increment: item;
+   padding-bottom: .5em;
+ }
+ .niceList li:before {
+   position: absolute;
+   left:1.75em;
+   font-weight: bolder;
+   content: '\00a0'counter(item)'.';
+   background: #2196F3;
+   border-radius: 100%;
+   color: white;
+   width: 1.5em;
+   height: 1.5em;
+   text-align: center;
+   display: inline-block;
+ }
 </style>
