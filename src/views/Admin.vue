@@ -11,7 +11,7 @@
         <!-- USERS -->
         <v-card-title class="justify-center">Users</v-card-title>
 
-         {{users.length}} users in total, combined effort: <span class="orange--text">{{totalContribution.toLocaleString()}}</span> contribution points
+         {{users.length}} users in total, combined effort: <span class="orange--text">{{totalContribution >= 0 ? totalContribution.toLocaleString() : '--'}}</span> contribution points
          <br>
          Sort by 
          <label class="mx-2 pointer"><input type="radio" name="sortby" @change="getUsers('createdOn', 'desc')" checked> Created</label>
@@ -21,6 +21,9 @@
          <label class="mx-2 pointer"><input type="radio" name="sortby" @change="getUsers('role','asc')"> Role</label>
          <label class="mx-2 pointer"><input type="radio" name="sortby" @change="getUsers('lastLogin','desc')"> Last login</label>
          <label class="mx-2 pointer"><input type="radio" name="sortby" @change="getUsers('kicked','desc')"> Kicked</label>
+         <label class="mx-2 pointer"><input type="radio" name="sortby" @change="getUsers('deletedUser', 'desc')"> Deleted</label>
+
+          <!-- <pre>{{users}}</pre> -->
         <div class="pa-0 py-4" style="max-height:1000px; overflow-y:auto;">
           <div
             v-for="(singleUser, i) in users"
@@ -28,7 +31,16 @@
             :key="i"
             :class="i % 2 == 0 ? 'grey darken-4' : ''"
           >
-            <div class="pr-2" :style="$vuetify.breakpoint.mdAndUp ? 'width:25%;' : 'width:100%;'" style="overflow:hidden; vertical-align: top; display:inline-block;">
+            <v-btn dense small class="ma-2 red right top absolute" :disabled="singleUser.id === user.uid" v-if="singleUser.kicked" @click="updateUserField('kicked', singleUser.id, false)">unkick me</v-btn>
+            <v-btn dense small class="ma-2 right top absolute" :disabled="singleUser.id === user.uid" v-else-if="singleUser.kicked === false" @click="updateUserField('kicked', singleUser.id, true)">kick me</v-btn>
+            
+            <v-btn dense small class="ma-2 hover right top absolute" :class="singleUser.deletedUser ? '' : 'mt-10'" :disabled="singleUser.id === user.uid" @click="userConfirmDelete = singleUser.id">delete {{singleUser.name ? `${singleUser.name}'s` : 'this'}} account</v-btn>
+            <v-btn dense small class="ma-2 right top absolute error--fade" :class="singleUser.deletedUser ? '' : 'mt-10'" v-if="userConfirmDelete === singleUser.id" @click="userDelete(singleUser.id)">yes delete me please dear god</v-btn>
+            
+            <div v-if="singleUser.deletedUser" class="">
+              Deleted user: <pre>{{singleUser.id}}</pre>
+            </div>
+            <div v-else class="pr-2" :style="$vuetify.breakpoint.mdAndUp ? 'width:25%;' : 'width:100%;'" style="overflow:hidden; vertical-align: top; display:inline-block;">
               <span class="text-h6 ">
               {{singleUser.name}}
               </span>
@@ -41,12 +53,8 @@
                 {{singleUser.emailVerified  ? 'mdi-check-circle' : 'mdi-close-circle'}}
               </v-icon>
               <a :href="`mailto:${singleUser.email}`">{{singleUser.email}}</a>
-              <br>
-              <v-btn dense small class="ma-2 red right top absolute" :disabled="singleUser.id === user.uid" v-if="singleUser.kicked" @click="updateUserField('kicked', singleUser.id, false)">unkick me</v-btn>
-              <v-btn dense small class="ma-2 right top absolute" :disabled="singleUser.id === user.uid" v-else @click="updateUserField('kicked', singleUser.id, true)">kick me</v-btn>
-              <br>
             </div>
-            <div class="grey--text" :style="$vuetify.breakpoint.mdAndUp ? 'width:75%;' : 'width:100%;'" style="display:inline-block">
+            <div v-if="!singleUser.deletedUser" class="grey--text" :style="$vuetify.breakpoint.mdAndUp ? 'width:75%;' : 'width:100%;'" style="display:inline-block">
               Role: <b class="pointer" @click="setRoleForUser(singleUser.role === 'user' ? 'admin' :'user', singleUser.uid)" 
               :title="singleUser.role === 'user' ? 'Upgrade to admin' :'Downgrade to user'" style="disaplay:inline-block">
                 {{singleUser.role}}
@@ -61,6 +69,9 @@
               last login: {{singleUser.lastLogin ? $helpers.fbTimeToString(singleUser.lastLogin, "DD.MM.YY - HH:mm") : '---' }}<br>
             </div>
           </div>
+        </div>
+        <div v-if="!users.length">
+          No users to show.
         </div>
         
         <hr class="mb-3 mt-16" style="border:none; border-top: solid 1px rgba(255,255,255,.25);">
@@ -171,6 +182,7 @@ import Copy from '@/components/Copy'
         backupName: '',
         loading: false,
         backupInProgress: false,
+        userConfirmDelete: '',
         users: [],
         backups: [],
         reloadBackupConfirmation: -1,
@@ -216,6 +228,7 @@ import Copy from '@/components/Copy'
         if(typeof unsubscribeSettings === 'function') this.unsubscribeUsers();
         // Circumvent doubled identical "orderBy" createdOn
         let secondary = orderBy === 'createdOn' ? 'email' : 'createdOn';
+        secondary = orderBy === 'deletedUser' ? 'editedOn' : secondary;
         this.unsubscribeUsers = db.collection('users')
         .orderBy(orderBy, sort)
         .orderBy(secondary, 'desc')
@@ -225,7 +238,7 @@ import Copy from '@/components/Copy'
           querySnapshot.forEach(doc => {
             let f = doc.data();
             f.id = doc.id;
-            if(!f.deletedUser) newData.push(f);
+            if(orderBy === 'deletedUser' || !f.deletedUser) newData.push(f);
           });
           this.users = newData;
         });
@@ -330,6 +343,18 @@ import Copy from '@/components/Copy'
         });
         this.reloadBackupConfirmation = -1;
         }
+      },
+
+      async userDelete(userId) {
+        console.log(userId)
+        this.userConfirmDelete = '';
+        this.$helpers.copyClipBoard(userId, 'User ID');
+        await db.collection('users').doc(userId).delete().then(function() {
+          window.open('https://console.firebase.google.com/project/szenodb/authentication/users', '_blank');
+        }).catch(function(error) {
+          throw error;
+        });
+
       },
     },
   }
