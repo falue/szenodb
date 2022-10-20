@@ -96,18 +96,18 @@
           <ol class="px-0 py-2" v-if="backups && backups['backups'] && backups['backups'].length">
             <li style="list-style:none;" v-for="(backup, x) in backups['backups'].slice().reverse()" :key="x">
               <!-- {{backup}} -->
-              <span class="inline-block" :style="$vuetify.breakpoint.xs ? 'width:100%' : 'width:225px'">
+              <div class="inline-block ellipsis" :title="backup.name" :style="$vuetify.breakpoint.xs ? 'width:100%' : 'width:225px'">
                 <span class="grey--text">{{x+1}}. </span>
                 <span v-html="starify(backup.name)"></span>
-              </span>
+              </div>
 
-              <v-btn icon small class="mr-2" :color="reloadBackupConfirmation === backup.date ? 'red' : 'grey'" @click="reloadBackupConfirmation === backup.date ? reloadBackupConfirmation = -1 :reloadBackupConfirmation = backup.date">
+              <v-btn icon small class="mr-2 nudge-y--50" :color="reloadBackupConfirmation === backup.date ? 'red' : 'grey'" @click="reloadBackupConfirmation === backup.date ? reloadBackupConfirmation = -1 :reloadBackupConfirmation = backup.date">
                 <!-- <v-icon small>mdi-database-outline</v-icon> -->
                 <v-icon>mdi-database-clock</v-icon>
               </v-btn>
 
               <!-- UNIX to date with format... -->
-              <div class="grey--text inline-block" :class="$vuetify.breakpoint.xs ? 'pb-5' : ''">
+              <div class="grey--text inline-block ellipsis" :class="$vuetify.breakpoint.xs ? 'pb-5' : ''">
                 {{ $moment(backup.date).format("dddd, DD. MM. YYYY - HH:mm:ss") }}<!-- 
                 -->{{x === 0 ? `, ${$helpers.timeRelativeToNow($moment(backup.date))}, newest` : ''}}<!-- 
                 -->{{x === backups.backups.length-1 && x != 0 ? ', oldest' : ''}}
