@@ -745,6 +745,13 @@ viewResourceFromHardReoadedUrl() {
 
       addResource() {
         this.loadingEdit = true;
+
+        if(this.post.note) {
+          // save to user doc instead
+          this.$store.dispatch('updateField', {'collection':'users', 'document':this.user.uid,'field':'notes', 'data': this.post.note});
+          delete this.post.note
+        }
+
         let id = this.post.id;
         delete this.post.id;
         this.$store.dispatch('addResource', {"id": id, "collection": "resources", "post": this.post}).then(() => {
@@ -802,6 +809,13 @@ viewResourceFromHardReoadedUrl() {
 
       async saveEditedResource() {
         this.loadingEdit = true;
+
+        if(this.post.note) {
+          // save to user doc instead
+          this.$store.dispatch('updateField', {'collection':'users', 'document':this.user.uid,'field':'notes', 'data': this.post.note});
+          delete this.post.note
+        }
+
         // to remove id from post
         let newData = {
             title: this.post.title,

@@ -1,6 +1,6 @@
 <template>
 <!--  -->
-  <form @submit.prevent="dataMode === 'new' ? $emit('new', data) : $emit('edit', {'newData': data, 'oldData': oldData});">
+  <form @submit.prevent="dataMode === 'new' ? $emit('new', {...data, 'note': user.notes}) : $emit('edit', {'newData': {...data, 'note': user.notes}, 'oldData': oldData});">
     <!-- Use v-model="..." @change="..." instead of v-model: massive typing speed improvements -->
     <v-text-field style="" :style="addDetails ? 'display:inline-block; width:40%;' : ''" class="mr-2" type="text" v-model="data.title" :rules="requiered">
       <template v-slot:label>Company/Title<span v-if="data.title.length == 0" class="red--text">*</span></template>
@@ -10,6 +10,7 @@
       <template v-slot:label>Resources<span v-if="data.resources.length == 0" class="red--text">*</span></template>
     </v-textarea>
     <v-textarea auto-grow rows="3" label="Opinions" hint="Delivery speed, what to look out for, etc. Will auto translate to EN/DE/FR/IT." type="text" v-model="data.info"></v-textarea>
+    <v-textarea auto-grow rows="1" label="Private note" hint="These notes do not show up to other users." type="text" v-model="user.notes[data.id]"></v-textarea>
     <v-text-field v-if="addDetails" label="Address" hint="Can be typed address, google share link or general region." type="text" v-model="data.address"></v-text-field>
     <v-text-field v-if="addDetails" label="Telephone" style="width:40%; display:inline-block" class="mr-2" type="text" v-model="data.tel"></v-text-field>
     <v-text-field v-if="addDetails" label="Email" style="width:55%; display:inline-block" type="text" v-model="data.email"></v-text-field>

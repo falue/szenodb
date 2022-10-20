@@ -518,6 +518,9 @@ const store = new Vuex.Store({
           } else if(payload && positionOf !== -1)  {
             // find matches anywhere
             dataArray.push(resource)
+          } else if(state.userProfile.notes[resource.id]?.replace(/[^0-9a-zA-Z]/g, '').toLowerCase().indexOf(payload) >= 0)  {
+            // find matches in user.notes.id
+            dataArray.push(resource)
           }
         })
         commit('setResource', [...primaryDataArray, ...dataArray]);

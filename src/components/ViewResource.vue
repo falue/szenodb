@@ -100,6 +100,19 @@
       {{data.content.rating ? data.content.rating+'/5' : '(unrated)'}}
       </v-card-text>
 
+      <v-card-text class="pt-8 pb-0 grey--text">
+        <div style="line-height:1em" class="grey--text overline">Private notes</div>
+          <v-textarea filled small dense class="mt-2" hide-details single-line auto-grow rows="1" placeholder="Type away.." type="text"
+            @input="saveNote(data.id)"
+            v-model="user.notes[data.id]"
+          >
+            <v-icon slot="append" :color="savedNote ? 'primary' : ''">
+              {{savedNote ? 'mdi-content-save-check' : 'mdi-pencil'}}
+            </v-icon>
+          </v-textarea>
+        <v-icon :small="$vuetify.breakpoint.mdAndUp" color="primary">mdi-information</v-icon> These notes do not show up to other users.
+      </v-card-text>
+
       <v-card-text v-if="data.content.imgs.length" class="pt-8 pb-0">
         <div style="line-height:1em" class="grey--text overline pb-2">
           {{ data.content.imgs.length == 1 ? 'image (1)' : "images ("+ data.content.imgs.length + ")" }}
@@ -252,6 +265,8 @@ import Share from '@/components/Share'
         languageIndex: 0,
         magnifyIndex: 0,
         magnifyDialog: false,
+        noteTimeout: 0,
+        savedNote: false,
         magnifyDialogImg: {},
         languages: ['original', 'DE', 'EN-GB', 'FR', 'IT']
       }
@@ -336,6 +351,21 @@ import Share from '@/components/Share'
           : this.magnifyIndex;
         this.magnifyDialogImg = this.data.content.imgs[this.magnifyIndex];
       },
+      saveNote(id) {
+        if(this.noteTimeout) {
+          clearTimeout(this.noteTimeout);  // do not overlapp last search
+        }
+        this.noteTimeout = setTimeout(() => {
+          console.log(id);
+          console.log(this.user.notes[id]);
+          //let data = {[id]: [...this.user.notes, this.user.notes[id]]}}
+          this.$store.dispatch('updateField', {'collection':'users', 'document':this.user.uid,'field':'notes', 'data': this.user.notes});
+          this.savedNote=true;
+          setTimeout(() => {
+            this.savedNote=false;
+          }, 1250);
+        }, 750);
+      }
     }
   }
 </script>
