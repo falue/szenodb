@@ -103,7 +103,7 @@
       <v-card-text class="pt-8 pb-0 grey--text">
         <div style="line-height:1em" class="grey--text overline">Private notes</div>
           <v-textarea filled small dense class="mt-2" hide-details single-line auto-grow rows="1" placeholder="Type away.." type="text"
-            @input="saveNote(data.id)"
+            @input="saveNote()"
             v-model="user.notes[data.id]"
           >
             <v-icon slot="append" :color="savedNote ? 'primary' : ''">
@@ -351,14 +351,11 @@ import Share from '@/components/Share'
           : this.magnifyIndex;
         this.magnifyDialogImg = this.data.content.imgs[this.magnifyIndex];
       },
-      saveNote(id) {
+      saveNote() {
         if(this.noteTimeout) {
           clearTimeout(this.noteTimeout);  // do not overlapp last search
         }
         this.noteTimeout = setTimeout(() => {
-          console.log(id);
-          console.log(this.user.notes[id]);
-          //let data = {[id]: [...this.user.notes, this.user.notes[id]]}}
           this.$store.dispatch('updateField', {'collection':'users', 'document':this.user.uid,'field':'notes', 'data': this.user.notes});
           this.savedNote=true;
           setTimeout(() => {
