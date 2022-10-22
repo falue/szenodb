@@ -157,7 +157,7 @@ const store = new Vuex.Store({
           uid: user.user.uid,
           favorites: [],
           kicked: false,
-          new: form.news,
+          news: form.news,
           emailVerified: false,
           tags: [],            // https://github.com/falue/szenodb/issues/25
           notes: [],           // https://github.com/falue/szenodb/issues/18
