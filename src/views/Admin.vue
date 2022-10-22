@@ -13,6 +13,8 @@
 
          {{users.length}} users in total, combined effort: <span class="orange--text">{{totalContribution >= 0 ? totalContribution.toLocaleString() : '--'}}</span> contribution points
          <br>
+         <v-btn small dense class="my-2" :href="`mailto:info@fluescher.ch?bcc=${users.map(x => {if(x.news) {return `${x.name}<${x.email}>`}}).filter(x => x).join(',%20')}`">Write email to every willing user</v-btn>
+         <br>
          Sort by 
          <label class="mx-2 pointer"><input type="radio" name="sortby" @change="getUsers('createdOn', 'desc')" checked> Created</label>
          <label class="mx-2 pointer"><input type="radio" name="sortby" @change="getUsers('contribution','desc')"> Contribution</label>

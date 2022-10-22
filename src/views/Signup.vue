@@ -56,6 +56,9 @@
                   I agree to the <router-link class="ml-1" to="/terms" @click.stop>Terms & conditions</router-link>
               </template>
             </v-checkbox>
+            
+            <v-checkbox dense hide-details class="ma-0" label="Get crucial news via email" v-model="signupForm.news">
+            </v-checkbox>
 
           <v-card-actions class="px-0 mt-4">
             <v-btn to="/login">Back</v-btn>
@@ -81,6 +84,7 @@
           password: '',
           privacy: null,
           terms: null,
+          news: false,
         },
         doubleCheck: false,
         doubleCheckPw: '',

@@ -165,6 +165,7 @@ import Info from '@/components/Info'
             'avatar': this.profile.avatar,
             'name': this.profile.name,
             'title': this.profile.title,
+            'news': this.profile.news,
             'role': this.profile.role,  // Someone can shape the sent object and overwrite this..
             'email': this.profile.email,
           }).then(() => {
