@@ -66,6 +66,13 @@
         <v-text-field filled class="input" :style="$vuetify.breakpoint.mdAndUp ? 'width:55%; display:inline-block' : ''" label="Email" type="text" placeholder="Email" persistent-hint v-model="profile.email" :rules="requiered">
           <v-icon :title="user.emailVerified ? 'Email verified' : 'Email not verified'" slot="append" :class="user.emailVerified ? 'green--text' : 'red--text'">{{user.emailVerified ? 'mdi-check-circle' : 'mdi-close-circle'}}</v-icon>
         </v-text-field>
+        <v-checkbox
+          class="inline-block mt-0 mb-3"
+          hide-details
+          dense
+          v-model="profile.news"
+          label="Receive crucial update news of szenodb via email"
+        ></v-checkbox>
         <br>
 
         <v-card-actions :class="$vuetify.breakpoint.mdAndUp ? 'pl-0 pr-6' : 'pa-0'">
@@ -136,6 +143,12 @@ import Info from '@/components/Info'
         loading: false,
         deleteAccountConfirmation: false,
         requiered: [value => !!value || 'Required.'],
+      }
+    },
+
+    async created() {
+      if(this.profile.news === undefined) {
+        this.profile.news = true;
       }
     },
 
