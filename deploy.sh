@@ -7,15 +7,19 @@ if [ ! -f package.json ]; then
 fi
 
 VERSION="0"
+TARGETPATH="szenodb.ch"
+KEEPSTASH=false
+
 usage() {
     echo "Usage:"
     echo "./deploy.sh           NPM build & deploy."
     echo "./deploy.sh -i        NPM build & deploy, git commit increment marginal number (e.g '0.2.99' => '0.2.100' )."
     echo "./deploy.sh -v 6.6.6  NPM build & deploy, git commit set version to 6.6.6."
+    echo "./deploy.sh -b        KEEP git stashes, NPM build, and deploy to beta.szenodb.ch"
     exit 1
 }
 
-while getopts ":v:i" o; do
+while getopts ":v:ib" o; do
     case "${o}" in
         v)
             VERSION=${OPTARG} || usage
@@ -24,6 +28,10 @@ while getopts ":v:i" o; do
         i)
             VERSION="iterate"
             GITMESSAGE="New marginal version"
+            ;;
+        b)
+            TARGETPATH="beta.szenodb.ch"
+            KEEPSTASH=true
             ;;
         *)
             usage
@@ -35,17 +43,23 @@ shift $((OPTIND-1))  # ?
 # COLORS
 YELLOW='\033[0;33m'
 BLACK='\033[0;30m'
+WHITE='\033[0;97m'
 GREEN='\033[0;32m'
 ON_GREEN='\033[42m'
+ON_RED='\033[41m'
 NC='\033[0m'
 
 # If changes where made to package.json, stash them all.
-GITSTASHED=$(git diff-index --quiet HEAD -- || echo "untracked")
-if [ "$GITSTASHED" == "untracked" ]; then
-    echo -e "\n${GREEN}Needs stashing.${NC}"
-    git stash
+if [ "$KEEPSTASH" = false ]; then
+    GITSTASHED=$(git diff-index --quiet HEAD -- || echo "untracked")
+    if [ "$GITSTASHED" == "untracked" ]; then
+        echo -e "\n${GREEN}Needs stashing.${NC}"
+        git stash
+    else
+        echo -e "\n${YELLOW}Does not need stashing, commence.${NC}"
+    fi
 else
-    echo -e "\n${YELLOW}Does not need stashing, commence.${NC}"
+    echo -e "\n${WHITE}${ON_RED}!!! Keep unstaged changes !!!${NC} and deploy them to ${BLACK}${ON_GREEN}${TARGETPATH}${NC}."
 fi
 
 # ITERATE MARGINAL
@@ -87,9 +101,9 @@ cd ./dist &&
 
 # Copy specified dir recursively
 # use port 2121 as per metanet. get IP from metanet gui. foldername of website.
-scp -P 2121 -r ./ filmkulissen@80.74.158.100:/szenodb.ch &&
+scp -P 2121 -r ./ "filmkulissen@80.74.158.100:/${TARGETPATH}" &&
 
-echo -e "\n\n${GREEN}FINISHED${NC}\n${YELLOW}Built files${NC} uploaded to szenodb.ch."
+echo -e "\n\n${GREEN}FINISHED${NC}\n${YELLOW}Built files${NC} uploaded to ${TARGETPATH}."
 
 if [ "$VERSION" != "0" ]; then
     echo -e "\nNew version ${GREEN}${VERSION}${NC} written to packages.json & committed.\nCommit message: ${BLACK}${ON_GREEN}<${GITMESSAGE} ${VERSION}>${NC}"
@@ -98,8 +112,10 @@ else
 fi
 if [ "$GITSTASHED" == "untracked" ]; then
     echo -e "\nCurrent local changes where git ${GREEN}stashed & reapplied${NC}."
+elif [ "$KEEPSTASH" = true ]; then
+    echo -e "\nLocal unstaged changes, if any, ${WHITE}${ON_RED}where deployd!${NC}"
 else
-    echo -e "\nNo local changes detected, ${GREEN}no git stashing."
+    echo -e "\nNo local changes detected, ${GREEN}no git stashing${NC}."
 fi
 
 # NOTES
