@@ -56,7 +56,7 @@
               </template>
             </v-checkbox>
             
-            <v-checkbox dense hide-details class="ma-0" label="Get crucial news via email" v-model="signupForm.news">
+            <v-checkbox dense hide-details class="ma-0" label="Get crucial updates via email" v-model="signupForm.news">
             </v-checkbox>
 
           <v-card-actions class="px-0 mt-4">
