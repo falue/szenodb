@@ -68,6 +68,14 @@ const store = new Vuex.Store({
 
         // fetch user profile and set in state
         dispatch('fetchUserProfile', user).then(async function() {
+
+          if(!user.uid) {
+            // Sometimes during development, user.uid is not set.
+            // Race-condition?
+            /* Function CollectionReference.doc() requires its first argument to be of type non-empty string, but it was: undefined */
+            console.log("something went wrong");
+            return
+          }
           await fb["db"].collection("users").doc(user.uid).update({
             'lastLogin': new Date(),
             'emailVerified': user.emailVerified
