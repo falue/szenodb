@@ -13,7 +13,7 @@
 
          {{users.length}} users in total, combined effort: <span class="orange--text">{{totalContribution >= 0 ? totalContribution.toLocaleString() : '--'}}</span> contribution points
          <br>
-         <v-btn small dense class="my-2" :href="`mailto:info@fluescher.ch?bcc=${users.map(x => {if(x.news) {return `${x.name}<${x.email}>`}}).filter(x => x).join(',%20')}`">Write email to every willing user</v-btn>
+         <v-btn small dense class="my-2" :href="`mailto:info@fluescher.ch?bcc=${users.map(x => {if(x.news || x.news === undefined) {return `${x.name}<${x.email}>`}}).filter(x => x).join(',%20')}`">Write email to every willing user</v-btn>
          <br>
          Sort by 
          <label class="mx-2 pointer"><input type="radio" name="sortby" @change="getUsers('createdOn', 'desc')" checked> Created</label>
@@ -36,8 +36,8 @@
             <v-btn dense small class="ma-2 red right top absolute" :disabled="singleUser.id === user.uid" v-if="singleUser.kicked" @click="updateUserField('kicked', singleUser.id, false)">unkick me</v-btn>
             <v-btn dense small class="ma-2 right top absolute" :disabled="singleUser.id === user.uid" v-else-if="singleUser.kicked === false" @click="updateUserField('kicked', singleUser.id, true)">kick me</v-btn>
             
-            <v-btn dense small class="ma-2 hover right top absolute" :class="singleUser.deletedUser ? '' : 'mt-10'" :disabled="singleUser.id === user.uid" @click="userConfirmDelete = singleUser.id">delete {{singleUser.name ? `${singleUser.name}'s` : 'this'}} account</v-btn>
-            <v-btn dense small class="ma-2 right top absolute error--fade" :class="singleUser.deletedUser ? '' : 'mt-10'" v-if="userConfirmDelete === singleUser.id" @click="userDelete(singleUser.id)">yes delete me please dear god</v-btn>
+            <v-btn dense small class="ma-2 hover right top absolute" :class="singleUser.deletedUser ? '' : 'mt-10'" :disabled="singleUser.id === user.uid" v-if="userConfirmDelete !== singleUser.id" @click="userConfirmDelete = singleUser.id">delete {{singleUser.name ? `${singleUser.name.split(' ')[0].split('@')[0].split('.')[0]}'s` : 'this'}} account</v-btn>
+            <v-btn dense small class="ma-2 right top absolute error--fade" :class="singleUser.deletedUser ? '' : 'mt-10'" v-else @click="userDelete(singleUser.id)">yes delete me please dear god</v-btn>
             
             <div v-if="singleUser.deletedUser" class="">
               Deleted user: <pre>{{singleUser.id}}</pre>
