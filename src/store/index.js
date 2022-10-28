@@ -155,7 +155,6 @@ const store = new Vuex.Store({
         credentials = user.user;
         return fb.usersCollection.doc(credentials.uid).set({  // return ?????
           name: form.name,
-          title: form.title,
           email: form.email.toLowerCase(),
           consent: {
             privacy: form.privacy,

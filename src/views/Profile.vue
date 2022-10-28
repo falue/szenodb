@@ -61,8 +61,6 @@
 
       <form @submit.prevent="saveUserData">
         <v-text-field filled class="input" :class="$vuetify.breakpoint.mdAndUp ? 'mr-2' : ''" :style="$vuetify.breakpoint.mdAndUp ? 'width:40%; display:inline-block' : ''" label="Name" type="text" placeholder="Name" v-model="profile.name" :rules="requiered"></v-text-field>
-        <v-text-field filled class="input" :style="$vuetify.breakpoint.mdAndUp ? 'width:55%; display:inline-block' : ''" label="Profession" type="text" placeholder="Title" v-model="profile.title"></v-text-field>
-        <v-text-field filled class="input" :class="$vuetify.breakpoint.mdAndUp ? 'mr-2' : ''" :style="$vuetify.breakpoint.mdAndUp ? 'width:40%; display:inline-block' : ''" label="Role" type="text" :placeholder="profile.role" persistent-hint hint="If admin, you can make changes to the system" disabled></v-text-field>
         <v-text-field filled class="input" :style="$vuetify.breakpoint.mdAndUp ? 'width:55%; display:inline-block' : ''" label="Email" type="text" placeholder="Email" persistent-hint v-model="profile.email" :rules="requiered">
           <v-icon :title="user.emailVerified ? 'Email verified' : 'Email not verified'" slot="append" :class="user.emailVerified ? 'green--text' : 'red--text'">{{user.emailVerified ? 'mdi-check-circle' : 'mdi-close-circle'}}</v-icon>
         </v-text-field>
@@ -177,7 +175,6 @@ import Info from '@/components/Info'
           await db.collection("users").doc(this.user.uid).update({
             'avatar': this.profile.avatar,
             'name': this.profile.name,
-            'title': this.profile.title,
             'news': this.profile.news,
             'role': this.profile.role,  // Someone can shape the sent object and overwrite this..
             'email': this.profile.email,
