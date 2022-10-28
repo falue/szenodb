@@ -50,20 +50,20 @@
 
       <!-- Breakpoint helpers -->
       <!-- https://vuetifyjs.com/en/features/breakpoints/#breakpoint-service -->
-      <!-- <div class="fixed top left pa-3 text-h4" style="background-color:rgba(0,0,0,0.75)">
+      <div class="fixed top left pa-3 text-h4" style="background-color:rgba(0,0,0,0.75)">
         <span class="px-1" :class="$vuetify.breakpoint.xs ? 'green--text' : 'grey--text text--darken-2'">{{$vuetify.breakpoint.xs ? 'XS' : 'XS'}}</span>
         <span class="px-1" :class="$vuetify.breakpoint.sm ? 'green--text' : 'grey--text text--darken-2'">{{$vuetify.breakpoint.sm ? 'SM' : 'SM'}}</span>
         <span class="px-1" :class="$vuetify.breakpoint.md ? 'green--text' : 'grey--text text--darken-2'">{{$vuetify.breakpoint.md ? 'MD' : 'MD'}}</span>
         <span class="px-1" :class="$vuetify.breakpoint.lg ? 'green--text' : 'grey--text text--darken-2'">{{$vuetify.breakpoint.lg ? 'LG' : 'LG'}}</span>
         <span class="px-1" :class="$vuetify.breakpoint.xl ? 'green--text' : 'grey--text text--darken-2'">{{$vuetify.breakpoint.xl ? 'XL' : 'XL'}}</span>
-      </div> -->
+      </div>
 
       <!-- DESKTOP LINKS -->
       <div v-if="$vuetify.breakpoint.smAndUp">
         <v-tooltip
           v-for="link in links.filter(x => { if((x.auth && auth || !x.auth && !auth || x.auth === 'both') && ( !x.admin || x.admin && (user.role == 'admin'))) return x})"
           :key="link.title"
-          open-delay="750" :open-on-click="false" bottom :disabled="$vuetify.breakpoint.smAndDown" color="#303030">
+          open-delay="750" :open-on-click="false" bottom color="#303030">
           <template v-slot:activator="{ on, attrs }">
             <v-btn text :icon="$vuetify.breakpoint.xs" dense small :to="link.to" class="hover px-1 mx-1 primary--text" v-bind="attrs" v-on="on">
               <v-icon :small="$vuetify.breakpoint.mdAndUp" color="">mdi-{{link.icon}}</v-icon>
@@ -78,7 +78,7 @@
       <v-tooltip v-if="auth && $vuetify.breakpoint.smAndUp" open-delay="0" :open-on-click="false" bottom color="#303030">
         <template v-slot:activator="{ on, attrs }">
           <v-btn text icon small :circle="$vuetify.breakpoint.mdAndUp" @click="logout()" class="mx-1" v-bind="attrs" v-on="on">
-            <v-icon :small="$vuetify.breakpoint.mdAndUp" color="primary">mdi-logout-variant</v-icon>
+            <v-icon :small="$vuetify.breakpoint.mdAndUp" color="pink">mdi-logout-variant</v-icon>
           </v-btn>
         </template>
         <span>Logout</span>
@@ -148,7 +148,7 @@
 
         <v-list-item v-if="auth" @click="logout()" link>
           <v-list-item-avatar>
-            <v-icon color="primary" class="mx-0">mdi-logout-variant</v-icon>
+            <v-icon color="pink" class="mx-0">mdi-logout-variant</v-icon>
           </v-list-item-avatar>
           <v-list-item-content>
             <v-list-item-title>Logout</v-list-item-title>
@@ -177,13 +177,13 @@ export default {
       appVersion: version,
       links: [
         /* NO AUTH OR BOTH */
-        {to: '/about', auth: "both", title: "What's this?", icon: 'information-outline', tooltip: 'More info about this'},
+        {to: '/about', auth: "both", title: "What's this?", icon: 'information-outline', tooltip: 'What & how, FAQ, guidelines, whodunit? & contact'},
         {to: '/login', auth: false, title: "Login", icon: 'login-variant', tooltip: 'Login to see the goodies'},
         /* AUTH */
         {to: '/resources', auth: true, title: 'Resources', icon: 'format-list-text', tooltip: 'See & edit the list of resources'},
-        // {to: '/colleagues', auth: true, title: 'Colleagues', icon: 'account-group', tooltip: 'Find people to work for or with you'},
+        {to: '/colleagues', auth: true, title: 'Colleagues', icon: 'account-group', tooltip: 'Find people to work for and with you'},
         {to: '/goodies', auth: true, title: 'Goodies', icon: 'cupcake', tooltip: 'An assortment of things'},
-        {to: '/admin', auth: true, admin: true, title: 'Admin', icon: 'wrench', tooltip: 'Manage users & backups'},
+        {to: '/admin', auth: true, admin: true, title: 'Admin', icon: 'shield-account', tooltip: 'Manage users & backups'},
         {to: '/profile', auth: true, title: 'Profile', icon: 'account-cowboy-hat', tooltip: `Your profile`},
       ],
       slides: [
