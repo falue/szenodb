@@ -50,13 +50,13 @@
 
       <!-- Breakpoint helpers -->
       <!-- https://vuetifyjs.com/en/features/breakpoints/#breakpoint-service -->
-      <div class="fixed top left pa-3 text-h4" style="background-color:rgba(0,0,0,0.75)">
+      <!-- <div class="fixed top left pa-3 text-h4" style="background-color:rgba(0,0,0,0.75)">
         <span class="px-1" :class="$vuetify.breakpoint.xs ? 'green--text' : 'grey--text text--darken-2'">{{$vuetify.breakpoint.xs ? 'XS' : 'XS'}}</span>
         <span class="px-1" :class="$vuetify.breakpoint.sm ? 'green--text' : 'grey--text text--darken-2'">{{$vuetify.breakpoint.sm ? 'SM' : 'SM'}}</span>
         <span class="px-1" :class="$vuetify.breakpoint.md ? 'green--text' : 'grey--text text--darken-2'">{{$vuetify.breakpoint.md ? 'MD' : 'MD'}}</span>
         <span class="px-1" :class="$vuetify.breakpoint.lg ? 'green--text' : 'grey--text text--darken-2'">{{$vuetify.breakpoint.lg ? 'LG' : 'LG'}}</span>
         <span class="px-1" :class="$vuetify.breakpoint.xl ? 'green--text' : 'grey--text text--darken-2'">{{$vuetify.breakpoint.xl ? 'XL' : 'XL'}}</span>
-      </div>
+      </div> -->
 
       <!-- DESKTOP LINKS -->
       <div v-if="$vuetify.breakpoint.smAndUp">
