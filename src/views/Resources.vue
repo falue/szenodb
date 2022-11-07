@@ -66,7 +66,7 @@
         <v-icon slot="append" :class="filter.length ? 'hover-red' : ''" @click="filter = ''; $refs['filter'].blur()">{{filter.length ? 'mdi-close' : 'mdi-magnify'}}</v-icon>
         <template v-slot:append-outer>
           <div class="primary ma-0 addNewResource">
-            <v-icon color="white" @click="resetSearch(maxSearchResults), dataMode = 'new'; drawerOpen = true">mdi-plus</v-icon> 
+            <v-icon color="white" @click="openNewResourceDrawer()">mdi-plus</v-icon> 
           </div>
         </template>
         </v-text-field>
@@ -743,6 +743,16 @@ viewResourceFromHardReoadedUrl() {
         }
       },
 
+      openNewResourceDrawer() {
+        if(!this.user.emailVerified) {
+          this.$toasted.global.error({msg:"Please verify your email."});
+          return;
+        }
+        this.resetSearch(this.maxSearchResults);
+        this.dataMode = 'new';
+        this.drawerOpen = true
+      },
+
       addResource() {
         this.loadingEdit = true;
 
@@ -769,11 +779,9 @@ viewResourceFromHardReoadedUrl() {
       },
 
       createNewFromSearch() {
+        this.openNewResourceDrawer();
         this.post.title=this.filter; 
         // this.filter='';   // FIXME: Does not work to clear searchfield because drawer gets closed when empty searchfield?
-        this.resetSearch(this.maxSearchResults);  // rebuild list
-        this.dataMode = 'new'; 
-        this.drawerOpen = true;
         this.$vuetify.goTo(0);
       },
 
