@@ -65,7 +65,16 @@
               </b>,
               contribution: {{singleUser.contribution}}<br>
               ID: <pre class="grey--text" style="display:inline">{{$vuetify.breakpoint.xs ? $helpers.truncate(singleUser.uid, 22, '…') : singleUser.uid}}</pre>
-              <Copy :data="singleUser.uid" dataName="user ID"></Copy><br>
+              <Copy :data="singleUser.uid" dataName="user ID"></Copy>
+              <a
+                target="_blank"
+                class="no-underline"
+                :title="`Open Firebase document of ${singleUser.name}`"
+                :href="`https://console.firebase.google.com/project/szenodb/firestore/data/~2Fusers~2F${singleUser.uid}`"
+              >
+                <v-icon small class="orange--text ml-2">mdi-firebase</v-icon>
+              </a>
+              <br>
               Created on: {{singleUser.createdOn ? $helpers.fbTimeToString(singleUser.createdOn, "DD.MM.YY - HH:mm") : '---' }},
               last login: {{singleUser.lastLogin ? $helpers.fbTimeToString(singleUser.lastLogin, "DD.MM.YY - HH:mm") : '---' }}<br>
             </div>
