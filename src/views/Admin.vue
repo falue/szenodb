@@ -239,7 +239,9 @@ import Copy from '@/components/Copy'
     methods: {
       getUsers(orderBy, sort) {
         // Terminate earlier snapshots if existing
-        if(typeof unsubscribeSettings === 'function') this.unsubscribeUsers();
+        if(typeof this.unsubscribeUsers === 'function') {
+          this.unsubscribeUsers();
+        }
         // Circumvent doubled identical "orderBy" createdOn
         let secondary = orderBy === 'createdOn' ? 'email' : 'createdOn';
         secondary = orderBy === 'deletedUser' ? 'editedOn' : secondary;
