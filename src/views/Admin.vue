@@ -64,7 +64,6 @@
                 <v-icon small v-else>mdi-account-arrow-down</v-icon>
               </b>,
               contribution: {{singleUser.contribution}}<br>
-              Profession: {{singleUser.title}}<br>
               ID: <pre class="grey--text" style="display:inline">{{$vuetify.breakpoint.xs ? $helpers.truncate(singleUser.uid, 22, '…') : singleUser.uid}}</pre>
               <Copy :data="singleUser.uid" dataName="user ID"></Copy><br>
               Created on: {{singleUser.createdOn ? $helpers.fbTimeToString(singleUser.createdOn, "DD.MM.YY - HH:mm") : '---' }},
