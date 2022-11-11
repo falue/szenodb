@@ -63,7 +63,14 @@
                 <v-icon small v-if="singleUser.role === 'user'">mdi-account-arrow-up</v-icon>
                 <v-icon small v-else>mdi-account-arrow-down</v-icon>
               </b>,
-              contribution: {{singleUser.contribution}}<br>
+              contribution: {{singleUser.contribution}},
+              Newsletter:
+              <v-icon small
+                :color="singleUser.news === false ? 'error' : singleUser.news === true ? 'green' : 'grey'"
+                :title="singleUser.news === false ? 'Opt-out' : singleUser.news === true ? 'Opt-in' : 'Has not yet decided'"
+              >
+                mdi-{{singleUser.news === false ? 'close-circle' : 'check-circle'}}
+              </v-icon><br>
               ID: <pre class="grey--text" style="display:inline">{{$vuetify.breakpoint.xs ? $helpers.truncate(singleUser.uid, 22, '…') : singleUser.uid}}</pre>
               <Copy :data="singleUser.uid" dataName="user ID"></Copy>
               <a
