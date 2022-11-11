@@ -37,7 +37,6 @@
         <v-spacer></v-spacer>
       </v-card-actions>
 
-
       <v-card-text class="white--text">
         <p>This is a tool for the lovely people who work in the art department of switzerland.</p>
         <p><span class="overline pink--text" style="line-height:1em">szeno&middot;DB</span> is a searchable collection of links of connections, materials, services and problem solvers; done by you for us all.</p>
@@ -51,44 +50,10 @@
           Create <router-link to="/signup">an always free account</router-link> to contribute, or feel free to just leech around.
           Login <router-link to="/login">here</router-link> if you're already a user.
         </p>
-
-        <p>
-          <a v-if="!showQuotes" @click="showQuotes = true">This is what people say <v-icon color="primary" small>mdi-arrow-right-bold-box</v-icon>&hellip;</a>
-          <a v-else @click="showQuotes = false">&hellip;people should shut up</a>
-        </p>
-
-        <v-carousel
-            v-if="showQuotes"
-            cycle
-            height="250"
-            hide-delimiter-background
-            hide-delimiters
-            hide-arrows
-            :show-arrows="false"
-          >
-            <v-carousel-item
-              v-for="(quote, i) in quotes"
-              :key="i"
-            >
-              <v-sheet height="100%">
-                <v-row
-                  class="fill-height pa-4"
-                  align="center"
-                  justify="center"
-                >
-                  <div class="text-h4" :class="classes[i]">
-                    &laquo;{{ quote }}&raquo;
-                  </div>
-                  <span class="italics" v-html="`- ${authors[i]}`"></span>
-                </v-row>
-              </v-sheet>
-            </v-carousel-item>
-          </v-carousel>
         
-        <hr class="mb-3 mt-16" style="border:none; border-top: solid 1px rgba(255,255,255,.25);">
-        <v-card-title class="justify-center">FAQ</v-card-title>
+        <v-card-title class="justify-center mt-16">FAQ</v-card-title>
 
-        <v-row justify="center" >
+        <v-row justify="center" class="mb-4">
           <v-expansion-panels accordion v-model="faqIndex">
             <v-expansion-panel
               v-for="(faq,i) in faqs"
@@ -102,8 +67,7 @@
           </v-expansion-panels>
         </v-row>
 
-        <hr class="mb-3 mt-16" style="border:none; border-top: solid 1px rgba(255,255,255,.25);">
-        <v-card-title class="justify-center">Whodunit?</v-card-title>
+        <v-card-title class="justify-center mt-16">Whodunit?</v-card-title>
 
         <v-card-title v-if="$vuetify.breakpoint.smAndDown" two-line class="justify-center">
           <v-list-item-avatar color="grey darken-3" size="250">
@@ -169,18 +133,15 @@
           </a>
         </v-card-text>
 
-        <hr class="mb-3 mt-16" style="border:none; border-top: solid 1px rgba(255,255,255,.25);">
-        This project is open-source under <a href="https://github.com/falue/szenodb/blob/main/COPYING" target="_blank">GNU GPLv3</a>.
-        <br>
-        See all the <router-link to="/updates">updates & issues here</router-link>.
-        <br>
-        <br>
-
-        <router-link to="/privacy">Privacy agreement</router-link>
-        &middot;
-        <router-link to="/terms">Terms & conditions</router-link>
-        &middot;
-        <a href="https://github.com/falue/szenodb/blob/main/COPYING" target="_blank">GNU GPLv3</a>
+        <v-card-text class="text-center mt-16">
+          This project is open-source under <a href="https://github.com/falue/szenodb/blob/main/COPYING" target="_blank">GNU GPLv3</a>.
+          <br>
+          <router-link to="/privacy">Privacy agreement</router-link>
+          &middot;
+          <router-link to="/terms">Terms & conditions</router-link>
+          &middot;
+          <a href="https://github.com/falue/szenodb/blob/main/COPYING" target="_blank">GNU GPLv3</a>
+        </v-card-text>
       </v-card-text>
     </v-card>
 
@@ -229,7 +190,6 @@ import Copy from '@/components/Copy'
     
     data () {
       return {
-        showQuotes: false,
         popUpTwint: false,
         faqIndex: 0,
         faqs: [
@@ -262,6 +222,10 @@ import Copy from '@/components/Copy'
                       <a href="https://tutti.ch" target="_blank">tutti</a>,
                       or <a href="https://ricardo.ch" target="_blank">ricardo</a>.
                       Have a warehouse full of stuff that fills & empties all the time? Yes please.`
+          },
+          {
+            'question': "What's new? Latest changes?",
+            'answer': `See all the <a href="#/updates">updates & issues here</a>, big and small.`
           },
           {
             'question': 'I found incorrect data. What to do?',
@@ -308,23 +272,6 @@ import Copy from '@/components/Copy'
           'red--text lighten-1',
           'deep-purple--text accent-4',
           'pink--text darken-2',
-        ],
-        quotes: [
-          "It's like google, but tailored for us, and like the best invention since sliced bread.",
-          "I disagree strongly with whatever work this quote is attached to.",
-          "Who are you? What are you doing in my workshop?",
-          //"Gimme your wallet or I blow your fucking head off",
-          "This quote is often falsely attributed to Mark Twain.",
-          "So this goes like, on the internet? What should I say?",
-          "Websites that collect quotes are full of mistakes and never check original sources.",
-        ],
-        authors: [
-          "Totally not made up user of <span class='overline pink--text' style='font-style: initial; line-height:1em'>szeno&middot;DB</span>",
-          "Randall Munroe / <a href='https://xkcd.com/1942/' target='_blank'>xkcd.com</a>",
-          "Best friend; first & last time I've seen him",
-          "Randall Munroe / <a href='https://xkcd.com/1942/' target='_blank'>xkcd.com</a>",
-          "Random citizen of Winterthur",
-          "Randall Munroe / <a href='https://xkcd.com/1942/' target='_blank'>xkcd.com</a>",
         ],
       }
     },
