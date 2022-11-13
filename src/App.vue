@@ -252,9 +252,10 @@ export default {
     },
     showWelcomeDialog() {
       this.welcomeDialog = true;
-      this.$router.push({
-        path: this.$route.path
-      })
+      this.$router.push({path: this.$route.path, query: { 
+        ...(this.$route.query.view && {view: this.$route.query.view}),
+        ...(this.$route.query.user && {user: this.$route.query.user}),
+      }})
       setTimeout(() => {
           this.blockWelcomeDialogClosing = true;
       }, 6500);
