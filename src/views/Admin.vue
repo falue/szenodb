@@ -47,14 +47,18 @@
               {{singleUser.name}}
               </span>
               <br>
-              <v-icon
-                small
-                class="mr-1"
-                :title="singleUser.emailVerified ? 'Email verified' : 'Email not verified'"
-                :class="singleUser.emailVerified ? 'green--text' : 'red--text'">
-                {{singleUser.emailVerified  ? 'mdi-check-circle' : 'mdi-close-circle'}}
-              </v-icon>
-              <a :href="`mailto:${singleUser.email}`">{{singleUser.email}}</a>
+              <a :href="`mailto:${singleUser.email}`"
+                class="no-underline block ellipsis maxWidth"
+                :title="singleUser.emailVerified ? `Email ${singleUser.email} verified` : `Email ${singleUser.email} not verified`"
+              >
+                <v-icon
+                  small
+                  class="mr-1"
+                  :class="singleUser.emailVerified ? 'green--text' : 'red--text'">
+                  {{singleUser.emailVerified  ? 'mdi-check-circle' : 'mdi-close-circle'}}
+                </v-icon>
+                {{singleUser.email}}
+              </a>
             </div>
             <div v-if="!singleUser.deletedUser" class="grey--text" :style="$vuetify.breakpoint.mdAndUp ? 'width:75%;' : 'width:100%;'" style="display:inline-block">
               Role: <b class="pointer" @click="setRoleForUser(singleUser.role === 'user' ? 'admin' :'user', singleUser.uid)" 
@@ -130,7 +134,7 @@
                 -->{{x === backups.backups.length-1 && x != 0 ? ', oldest' : ''}}
               </div>
 
-              <div class="primary--text pb-8 pl-4" v-if="reloadBackupConfirmation === backup.date">
+              <div class="error white--text bolder darken-1 rounded mb-8 pa-2 text-center" v-if="reloadBackupConfirmation === backup.date">
                 <p class="mb-2">
                   Really sure to delete current data & reload this backup?
                 </p>
