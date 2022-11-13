@@ -82,11 +82,25 @@ const store = new Vuex.Store({
           })
           store.dispatch('addContribution', 1);
         }).catch(err => {
-          console.log("KICKED USER");
-          console.log("FB rules prohibit because user is kicked:\n", err)
-          fb.auth.signOut();
-          commit('setUserProfile', {});
-          router.push('/login?error=kicked');
+          // if failed login, error is: "CollectionReference.doc(xxx) xxx was undefined".
+          //   I don't know where this error originates.
+          //   if user is kicked, error is: "Missing or insufficient permissions."/permission-denied
+          if(err.code === 'permission-denied') {
+            // cannot read .kicked because document is not readable by kicked user
+            console.error("KICKED USER");
+            console.log(err.code);
+            console.log("FB rules prohibit because user is kicked:\n", err)
+            fb.auth.signOut();
+            commit('setUserProfile', {});
+            router.push('/login?error=kicked');
+          } else {
+            console.error("SOMETHING WRONG with the login!")
+            console.log("Could not fetchUserProfile OR read collection(users)", err);
+            console.log(err.code); // === invalid-argument
+            console.log("user does not have all values from user doc.");
+            console.log("Do as nothing has happened. lastLogin, emailVerified, contribution could not be updated.");
+            router.push('/resources');
+          }
           return
         });
         return true
