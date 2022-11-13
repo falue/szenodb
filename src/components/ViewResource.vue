@@ -19,6 +19,15 @@
       <div class="nudge-y--25">
         <Copy :data="data.content.title" dataName="title" position="bottom"></Copy>
         <Copy v-if="user.role === 'admin'" :data="data.id" dataName="Document ID" position="bottom"></Copy>
+        <a
+          v-if="user.role === 'admin'"
+          target="_blank"
+          class="no-underline"
+          :title="`Open Firebase document of ${data.content.title}`"
+          :href="`https://console.firebase.google.com/project/szenodb/firestore/data/~2Fresources~2F${data.id}`"
+        >
+          <v-icon small class="orange--text ml-2">mdi-firebase</v-icon>
+        </a>
       </div>
     </v-card-title>
 
