@@ -17,7 +17,8 @@
         <v-card-actions class="px-0">
           <v-btn :to="`/forgot-password?email=${loginForm.email}`">Forgot PW</v-btn>
           <v-spacer></v-spacer>
-          <v-btn :disabled="loginForm.password.length > 0" color="pink" :to="`/signup?email=${loginForm.email}`">Sign up</v-btn>
+          <!-- TODO: use &next=? -->
+          <v-btn :disabled="loginForm.password.length > 0" color="pink" :to="`/signup?email=${loginForm.email}${$route.query.view ? `&next=/resources&view=${$route.query.view}` : ''}${$route.query.user ? `&next=/colleagues&user=${$route.query.user}` : ''}`">Sign up</v-btn>
           <v-spacer></v-spacer>
           <v-btn type="submit" color="primary" @click="login()">Log in</v-btn>
         </v-card-actions>
