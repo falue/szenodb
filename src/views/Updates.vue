@@ -181,7 +181,7 @@
 
 <style scoped>
   .hero {
-    background: url('../assets/about.jpg');
+    background: url('../assets/bg.jpg');
     background-size: cover;
     background-repeat: no-repeat;
     background-position: 50% 50%;

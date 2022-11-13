@@ -98,6 +98,39 @@ td.ellipsis div.content--wrap {
   vertical-align: sup;
 }
 
+ol.niceList {
+  list-style: none;
+  counter-reset: item;
+  margin-left: 2em;
+}
+ol.niceList li {
+  counter-increment: item;
+  padding-bottom: .5em;
+}
+ol.niceList li:before {
+  position: absolute;
+  left:1.75em;
+  font-weight: bolder;
+  content: '\00a0'counter(item)'.';
+  background: #2196F3;
+  border-radius: 100%;
+  color: white;
+  width: 1.5em;
+  height: 1.5em;
+  text-align: center;
+  display: inline-block;
+}
+
+ul.niceList {
+  list-style: none;
+  padding-left: 0em;
+}
+ul.niceList li:before {
+  content: "-";
+  padding-right: .5em;
+  opacity: 0.5;
+}
+
 .fill-width {
   width: 100%;
 }
@@ -319,6 +352,14 @@ td.ellipsis div.content--wrap {
 
 .roboto {
   font-family: 'Roboto';
+}
+
+.greyscale, .grayscale {
+  filter:grayscale(1)
+}
+
+.blur, .blur--25 {
+  filter: blur(.25em);
 }
 
 .text-shadow--black { 

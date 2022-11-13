@@ -268,26 +268,4 @@ export default {
   .v-image__image--preload {
     filter: none;
   }
-  ol.niceList {
-   list-style: none;
-   counter-reset: item;
-   margin-left: 2em;
- }
- .niceList li {
-   counter-increment: item;
-   padding-bottom: .5em;
- }
- .niceList li:before {
-   position: absolute;
-   left:1.75em;
-   font-weight: bolder;
-   content: '\00a0'counter(item)'.';
-   background: #2196F3;
-   border-radius: 100%;
-   color: white;
-   width: 1.5em;
-   height: 1.5em;
-   text-align: center;
-   display: inline-block;
- }
 </style>
