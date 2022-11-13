@@ -170,6 +170,10 @@ export default {
           this.$toasted.global.error({
             msg: this.message[this.$route.query.error] ? this.message[this.$route.query.error] : this.getMultipleMessages(this.$route.query.error),
           });
+          if(this.$route.query.error === 'kicked') {
+            this.$router.replace({'query': null});
+            return
+          }
         } else if(this.$route.query.info) {
           if(this.$route.query.info === 'welcome') {
             this.showWelcomeDialog();
