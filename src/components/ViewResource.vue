@@ -9,7 +9,9 @@
               class="no-underline"
               target="_blank"
             >
-              <span v-html="data.content.title" class="white--text" :style="data.flags.unreliable ? 'text-decoration: line-through': ''"></span>
+              <span class="white--text" :style="data.flags.unreliable ? 'text-decoration: line-through': ''">
+                {{data.content.title}}
+              </span>
             </a>
         </template>
         <span>{{data.content.web ? `Go to ${$helpers.retrieveDomain(data.content.web)}` : `Do a google for "${data.content.title}"`}}</span>
@@ -35,7 +37,7 @@
 
     <v-card-text v-if="data.content.name" class="pb-0">
       <div style="line-height:1em" class="grey--text overline">Contact person</div>
-      <span v-html="data.content.name"></span>
+      {{data.content.name}}
       <Copy :data="data.content.name" dataName="name" position="right"></Copy>
     </v-card-text>
 
