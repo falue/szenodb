@@ -26,21 +26,26 @@
 
         <p>
           Unless otherwise specified, everything here is
-          <span class="success--text italics">fair use, copyright free and free to use</span>.
+          <span class="orange--text italics">fair use, copyright free and free to use</span>.
         </p>
 
         <p>
           This list might change abruptly, and if you never want to forget links on here, bookmark them.
         </p>
 
-        <!-- MENU -->
-        <div style="line-height:1em" class="fill-width pt-12 grey--text text-h6 pb-2">
-          Chapters
+        <!-- ALL CHAPTER LINKS -->
+        <v-card-title class="justify-center">Chapters</v-card-title>
+        <div class="relative">
+          <ol class="niceList">
+            <div v-for="(card, n) in cards" :key="n">
+              <li v-if="card.chapter"
+                class="pointer mb-2 primary--text" @click="goto(`chapter-${n}`)"
+              >
+                {{card.chapter}}
+              </li>
+            </div>
+          </ol>
         </div>
-        <template v-for="(card, n) in cards">
-          <!-- <div :key="n" v-if="card.chapter" class="pointer mb-2" @click="goto(`chapter-${n}`)">{{card.chapter}}</div> -->
-          <div :key="n" v-if="card.chapter" class="pointer mb-2 primary--text" @click="goto(`chapter-${n}`)">- {{card.chapter}}</div>
-        </template>
 
         <v-row>
           <template v-for="(card, n) in cards" >
