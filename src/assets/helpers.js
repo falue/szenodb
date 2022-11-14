@@ -238,6 +238,10 @@ export default {
     return string ? string.split(/[^A-Za-z]/)[0] : '';
   },
 
+  getFirstName(name, fallback=false) {
+    return name.length ? `${name.split(' ')[0].split('@')[0].split('.')[0]}` : fallback ? fallback : name ? name : 'User';
+  },
+
   parseEmail(data) {
     if(data.indexOf('<') >= 0 && data.indexOf('>') >= 0) {
       let name = data.split("<")[0].trim().split(" ");

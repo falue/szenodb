@@ -11,32 +11,32 @@
         <!-- USERS -->
         <v-card-title class="justify-center">Users</v-card-title>
 
-         {{users.length}} users in total, combined effort: <span class="orange--text">{{totalContribution >= 0 ? totalContribution.toLocaleString() : '--'}}</span> contribution points
-         <br>
-         <v-btn small dense class="my-2" :href="`mailto:info@fluescher.ch?bcc=${users.map(x => {if(x.news || x.news === undefined) {return `${x.name}<${x.email}>`}}).filter(x => x).join(',%20')}`">Write email to every willing user</v-btn>
-         <br>
-         Sort by 
-         <label class="mx-2 pointer"><input type="radio" name="sortby" @change="getUsers('createdOn', 'desc')" checked> Created</label>
-         <label class="mx-2 pointer"><input type="radio" name="sortby" @change="getUsers('contribution','desc')"> Contribution</label>
-         <label class="mx-2 pointer"><input type="radio" name="sortby" @change="getUsers('name','asc')"> Name</label>
-         <label class="mx-2 pointer"><input type="radio" name="sortby" @change="getUsers('email','asc')"> Email</label>
-         <label class="mx-2 pointer"><input type="radio" name="sortby" @change="getUsers('role','asc')"> Role</label>
-         <label class="mx-2 pointer"><input type="radio" name="sortby" @change="getUsers('lastLogin','desc')"> Last login</label>
-         <label class="mx-2 pointer"><input type="radio" name="sortby" @change="getUsers('kicked','desc')"> Kicked</label>
-         <label class="mx-2 pointer"><input type="radio" name="sortby" @change="getUsers('deletedUser', 'desc')"> Deleted</label>
+        {{users.length}} users in total, combined effort: <span class="orange--text">{{totalContribution >= 0 ? totalContribution.toLocaleString() : '--'}}</span> contribution points
+        <br>
+        Sort by 
+        <label class="mx-2 pointer"><input type="radio" name="sortby" @change="getUsers('createdOn', 'desc')" checked> Created</label>
+        <label class="mx-2 pointer"><input type="radio" name="sortby" @change="getUsers('contribution','desc')"> Contribution</label>
+        <label class="mx-2 pointer"><input type="radio" name="sortby" @change="getUsers('name','asc')"> Name</label>
+        <label class="mx-2 pointer"><input type="radio" name="sortby" @change="getUsers('email','asc')"> Email</label>
+        <label class="mx-2 pointer"><input type="radio" name="sortby" @change="getUsers('role','asc')"> Role</label>
+        <label class="mx-2 pointer"><input type="radio" name="sortby" @change="getUsers('lastLogin','desc')"> Last login</label>
+        <label class="mx-2 pointer"><input type="radio" name="sortby" @change="getUsers('kicked','desc')"> Kicked</label>
+        <label class="mx-2 pointer"><input type="radio" name="sortby" @change="getUsers('deletedUser', 'desc')"> Deleted</label>
 
-          <!-- <pre>{{users}}</pre> -->
-        <div class="pa-0 py-4" style="max-height:1000px; overflow-y:auto;">
+        <div class="pt-4 text-right">
+          <v-btn small dense color="primary" class="my-2" :href="`mailto:info@fluescher.ch?bcc=${users.map(x => {if(x.news || x.news === undefined) {return `${x.name}<${x.email}>`}}).filter(x => x).join(',%20')}`">Write email to every willing user</v-btn>
+        </div>
+        <div class="pa-0 pb-4" style="max-height:1000px; overflow-y:auto;">
           <div
             v-for="(singleUser, i) in users"
-            class="my-2 py-2 relative"
+            class="my-2 pl-2 py-2 relative rounded"
             :key="i"
             :class="i % 2 == 0 ? 'grey darken-4' : ''"
           >
             <v-btn dense small class="ma-2 red right top absolute" :disabled="singleUser.id === user.uid" v-if="singleUser.kicked" @click="updateUserField('kicked', singleUser.id, false)">unkick me</v-btn>
             <v-btn dense small class="ma-2 right top absolute" :disabled="singleUser.id === user.uid" v-else-if="singleUser.kicked === false" @click="updateUserField('kicked', singleUser.id, true)">kick me</v-btn>
             
-            <v-btn dense small class="ma-2 hover right top absolute" :class="singleUser.deletedUser ? '' : 'mt-10'" :disabled="singleUser.id === user.uid" v-if="userConfirmDelete !== singleUser.id" @click="userConfirmDelete = singleUser.id">delete {{singleUser.name ? `${singleUser.name.split(' ')[0].split('@')[0].split('.')[0]}'s` : 'this'}} account</v-btn>
+            <v-btn dense small class="ma-2 hover right top absolute" :class="singleUser.deletedUser ? '' : 'mt-10'" :disabled="singleUser.id === user.uid" v-if="userConfirmDelete !== singleUser.id" @click="userConfirmDelete = singleUser.id">delete {{$helpers.getFirstName(singleUser.name, "this")}}'s account</v-btn>
             <v-btn dense small class="ma-2 right top absolute error--fade" :class="singleUser.deletedUser ? '' : 'mt-10'" v-else @click="userDelete(singleUser.id)">yes delete me please dear god</v-btn>
             
             <div v-if="singleUser.deletedUser" class="">
@@ -61,13 +61,15 @@
               </a>
             </div>
             <div v-if="!singleUser.deletedUser" class="grey--text" :style="$vuetify.breakpoint.mdAndUp ? 'width:75%;' : 'width:100%;'" style="display:inline-block">
-              Role: <b class="pointer" @click="setRoleForUser(singleUser.role === 'user' ? 'admin' :'user', singleUser.uid)" 
+              Role: <b class="pointer orange--text" @click="setRoleForUser(singleUser.role === 'user' ? 'admin' :'user', singleUser.uid)" 
               :title="singleUser.role === 'user' ? 'Upgrade to admin' :'Downgrade to user'" style="disaplay:inline-block">
                 {{singleUser.role}}
                 <v-icon small v-if="singleUser.role === 'user'">mdi-account-arrow-up</v-icon>
                 <v-icon small v-else>mdi-account-arrow-down</v-icon>
-              </b>,
-              contribution: {{singleUser.contribution}},
+              </b>
+              &middot;
+              contribution: <b class="orange--text">{{singleUser.contribution}}</b>
+              &middot;
               Newsletter:
               <v-icon small
                 :color="singleUser.news === false ? 'error' : singleUser.news === true ? 'green' : 'grey'"
@@ -76,7 +78,7 @@
                 mdi-{{singleUser.news === false ? 'close-circle' : 'check-circle'}}
               </v-icon><br>
               ID: <pre class="grey--text" style="display:inline">{{$vuetify.breakpoint.xs ? $helpers.truncate(singleUser.uid, 22, '…') : singleUser.uid}}</pre>
-              <Copy :data="singleUser.uid" dataName="user ID"></Copy>
+              <Copy :data="singleUser.uid" opacity=".75" dataName="user ID"></Copy>
               <a
                 target="_blank"
                 class="no-underline"
@@ -86,8 +88,11 @@
                 <v-icon small class="orange--text ml-2">mdi-firebase</v-icon>
               </a>
               <br>
-              Created on: {{singleUser.createdOn ? $helpers.fbTimeToString(singleUser.createdOn, "DD.MM.YY - HH:mm") : '---' }},
-              last login: {{singleUser.lastLogin ? $helpers.fbTimeToString(singleUser.lastLogin, "DD.MM.YY - HH:mm") : '---' }}<br>
+              <small>
+                Created on: {{singleUser.createdOn ? $helpers.fbTimeToString(singleUser.createdOn, "DD.MM.YY - HH:mm") : '---' }}
+                &middot;
+                last login: {{singleUser.lastLogin ? $helpers.fbTimeToString(singleUser.lastLogin, "DD.MM.YY - HH:mm") : '---' }}<br>
+              </small>
             </div>
           </div>
         </div>
