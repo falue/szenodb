@@ -226,6 +226,7 @@ import Info from '@/components/Info'
       getRandomUserImage() {
         let randomImg = this.$helpers.createUid();
         // this.user.avatar.random = randomImg;
+        if(this.profile.avatar === '') this.profile.avatar = {}
         this.profile.avatar.random = randomImg;
         this.$forceUpdate();
       },
