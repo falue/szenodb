@@ -64,8 +64,12 @@
               </a>
             </div>
             <div v-if="!singleUser.deletedUser" class="grey--text" :style="$vuetify.breakpoint.mdAndUp ? 'width:75%;' : 'width:100%;'" style="display:inline-block">
-              Role: <b class="pointer orange--text" @click="setRoleForUser(singleUser.role === 'user' ? 'admin' :'user', singleUser.uid)" 
-              :title="singleUser.role === 'user' ? 'Upgrade to admin' :'Downgrade to user'" style="disaplay:inline-block">
+              Role:
+              <b class="pointer inline"
+                :class="singleUser.role === 'user' ? 'orange--text' : 'pink--text'"
+                @click="setRoleForUser(singleUser.role === 'user' ? 'admin' :'user', singleUser.uid)" 
+                :title="singleUser.role === 'user' ? 'Upgrade to admin' : 'Downgrade to user'"
+              >
                 {{singleUser.role}}
                 <v-icon small v-if="singleUser.role === 'user'">mdi-account-arrow-up</v-icon>
                 <v-icon small v-else>mdi-account-arrow-down</v-icon>
@@ -78,7 +82,7 @@
                 :color="singleUser.news === false ? 'error' : singleUser.news === true ? 'green' : 'grey'"
                 :title="singleUser.news === false ? 'Opt-out' : singleUser.news === true ? 'Opt-in' : 'Has not yet decided'"
               >
-                mdi-{{singleUser.news === false ? 'close-circle' : 'check-circle'}}
+                mdi-{{singleUser.news === false ? 'email-off' : 'email-check'}}
               </v-icon><br>
               ID: <pre class="grey--text" style="display:inline">{{$vuetify.breakpoint.xs ? $helpers.truncate(singleUser.uid, 22, '…') : singleUser.uid}}</pre>
               <Copy :data="singleUser.uid" opacity=".75" dataName="user ID"></Copy>
