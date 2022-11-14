@@ -273,7 +273,7 @@ import Copy from '@/components/Copy'
           this.unsubscribeUsers = this.unsubscribeUsers.where(where, '==', true)
         }
         
-        this.unsubscribeUsers.onSnapshot(querySnapshot => {
+        this.unsubscribeUsers = this.unsubscribeUsers.onSnapshot(querySnapshot => {
           let newData = [];
           querySnapshot.forEach(doc => {
             let f = doc.data();
