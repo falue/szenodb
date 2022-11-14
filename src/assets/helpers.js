@@ -239,7 +239,7 @@ export default {
   },
 
   getFirstName(name, fallback=false) {
-    return name.length ? `${name.split(' ')[0].split('@')[0].split('.')[0]}` : fallback ? fallback : name ? name : 'User';
+    return name && name.length ? `${name.split(' ')[0].split('@')[0].split('.')[0]}` : fallback ? fallback : name ? name : 'User';
   },
 
   parseEmail(data) {
