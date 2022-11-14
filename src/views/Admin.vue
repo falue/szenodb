@@ -15,15 +15,15 @@
         <br>
         <small class="grey--text">
           Sort / filter by
-          <label class="mx-3 nobr pointer"><input type="radio" name="sortby" @change="getUsers('createdOn', 'desc')" checked> Created</label>
-          <label class="mr-3 nobr pointer"><input type="radio" name="sortby" @change="getUsers('contribution','desc')"> Contribution</label>
-          <label class="mr-3 nobr pointer"><input type="radio" name="sortby" @change="getUsers('public', 'desc')"> Public</label>
-          <label class="mr-3 nobr pointer"><input type="radio" name="sortby" @change="getUsers('name','asc')"> Name</label>
-          <label class="mr-3 nobr pointer"><input type="radio" name="sortby" @change="getUsers('email','asc')"> Email</label>
-          <label class="mr-3 nobr pointer"><input type="radio" name="sortby" @change="getUsers('role','asc')"> Role</label>
-          <label class="mr-3 nobr pointer"><input type="radio" name="sortby" @change="getUsers('lastLogin','desc')"> Last login</label>
-          <label class="mr-3 nobr pointer"><input type="radio" name="sortby" @change="getUsers('kicked','desc')"> Kicked</label>
-          <label class="mr-3 nobr pointer"><input type="radio" name="sortby" @change="getUsers('deletedUser', 'desc')"> Deleted</label>
+          <label class="mx-3 nobr pointer"><input type="radio" class="text--vert-middle invert" name="sortby" @change="getUsers('createdOn', 'desc')" checked> Created</label>
+          <label class="mr-3 nobr pointer"><input type="radio" class="text--vert-middle invert" name="sortby" @change="getUsers('contribution','desc')"> Contribution</label>
+          <label class="mr-3 nobr pointer"><input type="radio" class="text--vert-middle invert" name="sortby" @change="getUsers('public', 'desc')"> Public</label>
+          <label class="mr-3 nobr pointer"><input type="radio" class="text--vert-middle invert" name="sortby" @change="getUsers('name','asc')"> Name</label>
+          <label class="mr-3 nobr pointer"><input type="radio" class="text--vert-middle invert" name="sortby" @change="getUsers('email','asc')"> Email</label>
+          <label class="mr-3 nobr pointer"><input type="radio" class="text--vert-middle invert" name="sortby" @change="getUsers('role','asc')"> Role</label>
+          <label class="mr-3 nobr pointer"><input type="radio" class="text--vert-middle invert" name="sortby" @change="getUsers('lastLogin','desc')"> Last login</label>
+          <label class="mr-3 nobr pointer"><input type="radio" class="text--vert-middle invert" name="sortby" @change="getUsers('kicked','desc')"> Kicked</label>
+          <label class="mr-3 nobr pointer"><input type="radio" class="text--vert-middle invert" name="sortby" @change="getUsers('deletedUser', 'desc')"> Deleted</label>
         </small>
 
         <div class="pt-4 text-right">
@@ -43,7 +43,17 @@
             <v-btn dense small class="ma-2 right top absolute error--fade" :class="singleUser.deletedUser ? '' : 'mt-10'" v-else @click="userDelete(singleUser.id)">yes delete me please dear god</v-btn>
             
             <div v-if="singleUser.deletedUser" class="">
-              Deleted user: <pre>{{singleUser.id}}</pre>
+              Self deleted user <b class="orange--text">#{{i+1}}</b>
+              &middot;
+              <div class="inline mr-2">
+                <pre class="grey--text inline">{{singleUser.id}}</pre>
+                <Copy :data="singleUser.id" opacity=".75" dataName="user ID"></Copy>
+              </div>
+              &middot;
+              <small>
+                Edited on:
+                {{$helpers.fbTimeToString(singleUser.editedOn, "DD.MM.YY - HH:mm") }}
+              </small>
             </div>
             <div v-else class="pr-2" :style="$vuetify.breakpoint.mdAndUp ? 'width:25%;' : 'width:100%;'" style="overflow:hidden; vertical-align: top; display:inline-block;">
               <span class="text-h6 ">
@@ -84,7 +94,7 @@
               >
                 mdi-{{singleUser.news === false ? 'email-off' : 'email-check'}}
               </v-icon><br>
-              ID: <pre class="grey--text" style="display:inline">{{$vuetify.breakpoint.xs ? $helpers.truncate(singleUser.uid, 22, '…') : singleUser.uid}}</pre>
+              ID: <pre class="grey--text inline">{{$vuetify.breakpoint.xs ? $helpers.truncate(singleUser.uid, 22, '…') : singleUser.uid}}</pre>
               <Copy :data="singleUser.uid" opacity=".75" dataName="user ID"></Copy>
               <a
                 target="_blank"
