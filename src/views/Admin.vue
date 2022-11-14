@@ -13,15 +13,18 @@
 
         {{users.length}} users in total, combined effort: <span class="orange--text">{{totalContribution >= 0 ? totalContribution.toLocaleString() : '--'}}</span> contribution points
         <br>
-        Sort by 
-        <label class="mx-2 pointer"><input type="radio" name="sortby" @change="getUsers('createdOn', 'desc')" checked> Created</label>
-        <label class="mx-2 pointer"><input type="radio" name="sortby" @change="getUsers('contribution','desc')"> Contribution</label>
-        <label class="mx-2 pointer"><input type="radio" name="sortby" @change="getUsers('name','asc')"> Name</label>
-        <label class="mx-2 pointer"><input type="radio" name="sortby" @change="getUsers('email','asc')"> Email</label>
-        <label class="mx-2 pointer"><input type="radio" name="sortby" @change="getUsers('role','asc')"> Role</label>
-        <label class="mx-2 pointer"><input type="radio" name="sortby" @change="getUsers('lastLogin','desc')"> Last login</label>
-        <label class="mx-2 pointer"><input type="radio" name="sortby" @change="getUsers('kicked','desc')"> Kicked</label>
-        <label class="mx-2 pointer"><input type="radio" name="sortby" @change="getUsers('deletedUser', 'desc')"> Deleted</label>
+        <small class="grey--text">
+          Sort / filter by
+          <label class="mx-3 nobr pointer"><input type="radio" name="sortby" @change="getUsers('createdOn', 'desc')" checked> Created</label>
+          <label class="mr-3 nobr pointer"><input type="radio" name="sortby" @change="getUsers('contribution','desc')"> Contribution</label>
+          <label class="mr-3 nobr pointer"><input type="radio" name="sortby" @change="getUsers('public', 'desc')"> Public</label>
+          <label class="mr-3 nobr pointer"><input type="radio" name="sortby" @change="getUsers('name','asc')"> Name</label>
+          <label class="mr-3 nobr pointer"><input type="radio" name="sortby" @change="getUsers('email','asc')"> Email</label>
+          <label class="mr-3 nobr pointer"><input type="radio" name="sortby" @change="getUsers('role','asc')"> Role</label>
+          <label class="mr-3 nobr pointer"><input type="radio" name="sortby" @change="getUsers('lastLogin','desc')"> Last login</label>
+          <label class="mr-3 nobr pointer"><input type="radio" name="sortby" @change="getUsers('kicked','desc')"> Kicked</label>
+          <label class="mr-3 nobr pointer"><input type="radio" name="sortby" @change="getUsers('deletedUser', 'desc')"> Deleted</label>
+        </small>
 
         <div class="pt-4 text-right">
           <v-btn small dense color="primary" class="my-2" :href="`mailto:info@fluescher.ch?bcc=${users.map(x => {if(x.news || x.news === undefined) {return `${x.name}<${x.email}>`}}).filter(x => x).join(',%20')}`">Write email to every willing user</v-btn>
@@ -254,11 +257,23 @@ import Copy from '@/components/Copy'
         // Circumvent doubled identical "orderBy" createdOn
         let secondary = orderBy === 'createdOn' ? 'email' : 'createdOn';
         secondary = orderBy === 'deletedUser' ? 'editedOn' : secondary;
+        let where = false;
+        
+        // Do not show other users with these fitlers:
+        if(orderBy === 'public' || orderBy === 'kicked' || orderBy === 'deleted') {
+          where = orderBy;
+          orderBy = 'lastLogin';
+        }
+
         this.unsubscribeUsers = db.collection('users')
         .orderBy(orderBy, sort)
-        .orderBy(secondary, 'desc')
-        //.where('user_id', '==', firebaseUser.uid)
-        .onSnapshot(querySnapshot => {
+        .orderBy(secondary, 'desc');
+
+        if(where) {
+          this.unsubscribeUsers = this.unsubscribeUsers.where(where, '==', true)
+        }
+        
+        this.unsubscribeUsers.onSnapshot(querySnapshot => {
           let newData = [];
           querySnapshot.forEach(doc => {
             let f = doc.data();
