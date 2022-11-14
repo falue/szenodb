@@ -160,8 +160,8 @@
         <!-- LIST RESOURCES -->
         <v-container v-if="resources.length" class="pa-0 pt-4 ma-0 fill-width" style="max-width:initial">
           <!-- TABLE HEADER -->
-          <div v-if="$vuetify.breakpoint.smAndUp" class="primary--text italics my-2 grey darken-4" :class="$vuetify.breakpoint.mdAndUp ? 'px-4' : 'px-2'">
-              <div style="vertical-align: top; width:20%; display:inline-block;">Firm</div>
+          <div v-if="$vuetify.breakpoint.smAndUp" class="pink--text rounded my-2 grey darken-4" :class="$vuetify.breakpoint.mdAndUp ? 'px-4' : 'px-2'">
+              <div style="vertical-align: top; width:20%; display:inline-block;">Company</div>
               <div v-if="isSmallWithOpenDrawer" :style="$vuetify.breakpoint.mdAndUp ? 'width:60%' : 'width:80%'" class="pl-2" style="display:inline-block">
                   Resources
               </div>
