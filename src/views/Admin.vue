@@ -391,7 +391,8 @@ import Copy from '@/components/Copy'
       async userDelete(userId) {
         console.log(userId)
         this.userConfirmDelete = '';
-        this.$helpers.copyClipBoard(userId, 'User ID');
+        this.$helpers.copyClipBoard(userId, '..forwarding to firebase and User ID');
+        await this.$helpers.sleep(1250);
         await db.collection('users').doc(userId).delete().then(function() {
           window.open('https://console.firebase.google.com/project/szenodb/authentication/users', '_blank');
         }).catch(function(error) {
