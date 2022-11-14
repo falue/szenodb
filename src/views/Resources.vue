@@ -249,9 +249,6 @@
                   <v-icon>mdi-earth</v-icon>
                 </v-btn>
               </a>
-              <v-btn title="View" icon v-if="$vuetify.breakpoint.mdAndUp" class="primary ml-1" :small="$vuetify.breakpoint.mdAndUp" @click.stop="setViewUrl(resource.id)">
-                <v-icon :small="$vuetify.breakpoint.mdAndUp">mdi-eye</v-icon>
-              </v-btn>
 
               <v-btn title="Edit" icon class="primary ml-1" :small="$vuetify.breakpoint.mdAndUp" @click.stop="editResource(resource)">
                 <v-icon :small="$vuetify.breakpoint.mdAndUp">mdi-pencil</v-icon>
