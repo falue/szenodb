@@ -173,7 +173,7 @@
           <!-- LIST RESOURCES -->
           <div
             v-for="(resource, i) in resources"
-            class="resource rounded"
+            class="resource rounded pointer"
             style="overflow: hidden;"
             :style="
                 resource.flags.unreliable
