@@ -5,9 +5,7 @@
     <v-card
       :class="$vuetify.breakpoint.xs ? 'transparent fill-height ma-0 pa-4' : $vuetify.breakpoint.mdAndUp ? 'mx-auto my-4 mt-12 pa-8' : 'mx-auto my-4 mt-0 pa-8'"
       :max-width="$vuetify.breakpoint.smAndUp ? 666 : 6666"
-      max-height="80%"
       :flat="$vuetify.breakpoint.smAndUp"
-      style="overflow-y: auto;"
     >
       <v-card-title class="justify-center" style="word-break: initial;">This is for the art departments needs</v-card-title>
 
@@ -50,8 +48,17 @@
           Create <router-link to="/signup">an always free account</router-link> to contribute, or feel free to just leech around.
           Login <router-link to="/login">here</router-link> if you're already a user.
         </p>
-        
-        <v-card-title class="justify-center mt-16">FAQ</v-card-title>
+
+      </v-card-text>
+    </v-card>
+
+    <v-card
+      :class="$vuetify.breakpoint.xs ? 'transparent fill-height ma-0 pa-4' : $vuetify.breakpoint.mdAndUp ? 'mx-auto my-4 mt-12 pa-8' : 'mx-auto my-4 mt-0 pa-8'"
+      :max-width="$vuetify.breakpoint.smAndUp ? 666 : 6666"
+      :flat="$vuetify.breakpoint.smAndUp"
+    >
+      <v-card-title class="justify-center">FAQ</v-card-title>
+        <v-card-text class="white--text">
 
         <v-row justify="center" class="mb-4">
           <v-expansion-panels accordion v-model="faqIndex">
@@ -66,8 +73,16 @@
             </v-expansion-panel>
           </v-expansion-panels>
         </v-row>
+      </v-card-text>
+    </v-card>
 
-        <v-card-title class="justify-center mt-16">Whodunit?</v-card-title>
+    <v-card
+      :class="$vuetify.breakpoint.xs ? 'transparent fill-height ma-0 pa-4' : $vuetify.breakpoint.mdAndUp ? 'mx-auto my-4 mt-12 pa-8' : 'mx-auto my-4 mt-0 pa-8'"
+      :max-width="$vuetify.breakpoint.smAndUp ? 666 : 6666"
+      :flat="$vuetify.breakpoint.smAndUp"
+    >
+      <v-card-title class="justify-center">Whodunit?</v-card-title>
+      <v-card-text class="white--text">
 
         <v-card-title v-if="$vuetify.breakpoint.smAndDown" two-line class="justify-center">
           <v-list-item-avatar color="grey darken-3" size="250">
@@ -105,7 +120,7 @@
             </v-list-item-content>
           </v-list-item>
         </v-list>
-        <v-card-text class="pa-0 mb-16">
+        <v-card-text class="pa-0 mt-12 text-center">
           <p>
             Get in contact if you have questions or want to improve this:
             <br>
@@ -133,7 +148,7 @@
           </a>
         </v-card-text>
 
-        <v-card-text class="text-center mt-16">
+        <v-card-text class="text-center mt-12">
           This project is open-source under <a href="https://github.com/falue/szenodb/blob/main/COPYING" target="_blank">GNU GPLv3</a>.
           <br>
           <router-link to="/privacy">Privacy agreement</router-link>
