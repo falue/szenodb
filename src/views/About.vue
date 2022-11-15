@@ -112,7 +112,9 @@
               </v-list-item-subtitle>
               <v-card-text class="ma-0 pa-0">
                 <p>
-                  Thank you <a href="https://www.isabellesimmen.com/" class="no-underline" target="_blank">Isabelle Simmen</a>
+                  Thank you
+                  <a href="https://www.isabellesimmen.com/" class="externalLink no-underline" target="_blank">Isabelle Simmen</a> &
+                  <a href="https://gabi-views.com/" class="externalLink no-underline" target="_blank">Gabi Morales</a>
                   for testing, feedback and enthusiasm;
                   and szeno chat for the community.
                 </p>
