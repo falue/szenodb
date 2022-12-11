@@ -280,6 +280,16 @@ export default {
     }
   },
 
+  scrollTo(that, refName, block="center") {
+    that.$nextTick(() => {
+      that.$refs[refName].$el.scrollIntoView({ block: block, scrollBehavior: 'smooth' });
+    });
+  },
+
+  randomBetween(min, max) {
+    return parseInt(min + Math.random() * (max-min));
+  },
+
   async getRandomString(numberOfStrings=1, stringLength='random') {
     if(stringLength === 'random') {
       stringLength = Math.floor(Math.random() * 6) + 12;
