@@ -1,6 +1,19 @@
 <template>
   <div class="ma-0 fill-width fill-height">
-    <div class="hero fill-width fill-height"></div>
+    <div class="hero black fill-width fill-height" @click="getPseudoRandomImg()">
+      <v-img ref="hero" :src="randomImg.src" class="fill-height no-click"/>
+      <div class="caption absolute text-center bottom fill-width text-shadow--black" :class="$vuetify.breakpoint.smAndDown ? 'mb-16 pb-4' : 'mb-14'">
+        <span class="op-75">{{randomImg.imageName}} by</span>
+        <a :href="randomImg.links[0].url" target="_blank" class="no-underline externalLink ml-1">
+          <span class="white--text">{{randomImg.author}}</span>
+        </a>
+        <br>
+        <a v-for="(link, i) in JSON.parse(JSON.stringify(randomImg.links)).slice(1)" :key="'link-'+i" :href="link.url" target="_blank" class="no-underline externalLink">
+          {{link.name}}
+          <span v-if="i+1 < randomImg.links.length-1" class="white--text mx-1">&middot;</span>
+        </a>
+      </div>
+    </div>
 
     <!-- <div class="d-flex ma-0 red  fill-height fill-width">
       <v-img
@@ -72,6 +85,18 @@ export default {
       phonenumber: null,
       persons: [],
       about: {},
+      imageIndex: 0,
+      randomImg: {},
+      randomImgs: [
+        {src: require('@/assets/bg-1.jpg'), author: 'Anton Hangschlitt', imageName: '"Cloudy" ©', links: [{name: 'website', url: 'https://www.instagram.com/hangschlitt'}]},
+        {src: require('@/assets/bg-2.jpg'), author: 'Anton Hangschlitt', imageName: '"Congress" ©', links: [{name: 'website', url: 'https://www.instagram.com/hangschlitt'}]},
+        {src: require('@/assets/bg-3.jpg'), author: 'Anton Hangschlitt', imageName: '"Dinner" ©', links: [{name: 'website', url: 'https://www.instagram.com/hangschlitt'}]},
+        {src: require('@/assets/bg-4.jpg'), author: 'Anton Hangschlitt', imageName: '"Ernst Reuter Platz" ©', links: [{name: 'website', url: 'https://www.instagram.com/hangschlitt'}]},
+        {src: require('@/assets/bg-5.jpg'), author: 'Anton Hangschlitt', imageName: '"Hideaway" ©', links: [{name: 'website', url: 'https://www.instagram.com/hangschlitt'}]},
+        {src: require('@/assets/bg-6.jpg'), author: 'Anton Hangschlitt', imageName: '"Knife blocks" ©', links: [{name: 'website', url: 'https://www.instagram.com/hangschlitt'}]},
+        {src: require('@/assets/bg-7.jpg'), author: 'Anton Hangschlitt', imageName: '"Pannenhuis" ©', links: [{name: 'website', url: 'https://www.instagram.com/hangschlitt'}]},
+        {src: require('@/assets/bg-8.jpg'), author: 'Anton Hangschlitt', imageName: '"Three last" ©', links: [{name: 'website', url: 'https://www.instagram.com/hangschlitt'}]},
+      ]
     }
   },
 
@@ -80,6 +105,7 @@ export default {
   }, */
 
   created() {
+    this.getPseudoRandomImg(true);
     // get all documents from live collection
     /* db.collection('persons')
       //.where('user_id', '==', firebaseUser.uid)
@@ -105,13 +131,37 @@ export default {
     }); */
   },
   methods: {
+    // swap backgrounds
+    async getPseudoRandomImg(hourly) {
+      if(hourly) {
+        let currentHour = new Date().getHours();
+        currentHour /= 3;
+        this.imageIndex = Math.floor(currentHour) % this.randomImgs.length;
+        this.randomImg = this.randomImgs[this.imageIndex];
+      } else {
+        let newRandom = this.$helpers.randomBetween(0, this.randomImgs.length-1);
+        // do not display same as before
+        if(this.imageIndex != newRandom) {
+          this.$refs["hero"].$el.classList.add('fadeOutFast');
+          await this.$helpers.sleep(250);
+          this.imageIndex = newRandom
+          this.randomImg = this.randomImgs[this.imageIndex];
+          this.$refs["hero"].$el.classList.remove('fadeOutFast');
+          this.$refs["hero"].$el.classList.add('fadeInFast');
+          await this.$helpers.sleep(250);
+          this.$refs["hero"].$el.classList.remove('fadeInFast');
+        } else {
+          this.getPseudoRandomImg();
+        }
+      }
+    }
   },
 }
 </script>
 
 <style scoped>
   .hero {
-    background: url('../assets/bg.jpg');
+    /* background: url('../assets/bg.jpg'); */
     background-size: cover;
     background-repeat: no-repeat;
     background-position: 50% 50%;

@@ -40,8 +40,34 @@ div::-webkit-scrollbar {
   text-decoration: none !important;
 }
 
+.externalLink:before {
+  /* margin-right: 0.25em; */
+  font-size: 1.25em;
+  font-family: "Material Design Icons";
+  text-decoration:none;
+  display:inline-block;
+  transform: translateY(.1em);
+  padding-right: .25em;
+}
+.externalLink[href^="http"]:before {
+  content: '\F03CC' /* open in new */
+}
+.externalLink[href^="mailto"]:before {
+  content: '\F01EE' /* email */
+}
+.externalLink[href^="tel"]:before {
+  content: '\F03F2' /* tel*/
+}
+.externalLink[href*="instagram.com"]:before {
+  content: '\F02FE' /* instagram*/
+}
+
 .pointer {
   cursor: pointer;
+}
+
+.no-click, .disable-click {
+  pointer-events: none;
 }
 
 .cursor_default {

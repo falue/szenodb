@@ -1,6 +1,5 @@
 <template>
   <div class="ma-0 fill-width fill-height">
-    <div class="hero fill-width fill-height" v-if="$vuetify.breakpoint.mdAndUp"></div>
 
     <v-card
       :class="$vuetify.breakpoint.xs ? 'transparent fill-height ma-0 pa-4' : $vuetify.breakpoint.mdAndUp ? 'mx-auto my-4 mt-12 pa-8' : 'mx-auto my-4 mt-0 pa-8'"
@@ -178,18 +177,3 @@
     }
   }
 </script>
-
-<style scoped>
-  .hero {
-    background: url('../assets/bg.jpg');
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: 50% 50%;
-    height: 100vh;
-    position: fixed;
-    left:0;
-    top:0;
-    opacity: .25;
-    filter: saturate(0);
-  }
-</style>
