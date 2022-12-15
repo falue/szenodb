@@ -10,7 +10,7 @@
       <template v-slot:label>Resources<span v-if="data.resources.length == 0" class="red--text">*</span></template>
     </v-textarea>
     <v-textarea filled auto-grow rows="3" label="Opinions" hint="Delivery speed, what to look out for, etc. Will auto translate to EN/DE/FR/IT." type="text" v-model.trim="data.info"></v-textarea>
-    <v-textarea filled auto-grow rows="1" label="Private note" hint="These notes do not show up to other users." type="text" v-model.trim="user.notes[data.id]"></v-textarea>
+    <v-textarea filled auto-grow rows="1" label="Private note" hint="These notes do not show up to other users. Use it to remind yourself where you needed this resource." type="text" v-model.trim="user.notes[data.id]"></v-textarea>
     <v-text-field filled v-if="addDetails" label="Address" hint="Can be typed address, google share link or general region." type="text" v-model.trim="data.address"></v-text-field>
     <v-text-field filled v-if="addDetails" label="Telephone" style="width:40%; display:inline-block" class="mr-2" type="text" v-model.trim="data.tel"></v-text-field>
     <v-text-field filled v-if="addDetails" label="Email" style="width:55%; display:inline-block" type="text" v-model.trim="data.email"></v-text-field>
