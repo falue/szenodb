@@ -121,7 +121,7 @@
               {{savedNote ? 'mdi-content-save-check' : 'mdi-pencil'}}
             </v-icon>
           </v-textarea>
-        <v-icon :small="$vuetify.breakpoint.mdAndUp" color="primary">mdi-information</v-icon> These notes do not show up to other users.
+        <v-icon :small="$vuetify.breakpoint.mdAndUp" color="primary">mdi-information</v-icon> These notes do not show up to other users. Use it to remind yourself where you needed this resource.
       </v-card-text>
 
       <v-card-text v-if="data.content.imgs.length" class="pt-8 pb-0">
