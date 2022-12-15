@@ -672,7 +672,7 @@ import Share from '@/components/Share'
         }
       },
 
-viewResourceFromHardReoadedUrl() {
+      viewResourceFromHardReoadedUrl() {
         // get ID from PARAMS
         let view = this.$route.query.view;
         let q = this.$route.query.q;
