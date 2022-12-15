@@ -111,8 +111,11 @@
               <v-card-text class="ma-0 pa-0">
                 <p>
                   Thank you
-                  <a href="https://www.isabellesimmen.com/" class="externalLink no-underline" target="_blank">Isabelle Simmen</a> &
-                  <a href="https://gabi-views.com/" class="externalLink no-underline" target="_blank">Gabi Morales</a>
+                  <a href="https://www.isabellesimmen.com/" class="externalLink no-underline" target="_blank">Isabelle Simmen</a>,
+                  <a href="https://www.aronsommer.com/" class="externalLink no-underline" target="_blank">Aron Sommer</a>,
+                  Milena,
+                  <a href="https://gabi-views.com/" class="externalLink no-underline" target="_blank">Gabi Morales</a> &
+                  Madlen Hallauer
                   for testing, feedback and enthusiasm;
                   and szeno chat for the community.
                 </p>
@@ -120,7 +123,7 @@
             </v-list-item-content>
           </v-list-item>
         </v-list>
-        <v-card-text class="pa-0 mt-12 text-center">
+        <v-card-text class="pa-0 mt-8 text-center">
           <p>
             Get in contact if you have questions or want to improve this:
             <br>
@@ -134,7 +137,7 @@
               <v-icon color="primary">mdi-github</v-icon>
             </a>
           </p>
-          <br v-if="$vuetify.breakpoint.smAndDown">
+          <br>
           <p>
             If you think it's valuable what I do here, buy me a coffee:
           </p>
