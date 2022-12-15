@@ -117,7 +117,7 @@
           No users to show.
         </div>
         
-        <hr class="mb-3 mt-16" style="border:none; border-top: solid 1px rgba(255,255,255,.25);">
+        <hr class="mb-3 mt-16" style="border:none; border-top: solid 1px rgba(255,125,0,.25);">
 
         <v-card-title class="text-h3 justify-center italics error--text">DANGER ZONE!</v-card-title>
 
