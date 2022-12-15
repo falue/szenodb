@@ -24,12 +24,13 @@ npm run build         # Compiles & minifies for production
 
 ### With `deploy.sh` script
 ```
-./deploy.sh           # npm run build & deploy to server.
-./deploy.sh -i        # npm run build & deploy to server,
+./deploy.sh           # git stash, npm run build & deploy to server.
+./deploy.sh -i        # git stash, npm run build & deploy to server,
                       #   git commit increment marginal number
                       #   (e.g '0.2.99' => '0.2.100' ).
-./deploy.sh -v 6.6.6  # npm run build & deploy to server,
+./deploy.sh -v 6.6.6  # git stash, npm run build & deploy to server,
                       #   git commit set version to 6.6.6.
+./deploy.sh -b        # npm run build & deploy to beta.szenodb.ch (publish uncommited changes!)
 ```
 Be sure to change the IP of your server in the `deploy.sh` script and [enable ssh](https://www.metanet.ch/support/713#10591-ssh).
 
