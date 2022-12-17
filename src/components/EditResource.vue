@@ -13,8 +13,8 @@
     <v-textarea filled auto-grow rows="1" label="Private note" hint="These notes do not show up to other users. Use it to remind yourself where you needed this resource." type="text" v-model.trim="user.notes[data.id]"></v-textarea>
     <v-text-field filled v-if="addDetails" label="Address" hint="Can be typed address, google share link or general region." type="text" v-model.trim="data.address"></v-text-field>
     <v-text-field filled v-if="addDetails" label="Telephone" style="width:40%; display:inline-block" class="mr-2" type="text" v-model.trim="data.tel"></v-text-field>
-    <v-text-field filled v-if="addDetails" label="Email" style="width:55%; display:inline-block" type="text" v-model.trim="data.email"></v-text-field>
-    <v-text-field filled label="Website" type="text" v-model.trim="data.web"></v-text-field>
+    <v-text-field filled v-if="addDetails" label="Email" autocapitalize="none" style="width:55%; display:inline-block" type="text" v-model.trim="data.email"></v-text-field>
+    <v-text-field filled label="Website" type="text" autocapitalize="none" v-model.trim="data.web"></v-text-field>
 
     <!-- IMAGE MANAGER -->
     <div v-if="addDetails">
