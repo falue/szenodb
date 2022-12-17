@@ -10,7 +10,7 @@
       <v-card-title class="justify-center">Sign up <span class="pink--text ml-1">(always free)</span></v-card-title>
       <v-form @submit.prevent v-model="validForm">
           <v-text-field filled v-model.trim="signupForm.name" type="text" placeholder="Name*" id="name" autocomplete="username"></v-text-field>
-          <v-text-field filled v-model.trim="signupForm.email" type="text" placeholder="Email*" id="email2"></v-text-field>
+          <v-text-field filled v-model.trim="signupForm.email" type="text" autocapitalize="none" placeholder="Email*" id="email2"></v-text-field>
           <v-text-field filled v-model.trim="signupForm.password" type="password" placeholder="Password*" :hint="signupForm.password.length ? 'Seems good!' :'Min 6 characters'" id="password2" autocomplete="new-password" :rules="passwordRules">
             <v-tooltip slot="append" right v-if="signupForm.password.length >= 6" color="#303030">
               <template v-slot:activator="{ on, attrs }">

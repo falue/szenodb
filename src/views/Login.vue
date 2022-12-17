@@ -8,7 +8,7 @@
     >
       <v-card-title class="justify-center">Login</v-card-title>
       <form @submit.prevent>
-        <v-text-field filled v-model.trim="loginForm.email" type="text" placeholder="Email" name="username">
+        <v-text-field filled v-model.trim="loginForm.email" type="text" autocapitalize="none" placeholder="Email" name="username">
         </v-text-field>
 
         <v-text-field filled v-model.trim="loginForm.password" type="password" placeholder="Password">
