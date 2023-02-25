@@ -44,32 +44,35 @@
 
 
     <v-card tile flat color="#121212" class="d-flex ma-0 pa-0 fixed top left fill-height fill-width">
-      <v-card tile flat color="#121212" class="pa-0 flex-shrink-0 flex-grow-0" :width="$vuetify.breakpoint.smAndDown ? '0.5em' : $vuetify.breakpoint.md ? '10em' : $vuetify.breakpoint.xlAndUp ? '25em' : '8em'">
+      <v-card tile flat color="#121212" v-if="$vuetify.breakpoint.smAndUp" class="pa-0 flex-shrink-0 flex-grow-0" :width="$vuetify.breakpoint.smAndDown ? '0.5em' : $vuetify.breakpoint.md ? '10em' : $vuetify.breakpoint.xlAndUp ? '25em' : '8em'">
         <!-- SPACER LEFT -->
       </v-card>
 
-      <v-card id="resourcesList" ref="resourcesList" tile flat color="#121212" class="pa-4 mt-16 pb-16 pt-4 flex-grow-1" style="overflow:auto;">
+      <v-card id="resourcesList" ref="resourcesList" tile flat color="#121212" class="mt-16 pb-16 pt-4 flex-grow-1" style="overflow:auto;"
+      :class="$vuetify.breakpoint.xs ? 'py-4':'pa-4'">
         <!-- SEARCH FIELD -->
-        <v-text-field
-          :loading="loading"
-          filled
-          ref="filter"
-          label="Find resources.."
-          type="text"
-          class="mt-4 fill-width"
-          v-model.trim="filter"
-          persistent-hint
-          :hint="filter.length >= 2 ? resources.length == 1 ? '1 Result' : resources.length + ' Results' : ''"
-          :error="!!filter.length && resources.length == 0"
-          v-on:keyup.enter="!!filter.length && resources.length == 0 ? createNewFromSearch() : search(filter)"
-        >
-        <v-icon slot="append" :class="filter.length ? 'hover-red' : ''" @click="filter = ''; $refs['filter'].blur()">{{filter.length ? 'mdi-close' : 'mdi-magnify'}}</v-icon>
-        <template v-slot:append-outer>
-          <div class="primary ma-0 addNewResource">
-            <v-icon color="white" @click="openNewResourceDrawer()">mdi-plus</v-icon> 
-          </div>
-        </template>
-        </v-text-field>
+        <div :class="$vuetify.breakpoint.xs ? 'pa-4':''">
+          <v-text-field
+            :loading="loading"
+            filled
+            ref="filter"
+            label="Find resources.."
+            type="text"
+            class="mt-4 fill-width"
+            v-model.trim="filter"
+            persistent-hint
+            :hint="filter.length >= 2 ? resources.length == 1 ? '1 Result' : resources.length + ' Results' : ''"
+            :error="!!filter.length && resources.length == 0"
+            v-on:keyup.enter="!!filter.length && resources.length == 0 ? createNewFromSearch() : search(filter)"
+          >
+          <v-icon slot="append" :class="filter.length ? 'hover-red' : ''" @click="filter = ''; $refs['filter'].blur()">{{filter.length ? 'mdi-close' : 'mdi-magnify'}}</v-icon>
+          <template v-slot:append-outer>
+            <div class="primary ma-0 addNewResource">
+              <v-icon color="white" @click="openNewResourceDrawer()">mdi-plus</v-icon> 
+            </div>
+          </template>
+          </v-text-field>
+        </div>
 
 
         <!-- DISPLAY IMPORT CSV STATUS -->
@@ -177,7 +180,7 @@
           <!-- LIST RESOURCES -->
           <div
             v-for="(resource, i) in resources"
-            class="resource rounded pointer"
+            class="resource pointer"
             style="overflow: hidden;"
             :style="
                 resource.flags.unreliable
@@ -197,9 +200,9 @@
                 ? 'hideDeleted'
                   : i % 2 == 1 
                   ? 'grey darken-4'
-                    : '',
+                    : 'grey darken-3',
               $vuetify.breakpoint.mdAndUp
-                ? 'px-4'
+                ? 'px-4 rounded'
                 : 'px-2',
               $vuetify.breakpoint.xs
                 ? 'my-6'
@@ -298,7 +301,7 @@
       <v-card tile flat class="pa-0 flex-shrink-0 flex-grow-0" color="#121212" v-if="drawerOpen && $vuetify.breakpoint.mdAndUp" width="460px">
         <!-- DRAWER -->
       </v-card>
-      <v-card tile flat class="pa-0 flex-shrink-0 flex-grow-0" color="#121212" v-else :width="$vuetify.breakpoint.smAndDown ? '0.5em' : $vuetify.breakpoint.md ? '10%' : $vuetify.breakpoint.xlAndUp ? '25%' : '8%'">
+      <v-card tile flat class="pa-0 flex-shrink-0 flex-grow-0" color="#121212" v-else-if="$vuetify.breakpoint.smAndUp" :width="$vuetify.breakpoint.smAndDown ? '0.5em' : $vuetify.breakpoint.md ? '10%' : $vuetify.breakpoint.xlAndUp ? '25%' : '8%'">
         <!-- SPACER RIGHT -->
       </v-card>
     </v-card>
