@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div @click="showBewareDialog">
     <v-card-title class="pt-2" style="max-width:85%">
       <v-tooltip bottom color="#303030">
         <template v-slot:activator="{ on, attrs }">
@@ -257,6 +257,72 @@
       </v-card-actions>
       </v-card>
     </v-dialog>
+
+    <!-- WELCOME DIALOG -->
+    <v-dialog
+      v-model="bewareDialog"
+      :width="$vuetify.breakpoint.smAndDown ? '85%' : '45%'"
+      :fullscreen="$vuetify.breakpoint.xs"
+      persistent
+    >
+      <v-card>
+        <v-card-title class="text-h5 primary" style="word-break: initial;">
+          BEWARE: The rules of szenodb
+        </v-card-title>
+        <v-card-text class="mt-4 white--text pt-4">
+          <ol class="niceList mt-4 pl-0">
+            <li>
+              You do not talk about
+              <span class="overline pink--text" style="line-height:1em">szeno&middot;DB</span>
+              to <span class="orange--text">people on the resources list</span>
+              (they do not know they're on it)
+            </li>
+            <li class="italics">
+              You do <span class="bolder">not</span> talk about
+              <span class="overline pink--text" style="line-height:1em">szeno&middot;DB</span>
+              to <span class="orange--text">people on the resources list</span>
+              (they do not know they're on it)
+            </li>
+            <li>
+              You do talk a <span class="bolder"><span class="grey--text">*</span>lot<span class="grey--text">*</span></span>
+              about <span class="overline pink--text" style="line-height:1em">szeno&middot;DB</span>
+              to <span class="orange--text">colleagues in the industry</span>
+            </li>
+            <li>
+              Be nice and don't demand services like you're in a marketplace.
+            </li>
+            <li>
+              This is a starting point for your own research.
+            </li>
+            <li>
+              Double check. Some things might be outdated. 
+            </li>
+            <li>
+              Be professional.
+            </li>
+            <li>
+              Edit, create new, improve; become a colleague. <span class="italics pink--text">Or not, and just use it!</span>
+            </li>
+          </ol>
+
+        </v-card-text>
+        <v-card-actions class="grey darken-3">
+          <v-spacer></v-spacer>
+          <v-btn color="primary" @click="closeBewareDialog()" :disabled="!blockBewareDialog">
+            {{blockBewareDialog ? 'Onwards!' : 'Please read the rules'}}
+            <v-progress-circular
+              :size="16"
+              :width="2"
+              v-if="!blockBewareDialog"
+              indeterminate
+              color="primary"
+              class="ml-1"
+            ></v-progress-circular>
+          </v-btn>
+          <v-spacer></v-spacer>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -279,6 +345,8 @@ import Share from '@/components/Share'
         noteTimeout: 0,
         savedNote: false,
         magnifyDialogImg: {},
+        bewareDialog: false,
+        blockBewareDialog: false,
         languages: ['original', 'DE', 'EN-GB', 'FR', 'IT']
       }
     },
@@ -373,7 +441,34 @@ import Share from '@/components/Share'
             this.savedNote=false;
           }, 1250);
         }, 750);
-      }
+      },
+
+      showBewareDialog(event) {
+        if(!this.user.seenBewareDialog) {
+          this.bewareDialog = true;
+          setTimeout(() => {
+            this.blockBewareDialog = true;
+          }, 6500);
+          event.preventDefault();
+        }
+      },
+
+      closeBewareDialog() {
+        this.bewareDialog = false;
+        // & write true to this.user.seenBewareDialog
+        this.$store.dispatch('updateField', {
+          "collection": "users", "document": this.user.uid, "field": "seenBewareDialog", "data": true
+        }).then(async () => {
+          console.log('Successful confirm.')
+          // update local user
+          this.user.seenBewareDialog = true;
+          this.$store.commit('setUserProfile', this.user)
+        }).catch(error => {
+          console.log(error);
+          console.error(error.message);
+          this.$toasted.global.error({msg:error.message});
+        });
+      },
     }
   }
 </script>
