@@ -209,7 +209,7 @@ import Copy from '@/components/Copy'
     data () {
       return {
         popUpTwint: false,
-        faqIndex: 0,
+        faqIndex: -1,
         faqs: [
           {
             'question': 'How are these resources curated?',
