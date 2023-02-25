@@ -115,7 +115,7 @@
         <v-icon small class="grey--text pointer ml-2" title="Mail this to the admin">mdi-email</v-icon>
       </a>
       <br>
-      and you have <span class="orange--text">{{user.contribution ? user.contribution.toLocaleString() : ''}}</span> contribution {{user.contribution > 1 ? 'points' : 'point'}}. {{"🥳 ".repeat(user.contribution > 500 ? 5 : user.contribution / 100)}}
+      and you have <span class="orange--text">{{user.contribution ? user.contribution.toLocaleString() : 0}}</span> contribution {{user.contribution == 1 ? 'point' : 'points'}}. {{"🥳 ".repeat(user.contribution > 500 ? 5 : user.contribution / 100)}}
       <Info title="Contribution Points" text="are calculated from your activity: Creating or editing resources, and being a regular user.<br>They are only used for two things:<br>- With 12 or more points, you can be a public colleague, and your points are shown to other colleagues<br>- If you're very active, maybe you get a bottle of wine from the admins 🍷"></Info>
     </v-card>
   </div>
