@@ -54,12 +54,12 @@
           :loading="loading"
           filled
           ref="filter"
-          label="Search.."
+          label="Find resources.."
           type="text"
           class="mt-4 fill-width"
           v-model.trim="filter"
           persistent-hint
-          :hint="filter.length >= 2 ? resources.length == 1 ? '1 Result' : resources.length + ' Results' : 'Type to find resources & services for the art department'"
+          :hint="filter.length >= 2 ? resources.length == 1 ? '1 Result' : resources.length + ' Results' : ''"
           :error="!!filter.length && resources.length == 0"
           v-on:keyup.enter="!!filter.length && resources.length == 0 ? createNewFromSearch() : search(filter)"
         >
