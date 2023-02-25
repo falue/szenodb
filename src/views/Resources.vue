@@ -215,8 +215,8 @@
               style="text-decoration: inherit; vertical-align: top; display:inline-block;"
               :style="$vuetify.breakpoint.md && drawerOpen ? 'width:45%;' : $vuetify.breakpoint.smAndUp ? 'width:20%;' : 'width:100%; overflow: hidden; text-overflow:ellipsis; white-space: nowrap;'"
             >
-              <!-- min-width:150px;  -->
               <div
+                class="bolder"
                 style="text-decoration: inherit; overflow: hidden; text-overflow:ellipsis; white-space: nowrap; text-transform: capitalize;"
                 :style="$vuetify.breakpoint.xs ? 'display:inline' : ''"
               >{{resource.content.title}}{{resource.content.address && $vuetify.breakpoint.xs ? ', ' : ''}}
@@ -246,7 +246,7 @@
                 <br>
                 Reason: "{{resource.flags.reason}}"
               </div>
-              <div v-else style="text-decoration: inherit; overflow:hidden; display: -webkit-box; -webkit-box-orient: vertical; box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; ">
+              <div v-else :class="i % 2 === 0 ? 'white--text' : ''" style="text-decoration: inherit; overflow:hidden; display: -webkit-box; -webkit-box-orient: vertical; box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; ">
                   {{resource.content.resources}}
               </div>
             </div>
