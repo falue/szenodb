@@ -89,7 +89,7 @@
       <!-- SPECIAL WARNING BUTTONS -->
       <v-btn v-if="auth && !user.emailVerified" small class="red mx-1" :style="$vuetify.breakpoint.mdAndUp ? 'width:161px;' : ''" to="/profile?hint=verifyEmail" type="submit" color="">
         <span v-if="$vuetify.breakpoint.mdAndUp">Please verify email</span>
-        <v-icon small v-else>mdi-email-remove</v-icon>
+        <v-icon v-else>mdi-email-remove</v-icon>
       </v-btn>
       <div v-else-if="$vuetify.breakpoint.mdAndUp" style="width:161px;"></div>
 
