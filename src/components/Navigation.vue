@@ -102,6 +102,10 @@
       <v-btn @click="menu = !menu" v-if="$vuetify.breakpoint.xs" small color="black">
         <v-icon color="">mdi-menu</v-icon>
       </v-btn>
+
+      <v-btn v-if="!auth && $vuetify.breakpoint.xs && $route.path != '/login'" text icon small :circle="$vuetify.breakpoint.mdAndUp" to="/login" class="mx-1" v-bind="attrs" v-on="on">
+        <v-icon :small="$vuetify.breakpoint.mdAndUp" color="primary">mdi-login-variant</v-icon>
+      </v-btn>
     </v-app-bar>
 
     <!-- MOBILE HAMBURGER MENU -->
@@ -179,6 +183,7 @@ export default {
         /* NO AUTH OR BOTH */
         {to: '/about', auth: "both", title: "What's this?", icon: 'information-outline', tooltip: 'What & how, FAQ, guidelines, whodunit? & contact'},
         {to: '/login', auth: false, title: "Login", icon: 'login-variant', tooltip: 'Login to see the goodies'},
+        {to: '/signup', auth: false, title: "Sign up", icon: 'account-plus', tooltip: 'Create a new account'},
         /* AUTH */
         {to: '/resources', auth: true, title: 'Resources', icon: 'format-list-text', tooltip: 'See & edit the list of resources'},
         // {to: '/colleagues', auth: true, title: 'Colleagues', icon: 'account-group', tooltip: 'Find people to work for and with you'},
