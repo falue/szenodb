@@ -205,7 +205,7 @@ import Info from '@/components/Info'
       
       sendEmailVerification() {
         this.$store.dispatch('sendEmailVerification').then(() => {
-          this.$toasted.global.info({msg:"Verification email sent."});
+          this.$toasted.global.info({msg:"Verification email sent. Please check your spam folder."});
         }).catch(error => {
           console.log(error);
           console.error(error.message);
