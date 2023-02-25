@@ -41,7 +41,7 @@ export default {
     return {
       appVersion: version,
       message: {
-        'welcome': 'Welcome to szenodb! Thanks for passing by.',
+        'welcome': 'Welcome to szenodb! Check your spam folder for the address verification email.',
         'loggedIn': 'You have successfully been logged in.',
         'loggedOut': 'You have been logged out.',
         'kicked': 'You have been banned from this system.',
