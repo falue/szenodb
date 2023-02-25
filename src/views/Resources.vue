@@ -514,7 +514,7 @@ import Share from '@/components/Share'
         if (event.key === "Escape") {
           if(that.dataMode === 'edit') {
             that.dataMode = 'view';
-          } else {
+          } else if(this.user.seenBewareDialog) {
             this.cancelEditResource();
           }
         }
