@@ -152,14 +152,13 @@
               </template>
               <span>Reset filter</span>
             </v-tooltip>
-            <v-spacer></v-spacer>
 
             <Share
               v-if="this.filter.length >= 2"
-              buttonClasses="mt-0"
+              buttonClasses="mt-0 mx-2"
               :text="makeShareText()"
-              toastedInfo="Current search"
-              tooltip="Share these results"
+              toastedInfo="Found resources"
+              tooltip="Share found resources"
             ></Share>
           </div>
         </div>
