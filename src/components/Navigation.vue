@@ -168,6 +168,7 @@
 import {version} from '../../package'
 
 export default {
+  name: 'NavigationComponent',
   props: {
     auth: Boolean,
     user: Object,

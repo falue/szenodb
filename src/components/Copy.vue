@@ -11,6 +11,7 @@
 
 <script>
   export default {
+    name: 'copyComponent',
     props: ['data', 'dataName', 'iconClasses', 'position', 'opacity'],
   }
 </script>

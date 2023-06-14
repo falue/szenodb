@@ -179,7 +179,7 @@
 
 <script>
   export default {
-    name: 'Terms',
+    name: 'TermsView',
     props: {
       settings: Object,
     },

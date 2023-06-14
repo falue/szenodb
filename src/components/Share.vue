@@ -20,6 +20,7 @@
 
 <script>
   export default {
+    name: 'ShareComponent',
     props: ['text', 'icon', 'toastedInfo', 'iconClasses', 'buttonClasses', 'buttonColor', 'tooltip', 'position', 'opacity'],
     data () {
       return {

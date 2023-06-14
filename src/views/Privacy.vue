@@ -878,7 +878,7 @@
 
 <script>
 export default {
-  name: "Privacy",
+  name: "PrivacyView",
   props: {
     settings: Object,
   },

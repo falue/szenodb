@@ -179,6 +179,7 @@
 import FileUpload from '@/components/FileUpload'
 import CsvImport from '@/components/CsvImport'
   export default {
+    name: 'editResourceComponent',
     props: ['data', 'dataMode', 'user'],
     components: {
       FileUpload,

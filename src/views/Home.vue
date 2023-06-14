@@ -74,7 +74,7 @@
 // import { db } from '../firebase'
 
 export default {
-  name: 'Home',
+  name: 'HomeView',
   components: {
   },
   data () {

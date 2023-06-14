@@ -124,7 +124,7 @@
 
 <script>
   export default {
-    name: 'About',
+    name: 'GoodiesView',
     props: {
       auth: Boolean,
       user: Object,

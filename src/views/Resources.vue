@@ -386,7 +386,7 @@ import EditResource from '@/components/EditResource'
 import Share from '@/components/Share'
 
   export default {
-    name: 'Resource',
+    name: 'ResourceView',
 
     props: {
       user: Object,

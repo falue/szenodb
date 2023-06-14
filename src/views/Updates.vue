@@ -101,7 +101,7 @@
 
 <script>
   export default {
-    name: 'Updates',
+    name: 'UpdateView',
     props: {
       auth: Boolean,
       user: Object,

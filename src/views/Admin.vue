@@ -205,7 +205,7 @@ import { db } from '../firebase'
 import Copy from '@/components/Copy'
 
   export default {
-    name: 'Admin',
+    name: 'AdminView',
     props: {
       user: Object,
       settings: Object,

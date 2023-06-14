@@ -11,6 +11,7 @@
 
 <script>
   export default {
+    name: 'VCardExportComponent',
     props: ['data', 'dataName', 'iconClasses', 'position'],
     data() {
       return {

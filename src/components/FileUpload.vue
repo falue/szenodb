@@ -30,6 +30,7 @@
 <script>
 import { storage } from '../firebase'
 export default {
+  name: 'FileUploadComponent',
   props: ['type', 'target', 'multiple', 'maxImageSize', 'orderStart', 'icon', 'iconClasses', 'buttonClasses', 'tooltip', 'position'],
 
   data() {

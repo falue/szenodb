@@ -15,6 +15,7 @@
 
 <script>
   export default {
+    name: 'InfoComponent',
     props: ['title', 'text', 'icon', 'iconClasses', 'position', 'opacity'],
   }
 </script>

@@ -23,7 +23,7 @@
 
 <script>
   export default {
-    name: 'Maintenance',
+    name: 'MaintenanceView',
     props: {
       settings: Object,
     },

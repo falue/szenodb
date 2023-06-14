@@ -165,6 +165,7 @@
 
 <script>
   export default {
+    name: 'CsvImportComponent',
     props: ['data', 'dataMode'],
     components: {
     },

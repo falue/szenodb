@@ -332,6 +332,7 @@ import VCardExport from '@/components/VCardExport'
 import Share from '@/components/Share'
 
   export default {
+    name: 'ViewResourceComponent',
     props: ['data', 'user'],
     components: {
       Copy, VCardExport, Share

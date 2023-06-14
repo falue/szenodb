@@ -197,7 +197,7 @@
 <script>
 import Copy from '@/components/Copy'
   export default {
-    name: 'About',
+    name: 'AboutView',
     props: {
       auth: Boolean,
       user: Object,

@@ -34,6 +34,7 @@
 <script>
   // based on https://github.com/wenzhixin/vue-base64-upload/
   export default {
+    name: 'ImageUploadComponent',
     props: ['btnClasses', 'imagesOnly', 'maxFileSizeMb', 'imageSize', 'labelText', 'labelClasses'],
     data() {
       return {

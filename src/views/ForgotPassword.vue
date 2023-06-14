@@ -23,7 +23,7 @@
 import { auth } from '@/firebase'
 
   export default {
-    name: 'ForgotPassword',
+    name: 'ForgotPasswordView',
 
     props: {
       auth: Boolean,

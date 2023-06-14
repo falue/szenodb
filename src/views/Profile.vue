@@ -128,7 +128,7 @@ import FileUpload from '@/components/FileUpload'
 import Info from '@/components/Info'
 
   export default {
-    name: 'Profile',
+    name: 'ProfileView',
     props: {
       user: Object,
     },

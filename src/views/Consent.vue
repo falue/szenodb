@@ -34,7 +34,7 @@
 
 <script>
   export default {
-    name: 'Consent',
+    name: 'ConsentView',
   props: {
     user: Object,
     settings: Object,
