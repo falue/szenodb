@@ -94,10 +94,18 @@ div::-webkit-scrollbar {
   text-decoration: line-through;
 }
 
+.capitalize {
+  text-transform: capitalize;
+}
+
 .word_wrap {
   overflow: initial;
   word-wrap: initial;
   white-space: initial;
+}
+
+.linebreaks {
+  white-space: pre-line;
 }
 
 .ellipsis {
@@ -254,6 +262,8 @@ ul.niceList li:before {
 .maxx-800 { max-width: 800px; }
 
 .maxy-0   { max-height: initial; }
+.maxy-50 { max-height: 50px; }
+.maxy-75 { max-height: 75px; }
 .maxy-100 { max-height: 100px; }
 .maxy-200 { max-height: 200px; }
 .maxy-300 { max-height: 300px; }
@@ -261,6 +271,7 @@ ul.niceList li:before {
 .maxy-400 { max-height: 400px; }
 .maxy-500 { max-height: 500px; }
 .maxy-600 { max-height: 600px; }
+.maxy-auto { max-height: 999px; }
 
 .minx-0   { min-width: initial; }
 .minx-100 { min-width: 100px; }
@@ -300,8 +311,17 @@ ul.niceList li:before {
 .text--vert-center { vertical-align: bottom !important; }
 .text--vert-middle, .valign { vertical-align: middle !important; }
 .ovfl-y--hidden { overflow-y: hidden }
-.scroll-y { overflow-y: auto }
+.overflow, .overflow-y, .scroll-y { overflow-y: auto }
 
+.fadeout-bottom  {
+  -webkit-mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
+  mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
+}
+
+.rot-3  { transform: rotate(3deg)  }
+.rot-5  { transform: rotate(5deg)  }
+.rot-12  { transform: rotate(12deg)  }
+.rot-33  { transform: rotate(33deg)  }
 .rot-45  { transform: rotate(45deg)  }
 .rot-90  { transform: rotate(90deg)  }
 .rot-135 { transform: rotate(135deg) }
@@ -309,6 +329,18 @@ ul.niceList li:before {
 .rot-225 { transform: rotate(225deg) }
 .rot-270 { transform: rotate(270deg) }
 .rot-315 { transform: rotate(315deg) }
+
+.rot--3  { transform: rotate(-3deg)  }
+.rot--5  { transform: rotate(-5deg)  }
+.rot--12  { transform: rotate(-12deg)  }
+.rot--33  { transform: rotate(-33deg)  }
+.rot--45  { transform: rotate(-45deg)  }
+.rot--90  { transform: rotate(-90deg)  }
+.rot--135 { transform: rotate(-135deg) }
+.rot--180 { transform: rotate(-180deg) }
+.rot--225 { transform: rotate(-225deg) }
+.rot--270 { transform: rotate(-270deg) }
+.rot--315 { transform: rotate(-315deg) }
 
 .mirr-x { transform: scale(-1, 1) }
 .mirr-y { transform: scale(1, -1) }
@@ -321,6 +353,7 @@ ul.niceList li:before {
 .nudge-y-100 { transform: translateY(1em); }
 .nudge-y-125 { transform: translateY(1.25em); }
 .nudge-y-150 { transform: translateY(1.50em); }
+.nudge-y-200 { transform: translateY(2em); }
 .nudge-y-250 { transform: translateY(2.5em); }
 .nudge-y-400 { transform: translateY(4em); }
 .nudge-y-500 { transform: translateY(5em); }
@@ -331,8 +364,12 @@ ul.niceList li:before {
 .nudge-y--100 { transform: translateY(-1em); }
 .nudge-y--125 { transform: translateY(-1.25em); }
 .nudge-y--150 { transform: translateY(-1.50em); }
+.nudge-y--200 { transform: translateY(-2em); }
 .nudge-y--250 { transform: translateY(-2.5em); }
+.nudge-y--300 { transform: translateY(-3em); }
+.nudge-y--350 { transform: translateY(-3.5em); }
 .nudge-y--400 { transform: translateY(-4em); }
+.nudge-y--450 { transform: translateY(-4.5em); }
 .nudge-y--500 { transform: translateY(-5em); }
 
 .nudge-x-25 { transform: translateX(0.25em); }
@@ -489,6 +526,12 @@ ul.niceList li:before {
 .fadeIn { animation: fadeIn 1s linear 1 forwards; }
 .fadeInFast { animation: fadeIn 250ms linear 1 forwards; }
 .heartBeat { transform-origin: center; animation: beat .25s infinite alternate; }
+
+.smoothMoves-125 { transition: all 125ms ease-in-out; }
+.smoothMoves-250 { transition: all 250ms ease-in-out; }
+.smoothMoves, .smoothMoves-500 { transition: all 500ms ease-in-out; }
+.smoothMoves-750 { transition: all 750ms ease-in-out; }
+.smoothMoves-1000 { transition: all 1000ms ease-in-out; }
   
 @keyframes spinner { 
     100% { transform:rotate(360deg); } 

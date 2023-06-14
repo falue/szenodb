@@ -18,6 +18,7 @@ import Login from '../views/Login.vue'
 import Signup from '../views/Signup.vue'
 import ForgotPassword from '../views/ForgotPassword.vue'
 import Maintenance from '../views/Maintenance.vue'
+import Colleagues from '../views/Colleagues.vue'
 
 Vue.use(VueRouter)
 
@@ -39,6 +40,14 @@ const routes = [
     path: '/admin',
     name: 'Admin',
     component: Admin,
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/colleagues',
+    name: 'Colleagues',
+    component: Colleagues,
     meta: {
       requiresAuth: true
     }
@@ -146,6 +155,7 @@ router.beforeEach((to, from, next) => {
   
     // If not logged in where you should
   } else if (requiresAuth && !auth.currentUser) {
+    // hmmmm
     let addQuery = Object.keys(to.query).map(function (key) { 
       return [key, to.query[key]].join('=');
     }).join('&');

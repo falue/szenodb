@@ -131,6 +131,7 @@ const store = new Vuex.Store({
           .onSnapshot(userProfile => {
             /* DELETED USER FILE */
             if(!userProfile.data()) {
+              // This triggers when user signs up with &next= BUT WHY ???
               console.log(userProfile.data());
               fb.auth.signOut();
               commit('setUserProfile', {});

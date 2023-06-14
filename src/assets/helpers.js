@@ -225,6 +225,10 @@ export default {
     return date !== '00000000' ? date : '0000-00-00'
   },
 
+  normalizeText(text) {
+    return text.replace(/[^0-9a-zA-Z]/g, '').toLowerCase();
+  },
+
   stripHtml(text) {
     return text.trim().replace(/<(?:.|\n)*?>/gm, '').replace(/['\\"]+/g, '');
   },
@@ -354,7 +358,8 @@ export default {
 
   getCurrentUrl() {
     let path = window.location.href
-    console.log(path)
+    // TODO: Remove success=../error=../info=.. from URL
+    // console.log(path)
     return path;
   },
 
@@ -550,6 +555,20 @@ export default {
     return Object.values(arr).reduce(function(a,b){
       return a + b
     }, 0);
+  },
+
+  shuffle(array) {
+    let currentIndex = array.length,  randomIndex;
+    // While there remain elements to shuffle.
+    while (currentIndex != 0) {
+      // Pick a remaining element.
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex--;
+      // And swap it with the current element.
+      [array[currentIndex], array[randomIndex]] = [
+        array[randomIndex], array[currentIndex]];
+    }
+    return array;
   },
 
   range(start, end) {

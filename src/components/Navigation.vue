@@ -186,7 +186,7 @@ export default {
         {to: '/signup', auth: false, title: "Sign up", icon: 'account-plus', tooltip: 'Create a new account'},
         /* AUTH */
         {to: '/resources', auth: true, title: 'Resources', icon: 'format-list-text', tooltip: 'See & edit the list of resources'},
-        // {to: '/colleagues', auth: true, title: 'Colleagues', icon: 'account-group', tooltip: 'Find people to work for and with you'},
+        {to: '/colleagues', auth: true, title: 'Colleagues', icon: 'account-group', tooltip: 'Find people to work for and with you'},
         {to: '/goodies', auth: true, title: 'Goodies', icon: 'cupcake', tooltip: 'An assortment of things'},
         {to: '/admin', auth: true, admin: true, title: 'Admin', icon: 'shield-account', tooltip: 'Manage users & backups'},
         {to: '/profile', auth: true, title: 'Profile', icon: 'account-cowboy-hat', tooltip: `Your profile`},

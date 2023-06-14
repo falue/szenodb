@@ -67,8 +67,8 @@
           >
           <v-icon slot="append" :class="filter.length ? 'hover-red' : ''" @click="filter = ''; $refs['filter'].blur()">{{filter.length ? 'mdi-close' : 'mdi-magnify'}}</v-icon>
           <template v-slot:append-outer>
-            <div class="primary ma-0 addNewResource">
-              <v-icon color="white" @click="openNewResourceDrawer()">mdi-plus</v-icon> 
+            <div class="primary ma-0 addNewResource nobr" @click="openNewResourceDrawer()">
+              <v-icon color="white">mdi-plus-thick</v-icon>
             </div>
           </template>
           </v-text-field>
@@ -451,6 +451,7 @@ import Share from '@/components/Share'
         if(Object.keys(this.$route.query).length > 0) {
           if(this.$route.query.view) {
             // find index & content of complete resource in this.resource from ID in this.$route.query.view
+            // FIXME: this should just be a doc().get() FB request incase element is not in list.
             let listData = this.getResourceFromId(this.$route.query.view);
             // FIXME: Drawback of this, i throw away the already laoded resource data in the list
             // and use just the ID of that, reload it here with getResourceFromId
@@ -1004,19 +1005,21 @@ import Share from '@/components/Share'
     transition: background-color 500ms;
   }
 
-.addNewResource {
+  .addNewResource {
     transform: translate(0, -1.05em); 
-    border-top-right-radius:50% !important; 
-    border-bottom-right-radius:50% !important;
+    border-top-right-radius:58px !important; 
+    border-bottom-right-radius:58px !important;
   }
   .addNewResource button {
-    padding:.69em .69em .69em .69em; 
     overflow: hidden;
+  }
+  .addNewResource .v-icon {
+    padding:.69em;
   }
   .addNewResource:hover {
     background-color: white !important;
   }
-  .addNewResource:hover button:before {
+  .addNewResource:hover .v-icon:before {
     color:rgb(109, 170, 255);
   }
   .hover-red:hover {

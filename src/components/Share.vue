@@ -27,6 +27,7 @@
     },
     methods: {
       async share(text) {
+        // If seems "broken", check if localhost is served with http_s_
         console.log(text)
         
         if(navigator.share) {
