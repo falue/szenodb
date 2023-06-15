@@ -27,7 +27,7 @@
 <script>
 import { mapState } from 'vuex'
 import SiteNav from '@/components/Navigation'
-import {version} from '../package'
+// FIXME UPDATE import { version } from '../package'
 import { db, auth } from "./firebase.js";
 
 export default {
@@ -39,7 +39,8 @@ export default {
 
   data () {
     return {
-      appVersion: version,
+      // FIXME UPDATE appVersion: version,
+      appVersion: 666,
       message: {
         'welcome': 'Welcome to szenodb! Check your spam folder for the address verification email.',
         'loggedIn': 'You have successfully been logged in.',

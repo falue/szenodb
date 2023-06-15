@@ -1,5 +1,7 @@
-import Vue from 'vue';
-import Vuetify from 'vuetify/lib';
+import * as Vue from 'vue';
+// FIXME import Vuetify from 'vuetify/lib';   wtffff
+// import Vuetify from 'vuetify';  // works kinda
+import * as Vuetify from 'vuetify';
 
 Vue.use(Vuetify);
 

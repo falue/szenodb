@@ -1,4 +1,5 @@
-import Vue from 'vue';
+import moment from "vue-moment";
+import toast from "vue-toasted";
 import md5 from 'md5';
 
 export default {
@@ -65,12 +66,12 @@ export default {
   //$moment(playingClip.date).format("dd, MMMM Do, YYYY - HH:mm:ss")
   fbTimeToString: function (fbtimestamp, format) {
     try {
-      fbtimestamp = Vue.prototype.$moment(fbtimestamp.toDate()).format(format);
+      fbtimestamp = moment(fbtimestamp.toDate()).format(format);  // FIXME: prototype. ???
     } catch (err) {
       console.log("fbTimeToString function failed, maybe a datatype map instead of a timestamp?")
       console.log(err)
       try {
-        fbtimestamp = Vue.prototype.$moment.unix(fbtimestamp.seconds).format(format) + ' [invalid format]';
+        fbtimestamp = moment.unix(fbtimestamp.seconds).format(format) + ' [invalid format]';  // FIXME: prototype. ???
       } catch (err) {
         console.log("fbTimeToString failed to get seconds, return the string as is..")
         console.log(err)
@@ -99,7 +100,7 @@ export default {
       lastWeek: '[Last ] dddd HH:mm',
       sameElse: 'dd, MMMM Do, YYYY - HH:mm'
     };
-    return Vue.prototype.$moment(timestamp).calendar(referenceDay, formats);
+    return moment(timestamp).calendar(referenceDay, formats);  // FIXME: prototype. ???
   },
 
   copyClipBoard(text, title='Text') {
@@ -113,9 +114,9 @@ export default {
       el.select();
       document.execCommand('copy');
       document.body.removeChild(el);
-      Vue.prototype.$toasted.global.success({msg:`${title} was copied to your clipboard`});
+      toast.global.success({msg:`${title} was copied to your clipboard`});  // FIXME: prototype. ???
     } catch {
-      Vue.prototype.$toasted.global.error({msg:`Could not copy ${title} to your clipboard!`});
+      toast.global.error({msg:`Could not copy ${title} to your clipboard!`});  // FIXME: prototype. ???
     }
   },
 
@@ -217,9 +218,9 @@ export default {
     let day = date.substr(6, 2);
     let newDate = `${year}-${month}-${day}T12:00:00`;
     if(date && string === 'ISO8601') {
-      date = Vue.prototype.$moment(newDate).toISOString();
+      date = moment(newDate).toISOString();  // FIXME: prototype. ???
     } else if (date !== '00000000') {
-      date = Vue.prototype.$moment(newDate).format(string);
+      date = moment(newDate).format(string);  // FIXME: prototype. ???
     }
 
     return date !== '00000000' ? date : '0000-00-00'

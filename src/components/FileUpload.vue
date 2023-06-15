@@ -1,3 +1,4 @@
+<!-- eslint-disable -->
 <template>
   <div>
     <v-tooltip :disabled="!tooltip" :bottom="!position || position === 'bottom'" :right="position === 'right'" :left="position === 'left'" :top="position === 'top'" color="#303030">
@@ -28,6 +29,7 @@
 </template>
 
 <script>
+/* eslint-disable */
 import { storage } from '../firebase'
 export default {
   name: 'FileUploadComponent',

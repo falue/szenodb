@@ -1,3 +1,4 @@
+<!-- eslint-disable -->
 <template>
 <!--  -->
   <form @submit.prevent="dataMode === 'new' ? $emit('new', {...data, 'note': user.notes}) : $emit('edit', {'newData': {...data, 'note': user.notes}, 'oldData': oldData});">
@@ -149,9 +150,10 @@
               @mouseout="shiftKeyPressed = false"
               :color="data.title === '' || data.resources === '' ? 'red' :shiftKeyPressed ? 'green' : 'primary'"
               :style="data.title === '' || data.resources === '' ? 'pointer-events: none' : ''"
-              @click="if(shiftKeyPressed) data.newAndNext = true"
+              
               type="submit" class="mr-2 mb-2"
             >
+            <!-- FIXME FROM UPDATE: @click="if(shiftKeyPressed) data.newAndNext = true" -->
               {{shiftKeyPressed ? 'Save & next' : 'Save'}}
             </v-btn>
           </div>
@@ -176,6 +178,7 @@
 </template>
 
 <script>
+/* eslint-disable */
 import FileUpload from '@/components/FileUpload'
 import CsvImport from '@/components/CsvImport'
   export default {

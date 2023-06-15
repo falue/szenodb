@@ -1,7 +1,13 @@
-import * as firebase from 'firebase/app'
-import 'firebase/auth'
-import 'firebase/firestore'
-import 'firebase/storage'
+// import * as firebase from 'firebase/app'
+import firebase from 'firebase/compat/app'
+import 'firebase/compat/auth'
+import 'firebase/compat/firestore'
+import 'firebase/compat/storage'
+/* import { initializeApp } from 'firebase/app';
+import { getFirestore } from 'firebase/firestore/lite';
+import { authentication } from 'firebase/auth';
+import { storage } from 'firebase/storage'; */
+
 import { authKeys } from './auth.js'
 
 // firebase init - add your own config here
@@ -15,12 +21,17 @@ const firebaseConfig = {
   appId: authKeys.fb.appId,
   measurementId: authKeys.fb.measurementId
 };
+// FIXME
 firebase.initializeApp(firebaseConfig)
 
 // utils
 const db = firebase.firestore()
 const auth = firebase.auth()
 const storage = firebase.storage()
+/* const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = authentication(app);
+const storageThing = storage(app); */
 
 // collection references
 const usersCollection = db.collection('users')

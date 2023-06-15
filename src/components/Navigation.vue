@@ -165,7 +165,7 @@
 </template>
 
 <script>
-import {version} from '../../package'
+// FIXME UPDATE import {version} from '../../package'
 
 export default {
   name: 'NavigationComponent',
@@ -179,7 +179,8 @@ export default {
       on: false,
       attrs: false,
       menu: false,
-      appVersion: version,
+      // FIXME UPDATE appVersion: version,
+      appVersion: 666,
       links: [
         /* NO AUTH OR BOTH */
         {to: '/about', auth: "both", title: "What's this?", icon: 'information-outline', tooltip: 'What & how, FAQ, guidelines, whodunit? & contact'},

@@ -1,4 +1,5 @@
-import Vue from "vue";
+
+import { createApp } from 'vue'
 import App from "./App.vue";
 import router from "./router";
 import store from "./store";
@@ -11,7 +12,21 @@ import Toasted from "vue-toasted"; // alerts & notifications https://github.com/
 import VuePapaParse from 'vue-papa-parse' // parse csv to json https://www.papaparse.com/
 import deepl from 'deepl';  // https://www.npmjs.com/package/deepl
 
-Vue.config.productionTip = false;
+// Vue.config.productionTip = false;
+// FIXME UPDATE
+/* 
+https://vuejs.org/guide/essentials/application.html#the-root-component
+*/
+let Vue = createApp(App).mount('#app')
+
+
+
+
+
+
+
+
+
 
 // add js helpers to use like this.$helpers.textTruncate(deleteDialog.project.name, 20)
 const jsHelpers = {

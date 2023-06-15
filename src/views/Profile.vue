@@ -1,3 +1,4 @@
+<!-- eslint-disable -->
 <template>
   <div class="ma-0 fill-width fill-height">
     <v-card
@@ -122,6 +123,7 @@
 </template>
 
 <script>
+/* eslint-disable */
 import { db, auth } from '../firebase'
 import Copy from '@/components/Copy'
 import FileUpload from '@/components/FileUpload'

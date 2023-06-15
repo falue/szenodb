@@ -48,12 +48,13 @@
         <v-row>
           <template v-for="(card, n) in cards" >
             <!-- CHAPTER TITLE -->
-            <div :id="`chapter-${n}`" :key="n" v-if="card.chapter" class="fill-width">
+            <div :id="`chapter-${n}`" :key="`chapter-${n}`" v-if="card.chapter" class="fill-width">
               <hr class="mb-3 mt-16" style="border:none; border-top: solid 1px rgba(255,255,255,.25);">
               <v-card-title class="justify-center">{{card.chapter}}</v-card-title>
             </div>
 
-            <v-col :key="n" v-else cols="12" xs="12" sm="6" md="6">
+            <v-col :key="`goodie-${n}`" v-else cols="12" xs="12" sm="6" md="6">
+              <!-- FIXME UPDATE: :key="n" -->
 
               <!-- CARDS -->
               <v-card
@@ -109,7 +110,8 @@
         <v-card-title v-if="infoDialog.title" class="text-h5 grey darken-3">
           {{infoDialog.title}}
         </v-card-title>
-        <v-card-text class="my-4 white--text" :class="infoDialog.title ? '' : 'pt-4'" v-html="infoDialog.text">
+        <v-card-text class="my-4 white--text" :class="infoDialog.title ? '' : 'pt-4'">
+          <!-- TODO ADFTER UPDATE: v-html="infoDialog.text" -->
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>

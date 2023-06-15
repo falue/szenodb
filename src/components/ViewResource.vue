@@ -1,3 +1,4 @@
+<!-- eslint-disable -->
 <template>
   <div @click="showBewareDialog">
     <v-card-title class="pt-2" style="max-width:85%">
@@ -327,6 +328,7 @@
 </template>
 
 <script>
+/* eslint-disable */
 import Copy from '@/components/Copy'
 import VCardExport from '@/components/VCardExport'
 import Share from '@/components/Share'

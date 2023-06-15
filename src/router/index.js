@@ -1,6 +1,8 @@
+// Migration: https://router.vuejs.org/guide/migration/
+
 // General
-import Vue from 'vue'
-import VueRouter from 'vue-router'
+import * as Vue from 'vue';
+import { createRouter } from 'vue-router'
 import { auth } from '../firebase'
 import store from "../store";
 
@@ -18,8 +20,6 @@ import Login from '../views/Login.vue'
 import Signup from '../views/Signup.vue'
 import ForgotPassword from '../views/ForgotPassword.vue'
 import Maintenance from '../views/Maintenance.vue'
-
-Vue.use(VueRouter)
 
 const routes = [
   {
@@ -109,7 +109,7 @@ const routes = [
   }
 ]
 
-const router = new VueRouter({
+const router = createRouter({
   mode: 'hash',  // history for clean url but hard refresh equals to 404; hash adds a # in the url
   base: process.env.BASE_URL,
   routes,
