@@ -22,7 +22,7 @@
             class="grey darken-3 "
           />
           <!-- https://avatars.dicebear.com/ -->
-          <v-img v-else :src="`https://avatars.dicebear.com/api/adventurer-neutral/${profile.avatar && profile.avatar.random ? profile.avatar.random : $helpers.md5(user.uid)}.svg`" class="grey darken-3" :alt="user.name" />
+          <v-img v-else :src="`https://api.dicebear.com/7.x/adventurer-neutral/svg?seed=${profile.avatar && profile.avatar.random ? profile.avatar.random : $helpers.md5(user.uid)}.svg`" class="grey darken-3" :alt="user.name" />
         </v-avatar>
         <v-btn
           v-if="profile.avatar && user.avatar.url && user.avatar.url.length"
