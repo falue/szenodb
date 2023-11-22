@@ -94,6 +94,11 @@ div::-webkit-scrollbar {
   text-decoration: line-through;
 }
 
+
+.uppercase { text-transform: uppercase; }
+.lowercase { text-transform: lowercase; }
+.capitalize { text-transform: capitalize; }
+
 .word_wrap {
   overflow: initial;
   word-wrap: initial;

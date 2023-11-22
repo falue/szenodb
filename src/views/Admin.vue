@@ -55,13 +55,27 @@
                 {{$helpers.fbTimeToString(singleUser.editedOn, "DD.MM.YY - HH:mm") }}
               </small>
             </div>
-            <div v-else class="pr-2" :style="$vuetify.breakpoint.mdAndUp ? 'width:25%;' : 'width:100%;'" style="overflow:hidden; vertical-align: top; display:inline-block;">
-              <span class="text-h6 ">
-              {{singleUser.name}}
-              </span>
-              <br>
+            <div v-else class="pr-2 maxWidth" :style="$vuetify.breakpoint.mdAndUp ? 'width:25%;' : 'width:100%;'" style="overflow:hidden; vertical-align: top; display:inline-block;">
+              
+            <div class="text-h6 overflowHidden ellipsis">
+              <v-avatar color="grey" class="inlineBlock">
+                <v-img
+                  v-if="singleUser.avatar.url"
+                  :src="singleUser.avatar.url"
+                ></v-img>
+                <v-img
+                  v-else
+                  :src="`https://api.dicebear.com/7.x/adventurer-neutral/svg?seed=${singleUser.avatar && singleUser.avatar.random ? singleUser.avatar.random : $helpers.md5(singleUser.uid)}.svg`"
+                ></v-img>
+                <!-- <span v-else class="text-h5 uppercase">{{singleUser.name[0]}}</span> -->
+              </v-avatar>
+              <span :title="'User: '+singleUser.name" class="pl-2">{{singleUser.name}}</span>
+            </div>
+              
+            </div>
+            <div v-if="!singleUser.deletedUser" class="grey--text" :style="$vuetify.breakpoint.mdAndUp ? 'width:75%;' : 'width:100%;'" style="display:inline-block">
               <a :href="`mailto:${singleUser.email}`"
-                class="no-underline block ellipsis maxWidth"
+                class="no-underline"
                 :title="singleUser.emailVerified ? `Email ${singleUser.email} verified` : `Email ${singleUser.email} not verified`"
               >
                 <v-icon
@@ -72,8 +86,7 @@
                 </v-icon>
                 {{singleUser.email}}
               </a>
-            </div>
-            <div v-if="!singleUser.deletedUser" class="grey--text" :style="$vuetify.breakpoint.mdAndUp ? 'width:75%;' : 'width:100%;'" style="display:inline-block">
+              <br>
               Role:
               <b class="pointer inline"
                 :class="singleUser.role === 'user' ? 'orange--text' : 'pink--text'"
