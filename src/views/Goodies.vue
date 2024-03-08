@@ -292,6 +292,24 @@
            'dialog': {'title': ``, 'text': ``}
           },
 
+          {'title':`grid.layoutit.com`,
+           'desc':`Create simple website layouts in html & css.`,
+           'web':[`https://grid.layoutit.com/`],
+           'dialog': {'title': ``, 'text': ``}
+          },
+
+          {'title':`Copy & paste from device to another`,
+           'desc':`Paste text via the internet to any device.`,
+           'web':[`https://cl1p.net/`],
+           'dialog': {'title': ``, 'text': ``}
+          },
+
+          {'title':`realtimecolors`,
+           'desc':`Find color schemes for your application and see them in context of a website.`,
+           'web':[`https://www.realtimecolors.com`],
+           'dialog': {'title': ``, 'text': ``}
+          },
+
           {'chapter': 'Work: Your rights; jobs & money'},
           
           {'title':`SSFV`,
@@ -337,6 +355,12 @@
           {'title':`RGB, NCS, RAL converter`,
            'desc':`Convert RGB values to the nearest standard colour. Useful for matching digital colors to wall paint.`,
            'web':[`https://www.e-paint.co.uk/convert-rgb.asp`],
+           'dialog': {'title': ``, 'text': ``}
+          },
+
+          {'title':`Gear generator`,
+           'desc':`Gear Generator is a tool for drawing working gear mechanisms. Download them in DXF or SVG format. Gears will be animated to demonstrate a working mechanism.`,
+           'web':[`https://geargenerator.com`],
            'dialog': {'title': ``, 'text': ``}
           },
 
