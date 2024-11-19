@@ -43,70 +43,66 @@ const store = new Vuex.Store({
 
   actions: {
     /* SETTINGS */
-    setSettings({commit}) {
-      // get file froms ettings.settigns
-      let settings = {};
-      if(typeof unsubscribeSettings != 'function') {
-        unsubscribeSettings = fb["db"].collection("settings")
+    setSettings({ commit }) {
+      // Ensure only one listener exists
+      if (typeof unsubscribeSettings === "function") unsubscribeSettings();
+      unsubscribeSettings = fb["db"]
+        .collection("settings")
         .doc("settings")
-        .onSnapshot(doc => {
-          //var source = doc.metadata.hasPendingWrites ? "Local" : "Server";
-          let data = doc.data();
-          // this.about = {"me": data.me, "email": data.email};
-          settings = data;
-          commit('setSettings', settings)
+        .onSnapshot((doc) => {
+          const settings = doc.data() || {};
+          commit("setSettings", settings);
         });
-      }
     },
 
     /*  USER STUFFS */
     async login({ commit, dispatch }, form) {
-      // sign user in
-      await fb.auth.signInWithEmailAndPassword(form.email.toLowerCase(), form.password).then(function({ user }) {
-        // Get global settings
-        store.dispatch('setSettings');
-
-        // fetch user profile and set in state
-        dispatch('fetchUserProfile', user).then(async function() {
-
-          if(!user.uid) {
-            // Sometimes during development, user.uid is not set.
-            // Race-condition?
-            /* Function CollectionReference.doc() requires its first argument to be of type non-empty string, but it was: undefined */
-            console.log("something went wrong");
-            return
-          }
-          await fb["db"].collection("users").doc(user.uid).update({
-            'lastLogin': new Date(),
-            'emailVerified': user.emailVerified
-          })
-          store.dispatch('addContribution', 1);
-        }).catch(err => {
-          // if failed login, error is: "CollectionReference.doc(xxx) xxx was undefined".
-          //   I don't know where this error originates.
-          //   if user is kicked, error is: "Missing or insufficient permissions."/permission-denied
-          if(err.code === 'permission-denied') {
-            // cannot read .kicked because document is not readable by kicked user
-            console.error("KICKED USER");
-            console.log(err.code);
-            console.log("FB rules prohibit because user is kicked:\n", err)
-            fb.auth.signOut();
-            commit('setUserProfile', {});
-            router.push('/login?error=kicked');
-          } else {
-            console.error("SOMETHING WRONG with the login!")
-            console.log("Could not fetchUserProfile OR read collection(users)", err);
-            console.log(err.code); // === invalid-argument
-            console.log("user does not have all values from user doc.");
-            console.log("Do as nothing has happened. lastLogin, emailVerified, contribution could not be updated.");
-            router.push('/resources');
-          }
-          return
+      try {
+        // Sign the user in
+        const { user } = await fb.auth.signInWithEmailAndPassword(
+          form.email.toLowerCase(),
+          form.password
+        );
+    
+        if (!user?.uid) {
+          console.error("User UID is undefined. Possible race condition.");
+          throw { error: 500, message: "Internal error: Unable to retrieve user UID." };
+        }
+    
+        console.log("User signed in successfully:", user.uid);
+    
+        // Fetch global settings
+        await dispatch("setSettings");
+    
+        // Fetch and set user profile
+        await dispatch("fetchUserProfile", user);
+    
+        // Update the user's `lastLogin` and `emailVerified` fields
+        await fb["db"].collection("users").doc(user.uid).update({
+          lastLogin: new Date(),
+          emailVerified: user.emailVerified,
         });
-        return true
-      }).catch(function(error) {
-        throw error;
-      });
+
+        // Add points for existing!
+        store.dispatch('addContribution', 1);
+    
+        console.log("Login process completed successfully.");
+        router.push("/resources?success=loggedIn");
+        return true;
+      } catch (error) {
+        if (error?.code === "permission-denied") {
+          console.warn("User appears to be kicked or lacks permissions.");
+          console.error(error);
+          await fb.auth.signOut();
+          commit("setUserProfile", {});
+          router.push("/login?error=kicked");
+        } else {
+          console.error("An error occurred during login.");
+          console.error(error);
+          // Propagate the error for further handling if necessary
+          throw error;
+        }
+      }
     },
 
     async logout({ commit }, next='success') {
@@ -125,49 +121,48 @@ const store = new Vuex.Store({
     },
 
     async fetchUserProfile({ commit }, user) {
-      // fetch user profile an keep updates
-      unsubscribeLogin = fb["db"].collection("users")
+      try {
+        // Unsubscribe from previous listener
+        if (typeof unsubscribeLogin === "function") unsubscribeLogin();
+
+        // Attach a listener to the user's Firestore document
+        unsubscribeLogin = fb["db"]
+          .collection("users")
           .doc(user.uid)
-          .onSnapshot(userProfile => {
-            /* DELETED USER FILE */
-            if(!userProfile.data()) {
-              console.log(userProfile.data());
+          .onSnapshot((userProfile) => {
+            if (!userProfile.exists) {
+              console.error("User profile document missing.");
               fb.auth.signOut();
-              commit('setUserProfile', {});
-              router.push(`/login?error=missingUserFile&id=${user.uid}`);
+              commit("setUserProfile", {});
+              router.push("/login?error=missingUserProfile");
               return;
             }
 
-            commit('setUserProfile', {...userProfile.data(), 'emailVerified': user.emailVerified, 'uid': user.uid, 'email': user.email })
-            
-            if(router.currentRoute.query.next) {
-              // User was logged out and tried to access authRequiered content,
-              //   like profile, resource or resource?view=..
-              //   send to specific link
-              let nextQuery = Object.keys(router.currentRoute.query).map(function (key) {
-                if(key !== 'next' && router.currentRoute.query[key] !== 'authRequiered') {
-                  return `${key}=${router.currentRoute.query[key]}`
-                }
-              }).filter(n => n).join('&');
-              router.push(`${router.currentRoute.query.next}?success=loggedIn&${nextQuery}`)
-    
-            } else if (router.currentRoute.path === '/login') {
-              // User clicked on login link, send to resource list
-              router.push('/resources?success=loggedIn')
-            }
-          })
-      return;
+            // Commit the user profile to the store
+            commit("setUserProfile", {
+              ...userProfile.data(),
+              emailVerified: user.emailVerified,
+              uid: user.uid,
+              email: user.email,
+            });
+          });
+      } catch (error) {
+        console.error("Error fetching user profile:", error);
+        throw error.message;
+      }
     },
 
-    async signup({ dispatch }, form) {
-      // sign user up
-      // const { user } = 
-      let credentials = {};
-      
-      return fb.auth.createUserWithEmailAndPassword(form.email.toLowerCase(), form.password).then(function(user) {
-         // create user profile object in userCollections
-        credentials = user.user;
-        return fb.usersCollection.doc(credentials.uid).set({  // return ?????
+    // eslint-disable-next-line no-unused-vars
+    async signup({ dispatch, commit }, form) {
+      try {
+        // Create new user
+        const { user } = await fb.auth.createUserWithEmailAndPassword(
+          form.email.toLowerCase(),
+          form.password
+        );
+
+        // Default user profile
+        const userProfile = {
           name: form.name,
           email: form.email.toLowerCase(),
           consent: {
@@ -175,64 +170,61 @@ const store = new Vuex.Store({
             terms: form.terms,
           },
           role: 'user',
-          uid: user.user.uid,
+          uid: user.uid,
           favorites: [],
           kicked: false,
           news: form.news,
           emailVerified: false,
-          tags: [],            // https://github.com/falue/szenodb/issues/25
-          notes: [],           // https://github.com/falue/szenodb/issues/18
-          public: false,       // https://github.com/falue/szenodb/issues/12
-          guiLanguage: 'DE',  // https://github.com/falue/szenodb/issues/14
+          tags: [],           // tags: https://github.com/falue/szenodb/issues/25
+          notes: [],          // notes: https://github.com/falue/szenodb/issues/18
+          public: false,      // public: https://github.com/falue/szenodb/issues/12
+          guiLanguage: 'de',  // guiLanguage: https://github.com/falue/szenodb/issues/14
+          darkMode: false,
           contribution: 0,
           avatar: {},
           createdOn: new Date(),
           lastLogin: new Date(),
-        }).then(async function() {
-          // fetch user profile and set in state
-          await dispatch('fetchUserProfile', credentials)
-          
-          // Get global settings
-          store.dispatch('setSettings')
-          
-          // Send verification email
-          store.dispatch('sendEmailVerification');
+        };
 
-          // change route to dashboard
-          if (router.currentRoute.path === '/signup') {
-            //console.log("pushed to home")
-            router.push('/resources?info=welcome')
-          }
-          return true;
-        }).catch(function(error) {
-          console.log("error at doc(user.uid).set", error);
-          throw error;
-        });
-      }).catch(error => {
-        console.log("error at createUserWithEmailAndPassword", error);
-        throw error;
-      });
+        // Save user profile to Firestore
+        await fb["db"].collection("users").doc(user.uid).set(userProfile);
+
+        // Fetch user profile and settings
+        await dispatch("fetchUserProfile", user);
+        dispatch("setSettings");
+
+        // Send verification email
+        dispatch("sendEmailVerification");
+
+        // Redirect to /resources
+        if (router.currentRoute.path === "/signup") {
+          router.push("/resources?info=welcome");
+        }
+      } catch (error) {
+        console.error("Error in signup:", error);
+        throw error.message;
+      }
     },
 
     sendEmailVerification() {
-      console.log("Send email verification email...")
-      let actionCodeSettings = {
-        url: 'https://szenodb.ch/#/resources?success=emailVerified',
-        /* iOS: {
-          bundleId: 'com.myurl.ios'
-        },
-        android: {
-          packageName: 'com.myurl.android',
-          installApp: false,
-          minimumVersion: '12'
-        },
-        handleCodeInApp: false */
-      };
-      fb.auth.currentUser.sendEmailVerification(actionCodeSettings).then(function() {
-        console.log("Verification email sent");
-      }).catch(function(error) {
-        console.log(error);
-      });
+      try {
+        const actionCodeSettings = {
+          url: 'https://szenodb.ch/#/resources?success=emailVerified',
+          /* iOS: {
+            bundleId: 'com.myurl.ios'
+          },
+          android: {
+            packageName: 'com.myurl.android',
+            installApp: false,
+            minimumVersion: '12'
+          },
+          handleCodeInApp: false */
+        };
+        fb.auth.currentUser.sendEmailVerification(actionCodeSettings);
+        console.log("Verification email sent.");
+      } catch (error) {
+        console.error("Error sending verification email:", error);
+      }
     },
 
     addContribution({ state }, add) {
